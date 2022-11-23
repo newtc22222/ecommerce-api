@@ -14,6 +14,9 @@ public interface BannerDAO {
     int update(Banner banner);
     int delete(long bannerId);
     List<Banner> getAllBanner();
+    /**
+     * Find banner is being used in system
+     * */
     List<Banner> getAllBannerByDateRange(Date start_date, Date end_date);
     Banner findBannerById(long bannerId);
 }

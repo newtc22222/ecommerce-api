@@ -1,8 +1,8 @@
 package com.hcmute.ecom.dao.impl;
 
-import com.hcmute.ecom.dao.BrandDAO;
-import com.hcmute.ecom.mapper.BrandMapper;
-import com.hcmute.ecom.model.Brand;
+import com.hcmute.ecom.dao.CategoryDAO;
+import com.hcmute.ecom.mapper.CategoryMapper;
+import com.hcmute.ecom.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,31 +12,31 @@ import java.util.List;
 
 /**
  * @author Nhat Phi
- * @since 2022-11-18
+ * @since 2022-11-21
  * */
 @Component
-public class BrandDAOImpl implements BrandDAO {
+public class CategoryDAOImpl implements CategoryDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     // Query String
-    private final String TABLE_NAME = "tbl_brand";
-    private final String INSERT = String.format("insert into %s values (0, ?, ?, ?, ?)", TABLE_NAME);
-    private final String UPDATE = String.format("update %s set name=?, country=?, establish_date=?, logo=? where id=?", TABLE_NAME);
+    private final String TABLE_NAME = "tbl_category";
+    private final String INSERT = String.format("insert into %s values (0, ?, ?, ?)", TABLE_NAME);
+    private final String UPDATE = String.format("update %s " +
+            "set name=?, image=?, description=? where id=?", TABLE_NAME);
     private final String DELETE = String.format("delete from %s where id=?", TABLE_NAME);
 
     private final String QUERY_ALL = String.format("select * from %s", TABLE_NAME);
     private final String QUERY_ONE_BY_ID = String.format("select * from %s where id=? limit 1", TABLE_NAME);
 
     @Override
-    public int insert(Brand brand) {
+    public int insert(Category category) {
         try {
             return jdbcTemplate.update(
                     INSERT,
-                    brand.getName(),
-                    brand.getCountry(),
-                    brand.getEstablishDate(),
-                    brand.getLogo()
+                    category.getName(),
+                    category.getImage(),
+                    category.getDescription()
             );
         }
         catch (Exception err) {
@@ -45,15 +45,14 @@ public class BrandDAOImpl implements BrandDAO {
     }
 
     @Override
-    public int update(Brand brand) {
+    public int update(Category category) {
         try {
             return jdbcTemplate.update(
                     UPDATE,
-                    brand.getName(),
-                    brand.getCountry(),
-                    brand.getEstablishDate(),
-                    brand.getLogo(),
-                    brand.getId()
+                    category.getName(),
+                    category.getImage(),
+                    category.getDescription(),
+                    category.getId()
             );
         }
         catch (Exception err) {
@@ -62,16 +61,24 @@ public class BrandDAOImpl implements BrandDAO {
     }
 
     @Override
-    public int delete(long brandId) {
-        return jdbcTemplate.update(DELETE, brandId);
+    public int delete(long categoryId) {
+        try {
+            return jdbcTemplate.update(
+                    DELETE,
+                    categoryId
+            );
+        }
+        catch (Exception err) {
+            return 0;
+        }
     }
 
     @Override
-    public List<Brand> getAllBrand() {
+    public List<Category> getAllCategory() {
         try {
             return jdbcTemplate.query(
                     QUERY_ALL,
-                    new BrandMapper()
+                    new CategoryMapper()
             );
         }
         catch (EmptyResultDataAccessException err) {
@@ -80,14 +87,15 @@ public class BrandDAOImpl implements BrandDAO {
     }
 
     @Override
-    public Brand findBrandById(long brandId) {
+    public Category findCategoryById(long categoryId) {
         try {
             return jdbcTemplate.queryForObject(
                     QUERY_ONE_BY_ID,
-                    new BrandMapper(),
-                    brandId
+                    new CategoryMapper(),
+                    categoryId
             );
-        } catch (EmptyResultDataAccessException err) {
+        }
+        catch (EmptyResultDataAccessException err) {
             return null;
         }
     }
