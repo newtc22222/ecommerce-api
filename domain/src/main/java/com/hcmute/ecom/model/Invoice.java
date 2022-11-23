@@ -4,6 +4,7 @@ import com.hcmute.ecom.enums.OrderStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * @author Nhat Phi
@@ -22,13 +23,13 @@ public class Invoice {
     private LocalDateTime created_date;
     private String payment_type;
     private OrderStatus status;
-    private boolean id_paid;
+    private boolean is_paid;
     private String note;
     private String trouble_reason; // for Cancel or Failed order
 
     public Invoice(String id, Long user_id, Integer stock_quantity, String address, Double ship_fee, BigDecimal total_cost,
                    Long discount_id, BigDecimal tax, BigDecimal final_total_cost, LocalDateTime created_date,
-                   String payment_type, OrderStatus status, boolean id_paid, String note, String trouble_reason) {
+                   String payment_type, OrderStatus status, boolean is_paid, String note, String trouble_reason) {
         this.id = id;
         this.user_id = user_id;
         this.stock_quantity = stock_quantity;
@@ -41,10 +42,12 @@ public class Invoice {
         this.created_date = created_date;
         this.payment_type = payment_type;
         this.status = status;
-        this.id_paid = id_paid;
+        this.is_paid = is_paid;
         this.note = note;
         this.trouble_reason = trouble_reason;
     }
+
+    public Invoice() {}
 
     public String getId() {
         return id;
@@ -142,12 +145,12 @@ public class Invoice {
         this.status = status;
     }
 
-    public boolean id_paid() {
-        return id_paid;
+    public boolean getPaid() {
+        return is_paid;
     }
 
     public void setPaid(boolean paid) {
-        id_paid = paid;
+        is_paid = paid;
     }
 
     public String getNote() {
@@ -167,6 +170,33 @@ public class Invoice {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Invoice invoice = (Invoice) o;
+        return is_paid == invoice.is_paid
+                && id.equals(invoice.id)
+                && user_id.equals(invoice.user_id)
+                && stock_quantity.equals(invoice.stock_quantity)
+                && address.equals(invoice.address)
+                && ship_fee.equals(invoice.ship_fee)
+                && total_cost.equals(invoice.total_cost)
+                && Objects.equals(discount_id, invoice.discount_id)
+                && tax.equals(invoice.tax)
+                && final_total_cost.equals(invoice.final_total_cost)
+                && created_date.equals(invoice.created_date)
+                && payment_type.equals(invoice.payment_type)
+                && status == invoice.status
+                && Objects.equals(note, invoice.note)
+                && Objects.equals(trouble_reason, invoice.trouble_reason);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, user_id, address, payment_type);
+    }
+
+    @Override
     public String toString() {
         return "Invoice{" +
                 "id='" + id + '\'' +
@@ -181,7 +211,7 @@ public class Invoice {
                 ", created_date=" + created_date +
                 ", payment_type='" + payment_type + '\'' +
                 ", status=" + status +
-                ", id_paid=" + id_paid +
+                ", is_paid=" + is_paid +
                 ", note='" + note + '\'' +
                 ", trouble_reason='" + trouble_reason + '\'' +
                 '}';

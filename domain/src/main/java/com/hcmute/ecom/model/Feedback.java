@@ -23,6 +23,8 @@ public class Feedback {
         this.rating_point = rating_point;
     }
 
+    public Feedback() {}
+
     public Long getId() {
         return id;
     }

@@ -20,6 +20,8 @@ public class Cart {
         this.user_id = user_id;
     }
 
+    public Cart() {}
+
     public String getId() {
         return id;
     }

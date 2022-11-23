@@ -21,6 +21,8 @@ public class Banner {
         this.ended_date = ended_date;
     }
 
+    public Banner() {}
+
     public Long getId() {
         return id;
     }

@@ -25,6 +25,8 @@ public class Comment {
         this.created_date = created_date;
     }
 
+    public Comment() {}
+
     public Long getId() {
         return id;
     }

@@ -5,23 +5,26 @@ import com.hcmute.ecom.enums.ImageType;
 /**
  * This class is a blueprint for the image of product <br/>
  * Image will save as path
+ * 0 or 1 Feedback's image/product
  * @author Nhat Phi
  * @since 2022-11-18
  * */
 public class ProductImage {
     private String id;
     private String product_id;
-    private String feedback_id;
+    private Long feedback_id;
     private String path;
     private ImageType type;
 
-    public ProductImage(String id, String product_id, String feedback_id, String path, ImageType type) {
+    public ProductImage(String id, String product_id, Long feedback_id, String path, ImageType type) {
         this.id = id;
         this.product_id = product_id;
         this.feedback_id = feedback_id;
         this.path = path;
         this.type = type;
     }
+
+    public ProductImage() {}
 
     public String getId() {
         return id;
@@ -39,11 +42,11 @@ public class ProductImage {
         this.product_id = product_id;
     }
 
-    public String getFeedbackId() {
+    public Long getFeedbackId() {
         return feedback_id;
     }
 
-    public void setFeedbackId(String feedback_id) {
+    public void setFeedbackId(Long feedback_id) {
         this.feedback_id = feedback_id;
     }
 

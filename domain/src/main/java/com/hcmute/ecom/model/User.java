@@ -2,7 +2,7 @@ package com.hcmute.ecom.model;
 
 import com.hcmute.ecom.enums.Gender;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 /**
@@ -17,11 +17,11 @@ public class User {
     private Gender gender;
     private String phone;
     private String email;
-    private LocalDate date_of_birth;
+    private Date date_of_birth;
     private LocalDateTime created_date;
     private LocalDateTime last_updated_date;
 
-    public User(Long id, String name, Gender gender, String phone, String email, LocalDate date_of_birth, LocalDateTime created_date, LocalDateTime last_updated_date) {
+    public User(Long id, String name, Gender gender, String phone, String email, Date date_of_birth, LocalDateTime created_date, LocalDateTime last_updated_date) {
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -31,6 +31,8 @@ public class User {
         this.created_date = created_date;
         this.last_updated_date = last_updated_date;
     }
+
+    public User() {}
 
     public Long getId() {
         return id;
@@ -72,11 +74,11 @@ public class User {
         this.email = email;
     }
 
-    public LocalDate getDateOfBirth() {
+    public Date getDateOfBirth() {
         return date_of_birth;
     }
 
-    public void setDateOfBirth(LocalDate date_of_birth) {
+    public void setDateOfBirth(Date date_of_birth) {
         this.date_of_birth = date_of_birth;
     }
 

@@ -23,6 +23,8 @@ public class ImportProduct {
         this.imported_date = imported_date;
     }
 
+    public ImportProduct() {}
+
     public Long getTicketId() {
         return ticket_id;
     }

@@ -21,6 +21,8 @@ public class HardDrive {
         this.standard = standard;
     }
 
+    public HardDrive() {}
+
     public Long getId() {
         return id;
     }

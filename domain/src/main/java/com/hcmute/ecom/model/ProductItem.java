@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  * @since 2022-11-20
  * */
 public class ProductItem {
-    private Long id;
+    private String id;
     private String card_id;
     private String invoice_id;
     private String product_id;
@@ -15,7 +15,7 @@ public class ProductItem {
     private BigDecimal item_price;
     private BigDecimal item_discount_price;
 
-    public ProductItem(Long id, String card_id, String invoice_id, String product_id, Integer item_quantity,
+    public ProductItem(String id, String card_id, String invoice_id, String product_id, Integer item_quantity,
                        BigDecimal item_price, BigDecimal item_discount_price) {
         this.id = id;
         this.card_id = card_id;
@@ -26,11 +26,13 @@ public class ProductItem {
         this.item_discount_price = item_discount_price;
     }
 
-    public Long getId() {
+    public ProductItem() {}
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -1,5 +1,7 @@
 package com.hcmute.ecom.model.laptop;
 
+import java.util.Objects;
+
 /**
  * @author Nhat Phi
  * @since 2022-11-18
@@ -29,6 +31,8 @@ public class Screen {
         this.color_coverage = color_coverage;
         this.has_touch_screen = has_touch_screen;
     }
+
+    public Screen() {}
 
     public Long getId() {
         return id;
@@ -108,6 +112,28 @@ public class Screen {
 
     public void setHasTouchScreen(Boolean has_touch_screen) {
         this.has_touch_screen = has_touch_screen;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Screen screen = (Screen) o;
+        return id.equals(screen.id)
+                && size.equals(screen.size)
+                && technology.equals(screen.technology)
+                && resolution.equals(screen.resolution)
+                && type.equals(screen.type)
+                && refresh_rate.equals(screen.refresh_rate)
+                && panel.equals(screen.panel)
+                && brightness.equals(screen.brightness)
+                && Objects.equals(color_coverage, screen.color_coverage)
+                && has_touch_screen.equals(screen.has_touch_screen);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, size, technology, resolution, has_touch_screen);
     }
 
     @Override

@@ -1,7 +1,8 @@
 package com.hcmute.ecom.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.sql.Date;
+import java.util.Objects;
 
 /**
  * @author Nhat Phi
@@ -13,7 +14,7 @@ public class Product {
     private String name;
     private Long brand_id;
     private Long category_id;
-    private LocalDate released_date;
+    private Date released_date;
     private Integer quantity_in_stock;
     private BigDecimal listed_price;
     private BigDecimal price;
@@ -26,7 +27,7 @@ public class Product {
     private String more_description_html;
     private Long screen_id;
 
-    public Product(String id, String name, Long brand_id, Long category_id, LocalDate released_date,
+    public Product(String id, String name, Long brand_id, Long category_id, Date released_date,
                    Integer quantity_in_stock, BigDecimal listed_price, BigDecimal price, Byte ram_capacity,
                    String cpu_brand, String cpu_type, String cpu_more_infor_html, String more_description_html,
                    Long screen_id) {
@@ -45,6 +46,8 @@ public class Product {
         this.more_description_html = more_description_html;
         this.screen_id = screen_id;
     }
+    
+    public Product() {}
 
     public String getId() {
         return id;
@@ -78,11 +81,11 @@ public class Product {
         this.category_id = category_id;
     }
 
-    public LocalDate getReleasedDate() {
+    public Date getReleasedDate() {
         return released_date;
     }
 
-    public void setReleasedDate(LocalDate released_date) {
+    public void setReleasedDate(Date released_date) {
         this.released_date = released_date;
     }
 
@@ -156,6 +159,32 @@ public class Product {
 
     public void setMoreDescriptionHTML(String more_description_html) {
         this.more_description_html = more_description_html;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id.equals(product.id)
+                && name.equals(product.name)
+                && brand_id.equals(product.brand_id)
+                && category_id.equals(product.category_id)
+                && released_date.equals(product.released_date)
+                && quantity_in_stock.equals(product.quantity_in_stock)
+                && listed_price.equals(product.listed_price)
+                && price.equals(product.price)
+                && ram_capacity.equals(product.ram_capacity)
+                && cpu_brand.equals(product.cpu_brand)
+                && Objects.equals(cpu_type, product.cpu_type)
+                && cpu_more_infor_html.equals(product.cpu_more_infor_html)
+                && more_description_html.equals(product.more_description_html)
+                && Objects.equals(screen_id, product.screen_id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, brand_id, category_id, listed_price, screen_id);
     }
 
     @Override
