@@ -3,8 +3,6 @@ package com.hcmute.ecom.service;
 import com.hcmute.ecom.model.Brand;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-
 /**
  * @author Nhat Phi
  * @since 2022-11-18
