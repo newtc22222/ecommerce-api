@@ -11,7 +11,8 @@
         <module>dto</module>
         <module>config</module>
 		<module>mapper</module>
-	</modules>
+        <module>statistical-service</module>
+    </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
