@@ -6,6 +6,10 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * @author Nhat Phi
+ * @since 2022-11-21
+ * */
 public class BrandMapper implements RowMapper<Brand> {
     @Override
     public Brand mapRow(ResultSet rs, int rowNum) throws SQLException {
