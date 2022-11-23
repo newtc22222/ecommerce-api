@@ -1,9 +1,8 @@
-import com.hcmute.ecom.config.DBConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 
+@SuppressWarnings("SpringBootApplicationSetup")
 @SpringBootApplication
 @ComponentScan(basePackages = { "com.hcmute.ecom" })
 public class EcommerceApiApplication {
