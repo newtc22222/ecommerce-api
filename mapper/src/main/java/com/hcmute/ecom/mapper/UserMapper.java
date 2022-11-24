@@ -7,12 +7,15 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author Nhat Phi
  * @since 2022-11-21
  * */
 public class UserMapper implements RowMapper<User> {
+    private static final DateTimeFormatter DATE_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     @Override
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         User user = new User();
@@ -22,8 +25,8 @@ public class UserMapper implements RowMapper<User> {
         user.setPhone(rs.getString("phone"));
         user.setEmail(rs.getString("email"));
         user.setDateOfBirth(rs.getDate("date_of_birth"));
-        user.setCreatedDate(LocalDateTime.parse(rs.getString("created_date")));
-        user.setLastUpdatedDate(LocalDateTime.parse(rs.getString("last_updated_date")));
+        user.setCreatedDate(LocalDateTime.parse(rs.getString("created_date"), DATE_TIME_PATTERN));
+        user.setLastUpdatedDate(LocalDateTime.parse(rs.getString("last_updated_date"), DATE_TIME_PATTERN));
         return user;
     }
 }
