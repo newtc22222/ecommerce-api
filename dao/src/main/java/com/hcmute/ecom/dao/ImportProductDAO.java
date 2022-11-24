@@ -2,7 +2,7 @@ package com.hcmute.ecom.dao;
 
 import com.hcmute.ecom.model.ImportProduct;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,6 +17,6 @@ public interface ImportProductDAO {
     List<ImportProduct> getAllImportProductTicket();
     ImportProduct findImportProductTicket(long ticketId);
     List<ImportProduct> getImportProductTicketsByProductId(String productId);
-    List<ImportProduct> getImportProductTicketsByDate(Date date);
+    List<ImportProduct> getImportProductTicketsByDate(LocalDate date);
     List<ImportProduct> getImportProductTicketsByDateRange(LocalDateTime startDate, LocalDateTime endDate);
 }

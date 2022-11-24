@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -125,12 +126,12 @@ public class ImportProductDAOImpl implements ImportProductDAO {
     }
 
     @Override
-    public List<ImportProduct> getImportProductTicketsByDate(Date date) {
+    public List<ImportProduct> getImportProductTicketsByDate(LocalDate date) {
         try {
             return jdbcTemplate.query(
                     QUERY_IMPORT_PRODUCT_TICKETS_BY_DATE,
                     new ImportProductMapper(),
-                    date
+                    Date.valueOf(date)
             );
         }
         catch (EmptyResultDataAccessException err) {

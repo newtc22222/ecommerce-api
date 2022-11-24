@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -219,12 +220,12 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     }
 
     @Override
-    public List<Invoice> getInvoicesByDate(Date date) {
+    public List<Invoice> getInvoicesByDate(LocalDate date) {
         try {
             return jdbcTemplate.query(
                     QUERY_INVOICES_BY_DATE,
                     new InvoiceMapper(),
-                    date
+                    Date.valueOf(date)
             );
         }
         catch (EmptyResultDataAccessException err) {

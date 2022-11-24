@@ -3,7 +3,7 @@ package com.hcmute.ecom.dao;
 import com.hcmute.ecom.enums.OrderStatus;
 import com.hcmute.ecom.model.Invoice;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public interface InvoiceDAO {
     Invoice getInvoiceById(String invoiceId);
     List<Invoice> getInvoicesByUserId(long userId);
     List<Invoice> getInvoicesByAddress(String address);
-    List<Invoice> getInvoicesByDate(Date date);
+    List<Invoice> getInvoicesByDate(LocalDate date);
     List<Invoice> getInvoicesByDateRange(LocalDateTime startDate, LocalDateTime endDate);
     List<Invoice> getInvoicesByPaymentType(String paymentType);
     List<Invoice> getInvoicesByOrderStatus(OrderStatus status);
