@@ -1,10 +1,9 @@
 package com.hcmute.ecom.service.impl;
 
-import com.hcmute.ecom.dao.*;
+import com.hcmute.ecom.dao.ProductDAO;
 import com.hcmute.ecom.dto.request.LaptopDTORequest;
 import com.hcmute.ecom.dto.request.ProductDTORequest;
-import com.hcmute.ecom.enums.ImageType;
-import com.hcmute.ecom.model.*;
+import com.hcmute.ecom.model.Product;
 import com.hcmute.ecom.service.ProductService;
 import com.hcmute.ecom.service.model.ResponseCUDObject;
 import com.hcmute.ecom.service.model.ResponseObject;
@@ -23,18 +22,6 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductDAO productDAO;
-
-    @Autowired
-    private CommentDAO commentDAO;
-
-    @Autowired
-    private DiscountDAO discountDAO;
-
-    @Autowired
-    private FeedbackDAO feedbackDAO;
-
-    @Autowired
-    private ProductImageDAO productImageDAO;
 
     @Override
     public ResponseEntity<?> insert(Product product) {
@@ -180,89 +167,5 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseEntity<?> findProductsByConditions(Object... args) {
         return null;
-    }
-
-    @Override
-    public ResponseEntity<?> getAllCommentsOfProduct(String productId) {
-        List<Comment> comments = commentDAO.getAllCommentsOfProduct(productId);
-        if(comments == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any comment in this product!"
-                    ));
-        }
-        return ResponseEntity.ok(comments);
-    }
-
-    @Override
-    public ResponseEntity<?> getDiscountsByProduct(String productId) {
-        List<Discount> discounts = discountDAO.getDiscountsByProduct(productId);
-        if(discounts == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any discount in this product!"
-                    ));
-        }
-        return ResponseEntity.ok(discounts);
-    }
-
-    @Override
-    public ResponseEntity<?> getAllFeedbacksOfProduct(String productId) {
-        List<Feedback> feedbacks = feedbackDAO.getAllFeedbacksOfProduct(productId);
-        if(feedbacks == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any feedback in this product!"
-                    ));
-        }
-        return ResponseEntity.ok(feedbacks);
-    }
-
-    @Override
-    public ResponseEntity<?> getAllFeedbacksOfProductByRatingPoint(String productId, byte ratingPoint) {
-        List<Feedback> feedbacks = feedbackDAO.getAllFeedbacksOfProductByRatingPoint(productId, ratingPoint);
-        if(feedbacks == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any feedback in this product of this point!"
-                    ));
-        }
-        return ResponseEntity.ok(feedbacks);
-    }
-
-    @Override
-    public ResponseEntity<?> getProductImagesByProductId(String productId) {
-        List<ProductImage> images = productImageDAO.getProductImagesByProductId(productId);
-        if(images == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any images in this product!"
-                    ));
-        }
-        return ResponseEntity.ok(images);
-    }
-
-    @Override
-    public ResponseEntity<?> getProductImagesByProductIdAndImageType(String productId, ImageType type) {
-        List<ProductImage> images = productImageDAO.getProductImagesByProductIdAndImageType(productId, type);
-        if(images == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any images in this product of this type!"
-                    ));
-        }
-        return ResponseEntity.ok(images);
     }
 }

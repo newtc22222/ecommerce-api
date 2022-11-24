@@ -66,6 +66,20 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public ResponseEntity<?> getAllCommentsOfProduct(String productId) {
+        List<Comment> comments = commentDAO.getAllCommentsOfProduct(productId);
+        if(comments == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find any comment in this product!"
+                    ));
+        }
+        return ResponseEntity.ok(comments);
+    }
+
+    @Override
     public ResponseEntity<?> getAllCommentsOfUser(String phone) {
         List<Comment> comments = commentDAO.getAllCommentsOfUser(phone);
         if(comments == null){

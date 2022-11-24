@@ -16,6 +16,7 @@ public interface DiscountService {
     ResponseEntity<?> delete(long discountId);
 
     ResponseEntity<?> getAllDiscounts();
+    ResponseEntity<?> getDiscountsByProduct(String productId);
     ResponseEntity<?> findDiscountsByCode(String code);
     ResponseEntity<?> getDiscountByDateRange(LocalDateTime startDate, LocalDateTime endDate);
     ResponseEntity<?> getDiscountByType(DiscountType type);

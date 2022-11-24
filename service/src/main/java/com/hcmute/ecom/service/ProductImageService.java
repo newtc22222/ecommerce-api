@@ -16,4 +16,6 @@ public interface ProductImageService {
     ResponseEntity<?> getAllProductImages();
     ResponseEntity<?> findProductImageById(String imageId);
     ResponseEntity<?> getProductImagesByImageType(ImageType type);
+    ResponseEntity<?> getProductImagesByProductId(String productId);
+    ResponseEntity<?> getProductImagesByProductIdAndImageType(String productId, ImageType type);
 }

@@ -135,4 +135,32 @@ public class ProductImageServiceImpl implements ProductImageService {
         }
         return ResponseEntity.ok(productImageList);
     }
+
+    @Override
+    public ResponseEntity<?> getProductImagesByProductId(String productId) {
+        List<ProductImage> images = productImageDAO.getProductImagesByProductId(productId);
+        if(images == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find any images in this product!"
+                    ));
+        }
+        return ResponseEntity.ok(images);
+    }
+
+    @Override
+    public ResponseEntity<?> getProductImagesByProductIdAndImageType(String productId, ImageType type) {
+        List<ProductImage> images = productImageDAO.getProductImagesByProductIdAndImageType(productId, type);
+        if(images == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find any images in this product of this type!"
+                    ));
+        }
+        return ResponseEntity.ok(images);
+    }
 }

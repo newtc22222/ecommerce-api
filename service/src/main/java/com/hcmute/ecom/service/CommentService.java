@@ -11,6 +11,7 @@ public interface CommentService {
     ResponseEntity<?> insert(Comment comment);
     ResponseEntity<?> update(Comment comment, long commentId);
     ResponseEntity<?> delete(long commentId);
+    ResponseEntity<?> getAllCommentsOfProduct(String productId);
     ResponseEntity<?> getAllCommentsOfUser(String phone);
     ResponseEntity<?> getNewComments(int limit);
     ResponseEntity<?> findCommentById(long commentId);

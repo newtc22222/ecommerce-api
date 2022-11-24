@@ -71,6 +71,34 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
+    public ResponseEntity<?> getAllFeedbacksOfProduct(String productId) {
+        List<Feedback> feedbacks = feedbackDAO.getAllFeedbacksOfProduct(productId);
+        if(feedbacks == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find any feedback in this product!"
+                    ));
+        }
+        return ResponseEntity.ok(feedbacks);
+    }
+
+    @Override
+    public ResponseEntity<?> getAllFeedbacksOfProductByRatingPoint(String productId, byte ratingPoint) {
+        List<Feedback> feedbacks = feedbackDAO.getAllFeedbacksOfProductByRatingPoint(productId, ratingPoint);
+        if(feedbacks == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find any feedback in this product of this point!"
+                    ));
+        }
+        return ResponseEntity.ok(feedbacks);
+    }
+
+    @Override
     public ResponseEntity<?> getAllFeedbacksOfUser(long userId) {
         List<Feedback> feedbackList = feedbackDAO.getAllFeedbacksOfUser(userId);
 
