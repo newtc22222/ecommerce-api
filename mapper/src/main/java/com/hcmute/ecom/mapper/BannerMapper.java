@@ -17,8 +17,8 @@ public class BannerMapper implements RowMapper<Banner> {
         banner.setId(rs.getLong("_id"));
         banner.setPath(rs.getString("path"));
         banner.setType(rs.getString("type"));
-        banner.setUsed_date(rs.getDate("used_date"));
-        banner.setEnded_date(rs.getDate("ended_date"));
+        banner.setUsedDate(rs.getDate("used_date"));
+        banner.setEndedDate(rs.getDate("ended_date"));
         return banner;
     }
 }
