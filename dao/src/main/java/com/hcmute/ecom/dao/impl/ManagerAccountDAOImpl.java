@@ -24,11 +24,15 @@ public class ManagerAccountDAOImpl implements ManagerAccountDAO {
     private final String INSERT = String.format("insert into %s values (?, ?, ?, ?)", TABLE_NAME);
     private final String UPDATE = String.format("update %s " +
             "set password=?, created_date=?, last_updated_date=? where username=?", TABLE_NAME);
+    private final String UPDATE_PASSWORD = String.format("update %s " +
+            "set password=?, last_updated_date=? where username=?", TABLE_NAME);
     private final String DELETE = String.format("delete from %s where username=?", TABLE_NAME);
 
 //    private final String QUERY_ALL = String.format("select * from %s", TABLE_NAME);
     private final String QUERY_ACCOUNT =
         String.format("select * from %s where username=? and password=? limit 1", TABLE_NAME);
+    private final String QUERY_ACCOUNT_BY_USERNAME =
+        String.format("select * from %s where username=? limit 1", TABLE_NAME);
 
     @Override
     public int insert(ManagerAccount account) {
@@ -63,6 +67,21 @@ public class ManagerAccountDAOImpl implements ManagerAccountDAO {
     }
 
     @Override
+    public int updatePassword(ManagerAccount account) {
+        try {
+            return jdbcTemplate.update(
+                    UPDATE_PASSWORD,
+                    account.getPassword(),
+                    Timestamp.valueOf(account.getLastUpdatedDate()),
+                    account.getUsername()
+            );
+        }
+        catch (Exception err) {
+            return 0;
+        }
+    }
+
+    @Override
     public int delete(String username) {
         try {
             return jdbcTemplate.update(
@@ -83,6 +102,20 @@ public class ManagerAccountDAOImpl implements ManagerAccountDAO {
                     new ManagerAccountMapper(),
                     username,
                     password
+            );
+        }
+        catch (EmptyResultDataAccessException err) {
+            return null;
+        }
+    }
+
+    @Override
+    public ManagerAccount findAccountByUsername(String username) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    QUERY_ACCOUNT_BY_USERNAME,
+                    new ManagerAccountMapper(),
+                    username
             );
         }
         catch (EmptyResultDataAccessException err) {

@@ -9,6 +9,8 @@ import com.hcmute.ecom.model.ManagerAccount;
 public interface ManagerAccountDAO {
     int insert(ManagerAccount account);
     int update(ManagerAccount account);
+    int updatePassword(ManagerAccount account);
     int delete(String username);
     ManagerAccount findAccount(String username, String password);
+    ManagerAccount findAccountByUsername(String username);
 }
