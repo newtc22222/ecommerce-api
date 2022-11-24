@@ -104,9 +104,24 @@ public class AddressServiceImpl implements AddressService {
                     .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NOT_FOUND,
-                            "Cannot find address with id = " + addressId));
+                            "Cannot find address with id = " + addressId
+                    ));
         }
 
         return ResponseEntity.ok(address);
+    }
+
+    @Override
+    public ResponseEntity<?> getAllAddressOfUser(long userId) {
+        List<Address> addressList = addressDAO.getAllAddressOfUser(userId);
+        if(addressList == null || addressList.size() == 0) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find any address of this user!"
+                    ));
+        }
+        return ResponseEntity.ok(addressList);
     }
 }

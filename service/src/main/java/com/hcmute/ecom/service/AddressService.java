@@ -13,4 +13,5 @@ public interface AddressService {
     ResponseEntity<?> delete(long addressId);
     ResponseEntity<?> getAllAddress();
     ResponseEntity<?> findAddressById(long addressId);
+    ResponseEntity<?> getAllAddressOfUser(long userId);
 }
