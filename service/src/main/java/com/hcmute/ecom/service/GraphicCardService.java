@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
  */
 public interface GraphicCardService {
     ResponseEntity<?> insert(GraphicCard card);
-    ResponseEntity<?> update(GraphicCard card);
+    ResponseEntity<?> update(GraphicCard card, long graphicCardId);
     ResponseEntity<?> delete(long graphicCardId);
     ResponseEntity<?> getAllGraphicCards();
     ResponseEntity<?> findGraphicCardById(long graphicCardId);

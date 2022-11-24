@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  */
 public interface InvoiceService {
     ResponseEntity<?> insert(Invoice invoice);
-    ResponseEntity<?> update(Invoice invoice);
+    ResponseEntity<?> update(Invoice invoice, String invoiceId);
     ResponseEntity<?> updateStatus(String invoiceId, OrderStatus status);
     ResponseEntity<?> updatePaymentType(String invoiceId, String paymentType);
     ResponseEntity<?> updatePaidStatus(String invoiceId, boolean isPaid); // true -> was paid

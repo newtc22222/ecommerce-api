@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
  */
 public interface ProductService {
     ResponseEntity<?> insert(Product product);
-    ResponseEntity<?> updateAll(Product product);
+    ResponseEntity<?> updateAll(Product product, String productId);
     ResponseEntity<?> updatePrice(ProductDTORequest productDTO);
     ResponseEntity<?> updateLaptopProperties(LaptopDTORequest laptopDTO);
     ResponseEntity<?> delete(String productId);
@@ -38,7 +38,7 @@ public interface ProductService {
     // Discount
     ResponseEntity<?> getDiscountsByProduct(String productId);
     // Feedback
-    ResponseEntity<?> getAllFeedbacksOfProduct(long productId);
+    ResponseEntity<?> getAllFeedbacksOfProduct(String productId);
     ResponseEntity<?> getAllFeedbacksOfProductByRatingPoint(String productId, byte ratingPoint);
     // Images
     ResponseEntity<?> getProductImagesByProductId(String productId);

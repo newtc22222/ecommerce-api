@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
  */
 public interface ProductImageService {
     ResponseEntity<?> insert(ProductImage image);
-    ResponseEntity<?> update(ProductImage image);
+    ResponseEntity<?> update(ProductImage image, String imageId);
     ResponseEntity<?> updatePathAndType(String imageId, String path, ImageType type);
     ResponseEntity<?> delete(String imageId);
     ResponseEntity<?> getAllProductImages();

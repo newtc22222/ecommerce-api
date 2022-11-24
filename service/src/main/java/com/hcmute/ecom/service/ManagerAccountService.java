@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
  */
 public interface ManagerAccountService {
     ResponseEntity<?> insert(ManagerAccount account);
-    ResponseEntity<?> update(ManagerAccount account);
+    ResponseEntity<?> update(ManagerAccount account, String username);
     ResponseEntity<?> delete(String username);
     ResponseEntity<?> findAccount(AccountDTO account);
 }

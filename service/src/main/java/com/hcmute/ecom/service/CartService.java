@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
  */
 public interface CartService {
     ResponseEntity<?> insert(Cart cart);
-    ResponseEntity<?> update(Cart cart);
+    ResponseEntity<?> update(Cart cart, long userId);
     ResponseEntity<?> delete(String cartId, long userId);
-    ResponseEntity<?> getProductItemsByCartId(String cartId);
+    ResponseEntity<?> getProductItemsByUserId(long userId);
 }

@@ -10,17 +10,20 @@ import org.springframework.http.ResponseEntity;
  */
 public interface UserService {
     ResponseEntity<?> insert(User user);
-    ResponseEntity<?> updateAll(User user);
+    ResponseEntity<?> updateAll(User user, long userId);
     ResponseEntity<?> updateInformation(UserDTORequest userDTO);
     ResponseEntity<?> delete(long userId);
 
     ResponseEntity<?> getAllUsers();
     ResponseEntity<?> findUserById(long userId);
-    ResponseEntity<?> findUserByConditions(Object ...args);
+    ResponseEntity<?> findUserByPhone(String phone);
 
-//    ResponseEntity<?> findUserByPhone(String phone);
+    ResponseEntity<?> findUserByConditions(Object ...args);
 //    ResponseEntity<?> findUsersByName(String name);
 //    ResponseEntity<?> getUsersByGender(Gender gender);
+
+    //
+    ResponseEntity<?> getAllAddressOfUser(long userId);
 
     // Cart
     ResponseEntity<?> findCartByUserId(long userId);

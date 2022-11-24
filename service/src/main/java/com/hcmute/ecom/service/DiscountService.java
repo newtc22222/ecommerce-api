@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  */
 public interface DiscountService {
     ResponseEntity<?> insert(Discount discount);
-    ResponseEntity<?> update(Discount discount);
+    ResponseEntity<?> update(Discount discount, long discountId);
     ResponseEntity<?> delete(long discountId);
 
     ResponseEntity<?> getAllDiscounts();

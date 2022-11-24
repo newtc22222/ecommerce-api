@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
  */
 public interface FeedbackService {
     ResponseEntity<?> insert(Feedback feedback);
-    ResponseEntity<?> update(Feedback feedback);
+    ResponseEntity<?> update(Feedback feedback, long feedbackId);
     ResponseEntity<?> delete(long feedbackId, String productId, long userId);
     ResponseEntity<?> getAllFeedbacksOfUser(long userId);
     ResponseEntity<?> getNewFeedbacks(int limit);

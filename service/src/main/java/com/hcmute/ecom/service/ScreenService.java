@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
  */
 public interface ScreenService {
     ResponseEntity<?> insert(Screen screen);
-    ResponseEntity<?> update(Screen screen);
+    ResponseEntity<?> update(Screen screen, long screenId);
     ResponseEntity<?> delete(long screenId);
 
     ResponseEntity<?> getAllScreens();

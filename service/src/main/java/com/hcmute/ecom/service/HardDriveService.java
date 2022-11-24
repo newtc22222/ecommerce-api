@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
  */
 public interface HardDriveService {
     ResponseEntity<?> insert(HardDrive hardDrive);
-    ResponseEntity<?> update(HardDrive hardDrive);
+    ResponseEntity<?> update(HardDrive hardDrive, long hardDriveId);
     ResponseEntity<?> delete(long hardDriveId);
     ResponseEntity<?> getAllHardDrive();
     ResponseEntity<?> findHardDriveById(long hardDriveId);

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  */
 public interface ProductItemService {
     ResponseEntity<?> insert(ProductItem item);
-    ResponseEntity<?> update(ProductItem item);
+    ResponseEntity<?> update(ProductItem item, String itemId);
     ResponseEntity<?> updateProductItemProperties(String itemId, int quantity, BigDecimal price, BigDecimal discount_price);
     ResponseEntity<?> delete(String itemId); // cardId or invoiceId will be null
     ResponseEntity<?> findProductItemById(String itemId);

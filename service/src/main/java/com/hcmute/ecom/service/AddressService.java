@@ -9,9 +9,8 @@ import org.springframework.http.ResponseEntity;
  */
 public interface AddressService {
     ResponseEntity<?> insert(Address address);
-    ResponseEntity<?> update(Address address);
+    ResponseEntity<?> update(Address address, long addressId);
     ResponseEntity<?> delete(long addressId);
     ResponseEntity<?> getAllAddress();
-    ResponseEntity<?> getAllAddressOfUser(long userId);
     ResponseEntity<?> findAddressById(long addressId);
 }

@@ -1,7 +1,12 @@
 package com.hcmute.ecom.service.impl;
 
+import com.hcmute.ecom.dao.CartDAO;
 import com.hcmute.ecom.model.Cart;
 import com.hcmute.ecom.service.CartService;
+import com.hcmute.ecom.service.model.ResponseCUDObject;
+import com.hcmute.ecom.service.model.ResponseObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -11,23 +16,67 @@ import org.springframework.stereotype.Service;
  * */
 @Service
 public class CartServiceImpl implements CartService {
+    @Autowired
+    private CartDAO cartDAO;
+    
     @Override
     public ResponseEntity<?> insert(Cart cart) {
-        return null;
+        return ResponseCUDObject.of(
+                cartDAO.insert(cart) > 0,
+                HttpStatus.CREATED,
+                "Insert new cart successfully!",
+                HttpStatus.NOT_IMPLEMENTED,
+                "Failed to insert new cart! Please check your data again!"
+        );
     }
 
     @Override
-    public ResponseEntity<?> update(Cart cart) {
-        return null;
+    public ResponseEntity<?> update(Cart cart, long userId) {
+        Cart oldCart = cartDAO.findCartByUserId(userId);
+        
+        if(oldCart == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find cart of user with id = " + userId
+                    ));
+        }
+        else {
+            oldCart.setDiscountId(cart.getDiscountId());
+        }
+        
+        return ResponseCUDObject.of(
+                cartDAO.update(oldCart) > 0,
+                HttpStatus.OK,
+                "Update cart successfully!",
+                HttpStatus.NOT_IMPLEMENTED,
+                "Failed to update cart! Please check your data again!"
+        );
     }
 
     @Override
     public ResponseEntity<?> delete(String cartId, long userId) {
-        return null;
+        return ResponseCUDObject.of(
+                cartDAO.delete(cartId, userId) > 0,
+                HttpStatus.OK,
+                "Delete cart successfully!",
+                HttpStatus.NOT_FOUND,
+                "Failed to delete cart! Please check your data again!"
+        );
     }
 
     @Override
-    public ResponseEntity<?> getProductItemsByCartId(String cartId) {
-        return null;
+    public ResponseEntity<?> getProductItemsByUserId(long userId) {
+        Cart cart = cartDAO.findCartByUserId(userId);
+        if(cart == null){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find cart of user with id = " + userId));
+        }
+
+        return ResponseEntity.ok(cart);
     }
 }

@@ -1,10 +1,23 @@
 package com.hcmute.ecom.service.impl;
 
+import com.hcmute.ecom.dao.AddressDAO;
+import com.hcmute.ecom.dao.CartDAO;
+import com.hcmute.ecom.dao.InvoiceDAO;
+import com.hcmute.ecom.dao.UserDAO;
 import com.hcmute.ecom.dto.request.UserDTORequest;
+import com.hcmute.ecom.model.Address;
+import com.hcmute.ecom.model.Cart;
+import com.hcmute.ecom.model.Invoice;
 import com.hcmute.ecom.model.User;
 import com.hcmute.ecom.service.UserService;
+import com.hcmute.ecom.service.model.ResponseCUDObject;
+import com.hcmute.ecom.service.model.ResponseObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author Nhat Phi
@@ -12,34 +25,142 @@ import org.springframework.stereotype.Service;
  * */
 @Service
 public class UserServiceImpl implements UserService {
+    @Autowired
+    private UserDAO userDAO;
+
+    @Autowired
+    private AddressDAO addressDAO;
+
+    @Autowired
+    private CartDAO cartDAO;
+
+    @Autowired
+    private InvoiceDAO invoiceDAO;
+
     @Override
     public ResponseEntity<?> insert(User user) {
-        return null;
+        return ResponseCUDObject.of(
+                userDAO.insert(user) > 0,
+                HttpStatus.CREATED,
+                "Create new user successfully!",
+                HttpStatus.NOT_IMPLEMENTED,
+                "Failed to create new user! Please check your data again!"
+        );
     }
 
     @Override
-    public ResponseEntity<?> updateAll(User user) {
-        return null;
+    public ResponseEntity<?> updateAll(User user, long userId) {
+        User oldUser = userDAO.findUserById(userId);
+        if(oldUser == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find user with id = " + userId
+                    ));
+        }
+        else {
+            oldUser.setName(user.getName());
+            oldUser.setGender(user.getGender());
+            oldUser.setPhone(user.getPhone());
+            oldUser.setEmail(user.getEmail());
+            oldUser.setDateOfBirth(user.getDateOfBirth());
+            oldUser.setCreatedDate(user.getCreatedDate());
+            oldUser.setLastUpdatedDate(user.getLastUpdatedDate());
+        }
+        return ResponseCUDObject.of(
+                userDAO.updateAll(oldUser) > 0,
+                HttpStatus.OK,
+                "Update all information of user successfully!",
+                HttpStatus.NOT_IMPLEMENTED,
+                "Failed to update user! Please check your data again!"
+        );
     }
 
     @Override
     public ResponseEntity<?> updateInformation(UserDTORequest userDTO) {
-        return null;
+        User oldUser = userDAO.findUserById(userDTO.getId());
+        if(oldUser == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find user with id = " + userDTO.getId()
+                    ));
+        }
+
+        return ResponseCUDObject.of(
+                userDAO.updateInformation(userDTO) > 0,
+                HttpStatus.OK,
+                "Update information successfully!",
+                HttpStatus.NOT_IMPLEMENTED,
+                "Failed to update user! Please check your data again!"
+        );
     }
 
     @Override
     public ResponseEntity<?> delete(long userId) {
-        return null;
+        if(userDAO.findUserById(userId) == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find user with id = " + userId
+                    ));
+        }
+
+        return ResponseCUDObject.of(
+                userDAO.delete(userId) > 0,
+                HttpStatus.CREATED,
+                "Remove user successfully!",
+                HttpStatus.NOT_IMPLEMENTED,
+                "Failed to remove user!"
+        );
     }
 
     @Override
     public ResponseEntity<?> getAllUsers() {
-        return null;
+        List<User> users = userDAO.getAllUsers();
+        if(users == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find any user in system!"
+                    ));
+        }
+
+        return ResponseEntity.ok(users);
     }
 
     @Override
     public ResponseEntity<?> findUserById(long userId) {
-        return null;
+        User user = userDAO.findUserById(userId);
+
+        if(user == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find user with id = " + userId
+                    ));
+        }
+        return ResponseEntity.ok(user);
+    }
+
+    @Override
+    public ResponseEntity<?> findUserByPhone(String phone) {
+        User user = userDAO.findUserByPhone(phone);
+
+        if(user == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find user with phone = " + phone
+                    ));
+        }
+        return ResponseEntity.ok(user);
     }
 
     @Override
@@ -48,12 +169,44 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResponseEntity<?> getAllAddressOfUser(long userId) {
+        List<Address> addresses = addressDAO.getAllAddressOfUser(userId);
+        if (addresses == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find address of this user!"
+                    ));
+        }
+        return ResponseEntity.ok(addresses);
+    }
+
+    @Override
     public ResponseEntity<?> findCartByUserId(long userId) {
-        return null;
+        Cart cart = cartDAO.findCartByUserId(userId);
+        if (cart == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find cart of this user!"
+                    ));
+        }
+        return ResponseEntity.ok(cart);
     }
 
     @Override
     public ResponseEntity<?> getInvoicesByUserId(long userId) {
-        return null;
+        List<Invoice> invoices = invoiceDAO.getInvoicesByUserId(userId);
+        if (invoices == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find any invoices of this user!"
+                    ));
+        }
+        return ResponseEntity.ok(invoices);
     }
 }

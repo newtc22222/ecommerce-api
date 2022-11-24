@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
  */
 public interface CategoryService {
     ResponseEntity<?> insert(Category category);
-    ResponseEntity<?> update(Category category);
+    ResponseEntity<?> update(Category category, long categoryId);
     ResponseEntity<?> delete(long categoryId);
     ResponseEntity<?> getAllCategory();
     ResponseEntity<?> findCategoryById(long categoryId);

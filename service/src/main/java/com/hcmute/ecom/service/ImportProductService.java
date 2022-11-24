@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  */
 public interface ImportProductService {
     ResponseEntity<?> insert(ImportProduct ticket);
-    ResponseEntity<?> update(ImportProduct ticket);
+    ResponseEntity<?> update(ImportProduct ticket, long ticketId);
     ResponseEntity<?> delete(long ticketId);
     ResponseEntity<?> getAllImportProductTicket();
     ResponseEntity<?> findImportProductTicket(long ticketId);
