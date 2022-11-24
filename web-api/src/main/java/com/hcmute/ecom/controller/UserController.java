@@ -21,9 +21,18 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<?> findUserByPhone(@RequestParam(value = "phoneNumber", required = false) String phone) {
+        if (phone.charAt(0) == '0') {
+            phone = phone.replaceAll("^.", "+84");
+        }
+
+        return userService.findUserByPhone(phone);
+    }
+
+
     @GetMapping("{id}")
     public ResponseEntity<?> findUserById(@PathVariable("id") long userId) {
         return userService.findUserById(userId);
     }
-
 }

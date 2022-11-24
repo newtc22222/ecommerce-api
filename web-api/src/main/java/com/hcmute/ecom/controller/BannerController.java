@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author Nhat Phi
@@ -35,12 +38,25 @@ public class BannerController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> insertBanner(@RequestBody Banner banner) {
+    public ResponseEntity<?> insertBanner(@RequestBody Map<String, String> bannerRequest) {
+        Banner banner = new Banner(
+                Long.getLong(bannerRequest.get("id")),
+                bannerRequest.get("path"),
+                bannerRequest.get("type"),
+                Date.valueOf(bannerRequest.get("usedDate")),
+                Date.valueOf(bannerRequest.get("endedDate")));
         return bannerService.insert(banner);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> updateBanner(@PathVariable("id") long bannerId, @RequestBody Banner banner) {
+    public ResponseEntity<?> updateBanner(@PathVariable("id") long bannerId, @RequestBody Map<String, String> bannerRequest) {
+        Banner banner = new Banner(
+                Long.getLong(bannerRequest.get("id")),
+                bannerRequest.get("path"),
+                bannerRequest.get("type"),
+                Date.valueOf(bannerRequest.get("usedDate")),
+                Date.valueOf(bannerRequest.get("endedDate")));
+        System.out.println(banner);
         return bannerService.update(banner, bannerId);
     }
 

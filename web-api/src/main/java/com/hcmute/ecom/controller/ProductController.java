@@ -47,4 +47,6 @@ public class ProductController {
     public ResponseEntity<?> removeProduct(@PathVariable("id") String productId) {
         return productService.delete(productId);
     }
+
+
 }
