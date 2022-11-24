@@ -24,7 +24,7 @@ public class BannerDAOImpl implements BannerDAO {
     private final String TABLE_NAME = "tbl_banner";
     private final String INSERT = String.format("insert into %s values (0, ?, ?, ?, ?)", TABLE_NAME);
     private final String UPDATE = String.format("update %s " +
-            "set path=?, type=?, used_date=?, end_date=? where id=?", TABLE_NAME);
+            "set path=?, type=?, used_date=?, ended_date=? where id=?", TABLE_NAME);
     private final String DELETE = String.format("delete from %s where id=?", TABLE_NAME);
 
     private final String QUERY_ALL = String.format("select * from %s", TABLE_NAME);
