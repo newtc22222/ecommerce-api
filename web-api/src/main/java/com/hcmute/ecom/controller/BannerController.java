@@ -19,7 +19,7 @@ public class BannerController {
     @Autowired
     private BannerService bannerService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getAllBanners(){
         return bannerService.getAllBanner();
     }
@@ -29,22 +29,22 @@ public class BannerController {
         return bannerService.getBannersByDateRange(startDate, endDate);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<?> findBannerById(@PathVariable("id") long bannerId) {
         return bannerService.findBannerById(bannerId);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<?> insertBanner(@RequestBody Banner banner) {
         return bannerService.insert(banner);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<?> updateBanner(@PathVariable("id") long bannerId, @RequestBody Banner banner) {
         return bannerService.update(banner, bannerId);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<?> deleteBanner(@PathVariable("id") long bannerId) {
         return bannerService.delete(bannerId);
     }
