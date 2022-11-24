@@ -3,6 +3,7 @@ package com.hcmute.ecom.dto.request;
 import java.util.Objects;
 
 /**
+ * username - password
  * @author Nhat Phi
  * @since 2022-11-22
  * */

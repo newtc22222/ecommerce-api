@@ -14,7 +14,7 @@ public class BannerMapper implements RowMapper<Banner> {
     @Override
     public Banner mapRow(ResultSet rs, int rowNum) throws SQLException {
         Banner banner = new Banner();
-        banner.setId(rs.getLong("_id"));
+        banner.setId(rs.getLong("id"));
         banner.setPath(rs.getString("path"));
         banner.setType(rs.getString("type"));
         banner.setUsedDate(rs.getDate("used_date"));
