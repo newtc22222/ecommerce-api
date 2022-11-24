@@ -2,6 +2,10 @@ package com.hcmute.ecom.dto.request;
 
 import java.util.Objects;
 
+/**
+ * @author Nhat Phi
+ * @since 2022-11-22
+ * */
 public class AccountDTO {
     private String username;
     private String password;
