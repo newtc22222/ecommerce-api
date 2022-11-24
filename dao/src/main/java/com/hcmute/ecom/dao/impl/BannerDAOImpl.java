@@ -40,8 +40,8 @@ public class BannerDAOImpl implements BannerDAO {
                     INSERT,
                     banner.getPath(),
                     banner.getType(),
-                    banner.getUsed_date(),
-                    banner.getEnded_date()
+                    banner.getUsedDate(),
+                    banner.getEndedDate()
             );
         }
         catch (Exception err) {
@@ -56,8 +56,8 @@ public class BannerDAOImpl implements BannerDAO {
                     UPDATE,
                     banner.getPath(),
                     banner.getType(),
-                    banner.getUsed_date(),
-                    banner.getEnded_date(),
+                    banner.getUsedDate(),
+                    banner.getEndedDate(),
                     banner.getId()
             );
         }

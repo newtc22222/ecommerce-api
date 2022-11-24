@@ -25,7 +25,7 @@ public class ProductDAOImpl implements ProductDAO {
     private JdbcTemplate jdbcTemplate;
 
     // Query String
-    private final String TABLE_NAME = "tbl_category";
+    private final String TABLE_NAME = "tbl_product";
     private final String INSERT = String.format("insert into %s values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", TABLE_NAME);
     private final String UPDATE_ALL = String.format("update %s " +
             "set name=?, brand_id=?, category_id=?, released_date=?, quantity_in_stock=?, listed_price=?, price=?, " +
