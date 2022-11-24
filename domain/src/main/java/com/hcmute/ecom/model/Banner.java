@@ -47,19 +47,19 @@ public class Banner {
         this.type = type;
     }
 
-    public Date getUsed_date() {
+    public Date getUsedDate() {
         return used_date;
     }
 
-    public void setUsed_date(Date used_date) {
+    public void setUsedDate(Date used_date) {
         this.used_date = used_date;
     }
 
-    public Date getEnded_date() {
+    public Date getEndedDate() {
         return ended_date;
     }
 
-    public void setEnded_date(Date ended_date) {
+    public void setEndedDate(Date ended_date) {
         this.ended_date = ended_date;
     }
 }
