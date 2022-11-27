@@ -26,7 +26,6 @@ public class UserController {
         if (phone.charAt(0) == '0') {
             phone = phone.replaceAll("^.", "+84");
         }
-
         return userService.findUserByPhone(phone);
     }
 

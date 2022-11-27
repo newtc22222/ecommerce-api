@@ -1,10 +1,12 @@
 package com.hcmute.ecom.controller;
 
+import com.hcmute.ecom.dto.request.InvoiceDTO;
 import com.hcmute.ecom.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @author Nhat Phi
@@ -17,4 +19,49 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
+    @GetMapping("/invoices")
+    public ResponseEntity<?> getAllInvoices(@RequestParam(value = "address", required = false) String address,
+                                            @RequestParam(value = "date", required = false) String date,
+                                            @RequestParam(value = "startDate", required = false) String startDate,
+                                            @RequestParam(value = "endDate", required = false) String endDate,
+                                            @RequestParam(value = "paymentType", required = false) String paymentType,
+                                            @RequestParam(value = "status", required = false) String status,
+                                            @RequestParam(value = "isPaid", required = false) String isPaid) {
+        if (address == null && date == null && startDate == null && endDate == null
+                && paymentType == null && status == null && isPaid == null) {
+            return invoiceService.getAllInvoices();
+        }
+        else {
+            // Filter
+            return null;
+        }
+    }
+
+    @GetMapping("/invoices/{id}")
+    public ResponseEntity<?> getInvoiceById(@PathVariable("id") String invoiceId) {
+        return invoiceService.getInvoiceById(invoiceId);
+    }
+
+    @GetMapping("/users/{userId}/invoices")
+    public ResponseEntity<?> getInvoicesOfUser(@PathVariable("userId") long userId) {
+        return invoiceService.getInvoicesByUserId(userId);
+    }
+
+    @PostMapping("/invoices")
+    public ResponseEntity<?> createNewInvoice(@RequestBody Map<String, String> invoiceRequest) {
+        return invoiceService.insert(InvoiceDTO.transform(invoiceRequest));
+    }
+
+    @PutMapping("/invoices/{id}")
+    public ResponseEntity<?> updateInvoice(@PathVariable("id") String invoiceId,
+                                           @RequestBody Map<String, String> invoiceRequest) {
+        return invoiceService.update(InvoiceDTO.transform(invoiceRequest), invoiceId);
+    }
+
+    @PutMapping("/invoices/{id}/status")
+    public ResponseEntity<?> updateInvoiceStatus(@PathVariable("id") String invoiceId,
+                                                 @RequestBody Map<String, String> invoiceStatusRequest) {
+//        return invoiceService.updateStatus(invoiceId, OrderStatus.valueOf(orderStatus));
+        return null;
+    }
 }

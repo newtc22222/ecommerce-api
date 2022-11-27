@@ -1,5 +1,6 @@
 package com.hcmute.ecom.controller;
 
+import com.hcmute.ecom.dto.request.BannerDTO;
 import com.hcmute.ecom.model.Banner;
 import com.hcmute.ecom.service.BannerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -23,13 +25,17 @@ public class BannerController {
     private BannerService bannerService;
 
     @GetMapping("")
-    public ResponseEntity<?> getAllBanners(){
-        return bannerService.getAllBanner();
-    }
-    public ResponseEntity<?> getBannersByDateRange(
-            @RequestParam(value = "start", defaultValue = "2022-10-01") LocalDate startDate,
-            @RequestParam(value = "end", defaultValue = "2022-11-01") LocalDate endDate){
-        return bannerService.getBannersByDateRange(startDate, endDate);
+    public ResponseEntity<?> getBanners(
+            @RequestParam(value = "start", defaultValue = "2022-10-01", required = false) String startDate,
+            @RequestParam(value = "end", defaultValue = "2022-11-01", required = false) String endDate) {
+        if(startDate != null && endDate != null){
+            LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return bannerService.getBannersByDateRange(start, end);
+        }
+        else {
+            return bannerService.getAllBanner();
+        }
     }
 
     @GetMapping("{id}")
@@ -39,25 +45,12 @@ public class BannerController {
 
     @PostMapping("")
     public ResponseEntity<?> insertBanner(@RequestBody Map<String, String> bannerRequest) {
-        Banner banner = new Banner(
-                Long.getLong(bannerRequest.get("id")),
-                bannerRequest.get("path"),
-                bannerRequest.get("type"),
-                Date.valueOf(bannerRequest.get("usedDate")),
-                Date.valueOf(bannerRequest.get("endedDate")));
-        return bannerService.insert(banner);
+        return bannerService.insert(BannerDTO.transform(bannerRequest));
     }
 
     @PutMapping("{id}")
     public ResponseEntity<?> updateBanner(@PathVariable("id") long bannerId, @RequestBody Map<String, String> bannerRequest) {
-        Banner banner = new Banner(
-                Long.getLong(bannerRequest.get("id")),
-                bannerRequest.get("path"),
-                bannerRequest.get("type"),
-                Date.valueOf(bannerRequest.get("usedDate")),
-                Date.valueOf(bannerRequest.get("endedDate")));
-        System.out.println(banner);
-        return bannerService.update(banner, bannerId);
+        return bannerService.update(BannerDTO.transform(bannerRequest), bannerId);
     }
 
     @DeleteMapping("{id}")

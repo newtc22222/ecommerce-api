@@ -1,10 +1,13 @@
 package com.hcmute.ecom.controller;
 
+import com.hcmute.ecom.dto.request.BrandDTO;
 import com.hcmute.ecom.model.Brand;
 import com.hcmute.ecom.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @author Nhat Phi
@@ -28,7 +31,7 @@ public class BrandController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> insertNewBrand(@RequestBody Brand brand){
+    public ResponseEntity<?> createNewBrand(@RequestBody Brand brand){
         return brandService.insert(brand);
     }
 
