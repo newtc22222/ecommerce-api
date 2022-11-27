@@ -12,6 +12,7 @@
         <module>config</module>
 		<module>mapper</module>
         <module>statistical-service</module>
+        <module>filter</module>
     </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
