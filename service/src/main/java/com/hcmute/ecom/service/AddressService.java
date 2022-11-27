@@ -11,7 +11,7 @@ public interface AddressService {
     ResponseEntity<?> insert(Address address);
     ResponseEntity<?> update(Address address, long addressId);
     ResponseEntity<?> delete(long addressId);
-    ResponseEntity<?> getAllAddress();
+//    ResponseEntity<?> getAllAddress();
     ResponseEntity<?> findAddressById(long addressId);
     ResponseEntity<?> getAllAddressOfUser(long userId);
 }

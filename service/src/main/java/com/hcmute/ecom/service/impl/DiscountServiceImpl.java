@@ -90,6 +90,20 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
+    public ResponseEntity<?> getDiscountById(long discountId) {
+        Discount discount = discountDAO.findDiscountById(discountId);
+        if(discount == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find discount with id = " + discountId
+                    ));
+        }
+        return ResponseEntity.ok(discount);
+    }
+
+    @Override
     public ResponseEntity<?> getDiscountsByProduct(String productId) {
         List<Discount> discounts = discountDAO.getDiscountsByProduct(productId);
         if(discounts == null) {

@@ -64,36 +64,13 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public ResponseEntity<?> delete(long addressId) {
-        if(addressDAO.findAddressById(addressId) == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseObject(
-                            HttpStatus.NOT_FOUND,
-                            "Cannot find address with id = " + addressId
-                    ));
-        }
-
         return ResponseCUDObject.of(
                 addressDAO.delete(addressId) > 0,
                 HttpStatus.OK,
                 "Delete address successfully!",
-                HttpStatus.NOT_IMPLEMENTED,
-                "Cannot remove this address!"
+                HttpStatus.NOT_FOUND,
+                "Cannot find address with id = " + addressId
         );
-    }
-
-    @Override
-    public ResponseEntity<?> getAllAddress() {
-        List<Address> addresses = addressDAO.getAllAddress();
-        if (addresses == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any address!"
-                    ));
-        }
-        return ResponseEntity.ok(addresses);
     }
 
     @Override
@@ -104,8 +81,7 @@ public class AddressServiceImpl implements AddressService {
                     .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NOT_FOUND,
-                            "Cannot find address with id = " + addressId
-                    ));
+                            "Cannot find address with id = " + addressId));
         }
 
         return ResponseEntity.ok(address);

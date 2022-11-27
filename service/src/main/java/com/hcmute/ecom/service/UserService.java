@@ -21,12 +21,4 @@ public interface UserService {
     ResponseEntity<?> findUserByConditions(Object ...args);
 //    ResponseEntity<?> findUsersByName(String name);
 //    ResponseEntity<?> getUsersByGender(Gender gender);
-
-    //
-    ResponseEntity<?> getAllAddressOfUser(long userId);
-
-    // Cart
-    ResponseEntity<?> findCartByUserId(long userId);
-    // Invoice
-    ResponseEntity<?> getInvoicesByUserId(long userId);
 }

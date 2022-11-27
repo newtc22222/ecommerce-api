@@ -56,9 +56,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ResponseEntity<?> delete(String cartId, long userId) {
+    public ResponseEntity<?> delete(long userId) {
+        Cart cart = cartDAO.findCartByUserId(userId);
+
         return ResponseCUDObject.of(
-                cartDAO.delete(cartId, userId) > 0,
+                cartDAO.delete(cart.getId(), userId) > 0,
                 HttpStatus.OK,
                 "Delete cart successfully!",
                 HttpStatus.NOT_FOUND,
@@ -67,7 +69,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ResponseEntity<?> getProductItemsByUserId(long userId) {
+    public ResponseEntity<?> getCartByUserId(long userId) {
         Cart cart = cartDAO.findCartByUserId(userId);
         if(cart == null){
             return ResponseEntity

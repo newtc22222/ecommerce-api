@@ -68,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public ResponseEntity<?> getAllCommentsOfProduct(String productId) {
         List<Comment> comments = commentDAO.getAllCommentsOfProduct(productId);
-        if(comments == null) {
+        if(comments == null || comments.size() == 0) {
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
                     .body(new ResponseObject(
@@ -82,7 +82,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public ResponseEntity<?> getAllCommentsOfUser(String phone) {
         List<Comment> comments = commentDAO.getAllCommentsOfUser(phone);
-        if(comments == null){
+        if(comments == null || comments.size() == 0){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(

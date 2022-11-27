@@ -1,13 +1,7 @@
 package com.hcmute.ecom.service.impl;
 
-import com.hcmute.ecom.dao.AddressDAO;
-import com.hcmute.ecom.dao.CartDAO;
-import com.hcmute.ecom.dao.InvoiceDAO;
 import com.hcmute.ecom.dao.UserDAO;
 import com.hcmute.ecom.dto.request.UserDTORequest;
-import com.hcmute.ecom.model.Address;
-import com.hcmute.ecom.model.Cart;
-import com.hcmute.ecom.model.Invoice;
 import com.hcmute.ecom.model.User;
 import com.hcmute.ecom.service.UserService;
 import com.hcmute.ecom.service.model.ResponseCUDObject;
@@ -27,15 +21,6 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDAO userDAO;
-
-    @Autowired
-    private AddressDAO addressDAO;
-
-    @Autowired
-    private CartDAO cartDAO;
-
-    @Autowired
-    private InvoiceDAO invoiceDAO;
 
     @Override
     public ResponseEntity<?> insert(User user) {
@@ -166,47 +151,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> findUserByConditions(Object... args) {
         return null;
-    }
-
-    @Override
-    public ResponseEntity<?> getAllAddressOfUser(long userId) {
-        List<Address> addresses = addressDAO.getAllAddressOfUser(userId);
-        if (addresses == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find address of this user!"
-                    ));
-        }
-        return ResponseEntity.ok(addresses);
-    }
-
-    @Override
-    public ResponseEntity<?> findCartByUserId(long userId) {
-        Cart cart = cartDAO.findCartByUserId(userId);
-        if (cart == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseObject(
-                            HttpStatus.NOT_FOUND,
-                            "Cannot find cart of this user!"
-                    ));
-        }
-        return ResponseEntity.ok(cart);
-    }
-
-    @Override
-    public ResponseEntity<?> getInvoicesByUserId(long userId) {
-        List<Invoice> invoices = invoiceDAO.getInvoicesByUserId(userId);
-        if (invoices == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any invoices of this user!"
-                    ));
-        }
-        return ResponseEntity.ok(invoices);
     }
 }

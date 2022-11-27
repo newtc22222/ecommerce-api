@@ -15,4 +15,5 @@ public interface ProductItemService {
     ResponseEntity<?> updateProductItemProperties(String itemId, int quantity, BigDecimal price, BigDecimal discount_price);
     ResponseEntity<?> delete(String itemId); // cardId or invoiceId will be null
     ResponseEntity<?> findProductItemById(String itemId);
+    ResponseEntity<?> getProductItemsByInvoiceId(String invoiceId);
 }

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author Nhat Phi
@@ -107,5 +108,19 @@ public class ProductItemServiceImpl implements ProductItemService {
                     ));
         }
         return ResponseEntity.ok(productItem);
+    }
+
+    @Override
+    public ResponseEntity<?> getProductItemsByInvoiceId(String invoiceId) {
+        List<ProductItem> productItemList = productItemDAO.getProductItemsByInvoiceId(invoiceId);
+        if(productItemList == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find any items which suit this condition!"
+                    ));
+        }
+        return ResponseEntity.ok(productItemList);
     }
 }

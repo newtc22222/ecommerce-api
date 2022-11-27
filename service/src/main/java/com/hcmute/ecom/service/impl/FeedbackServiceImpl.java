@@ -60,13 +60,23 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public ResponseEntity<?> delete(long feedbackId, String productId, long userId) {
+    public ResponseEntity<?> delete(long feedbackId) {
+        Feedback feedback = feedbackDAO.findFeedbackById(feedbackId);
+        if (feedback == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find feedback with id = " + feedbackId
+                    ));
+        }
+
         return ResponseCUDObject.of(
-                feedbackDAO.delete(feedbackId, productId, userId) > 0,
+                feedbackDAO.delete(feedbackId, feedback.getProductId(), feedback.getUserId()) > 0,
                 HttpStatus.OK,
                 "Delete feedback successfully!",
-                HttpStatus.NOT_FOUND,
-                "Cannot find feedback with id = " + feedbackId
+                HttpStatus.NOT_IMPLEMENTED,
+                "Failed to remove this feedback!"
         );
     }
 

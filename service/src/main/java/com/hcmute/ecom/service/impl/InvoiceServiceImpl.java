@@ -1,10 +1,8 @@
 package com.hcmute.ecom.service.impl;
 
 import com.hcmute.ecom.dao.InvoiceDAO;
-import com.hcmute.ecom.dao.ProductItemDAO;
 import com.hcmute.ecom.enums.OrderStatus;
 import com.hcmute.ecom.model.Invoice;
-import com.hcmute.ecom.model.ProductItem;
 import com.hcmute.ecom.service.InvoiceService;
 import com.hcmute.ecom.service.model.ResponseCUDObject;
 import com.hcmute.ecom.service.model.ResponseObject;
@@ -25,9 +23,6 @@ import java.util.List;
 public class InvoiceServiceImpl implements InvoiceService {
     @Autowired
     private InvoiceDAO invoiceDAO;
-
-    @Autowired
-    private ProductItemDAO productItemDAO;
 
     @Override
     public ResponseEntity<?> insert(Invoice invoice) {
@@ -182,6 +177,20 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
+    public ResponseEntity<?> getInvoicesByUserId(long userId) {
+        List<Invoice> invoices = invoiceDAO.getInvoicesByUserId(userId);
+        if (invoices == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find any invoices of this user!"
+                    ));
+        }
+        return ResponseEntity.ok(invoices);
+    }
+
+    @Override
     public ResponseEntity<?> getInvoicesByAddress(String address) {
         List<Invoice> invoices = invoiceDAO.getInvoicesByAddress(address);
         if(invoices == null) {
@@ -263,19 +272,5 @@ public class InvoiceServiceImpl implements InvoiceService {
                     ));
         }
         return ResponseEntity.ok(invoices);
-    }
-
-    @Override
-    public ResponseEntity<?> getProductItemsByInvoiceId(String invoiceId) {
-        List<ProductItem> productItemList = productItemDAO.getProductItemsByInvoiceId(invoiceId);
-        if(productItemList == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any items which suit this condition!"
-                    ));
-        }
-        return ResponseEntity.ok(productItemList);
     }
 }

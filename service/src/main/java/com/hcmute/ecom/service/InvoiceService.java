@@ -17,16 +17,16 @@ public interface InvoiceService {
     ResponseEntity<?> updateStatus(String invoiceId, OrderStatus status);
     ResponseEntity<?> updatePaymentType(String invoiceId, String paymentType);
     ResponseEntity<?> updatePaidStatus(String invoiceId, boolean isPaid); // true -> was paid
+//    ResponseEntity<?> updateInvoiceStatus(InvoiceStatusDTO invoiceStatusDTO);
     ResponseEntity<?> delete(String invoiceId);
 
     ResponseEntity<?> getAllInvoices();
     ResponseEntity<?> getInvoiceById(String invoiceId);
+    ResponseEntity<?> getInvoicesByUserId(long userId);
     ResponseEntity<?> getInvoicesByAddress(String address);
     ResponseEntity<?> getInvoicesByDate(LocalDate date);
     ResponseEntity<?> getInvoicesByDateRange(LocalDateTime startDate, LocalDateTime endDate);
     ResponseEntity<?> getInvoicesByPaymentType(String paymentType);
     ResponseEntity<?> getInvoicesByOrderStatus(OrderStatus status);
     ResponseEntity<?> getInvoicesByPaidStatus(boolean isPaid);
-
-    ResponseEntity<?> getProductItemsByInvoiceId(String invoiceId);
 }

@@ -4,6 +4,7 @@ import com.hcmute.ecom.model.Banner;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * @author Nhat Phi
@@ -16,4 +17,6 @@ public interface BannerService {
     ResponseEntity<?> getAllBanner();
     ResponseEntity<?> getBannersByDateRange(LocalDate start_date, LocalDate end_date);
     ResponseEntity<?> findBannerById(long bannerId);
+//    ResponseEntity<?> getBannersByDate(Date date);
+//    ResponseEntity<?> getBannersByType(String type);
 }
