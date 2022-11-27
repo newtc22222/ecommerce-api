@@ -3,9 +3,8 @@ package com.hcmute.ecom.dto.request;
 import java.util.Objects;
 
 /**
- * username - password
  * @author Nhat Phi
- * @since 2022-11-22
+ * @since 2022-11-25
  * */
 public class AccountDTO {
     private String username;
