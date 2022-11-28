@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -32,8 +33,15 @@ public class InvoiceController {
             return invoiceService.getAllInvoices();
         }
         else {
-            // Filter
-            return null;
+            Map<String, String> params = new HashMap<>();
+            if(address != null) params.put("address", address);
+            if(date != null) params.put("date", date);
+            if(startDate != null) params.put("startDate", startDate);
+            if(endDate != null) params.put("endDate", endDate);
+            if(paymentType != null) params.put("paymentType", paymentType);
+            if(status != null) params.put("status", status);
+            if(isPaid != null) params.put("isPaid", isPaid);
+            return invoiceService.filter(params);
         }
     }
 
@@ -63,5 +71,10 @@ public class InvoiceController {
                                                  @RequestBody Map<String, String> invoiceStatusRequest) {
 //        return invoiceService.updateStatus(invoiceId, OrderStatus.valueOf(orderStatus));
         return null;
+    }
+
+    @DeleteMapping("/invoices/{id}")
+    public ResponseEntity<?> deleteInvoice(@PathVariable("id") String invoiceId) {
+        return invoiceService.delete(invoiceId);
     }
 }
