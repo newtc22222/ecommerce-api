@@ -29,6 +29,10 @@ public class GraphicCardDAOImpl implements GraphicCardDAO {
 
     private final String QUERY_ALL = String.format("select * from %s", TABLE_NAME);
     private final String QUERY_ONE_BY_ID = String.format("select * from %s where id=? limit 1", TABLE_NAME);
+    private final String QUERY_GRAPHIC_CARDS_BY_PRODUCT_ID =
+            String.format("select gc.* " +
+                    "from %s gc, joshua_tbl_product_graphic_card pgc " +
+                    "where gc._id = pgc.graphic_card_id and pgc.product_id = ?", TABLE_NAME);
     private final String QUERY_GRAPHIC_CARDS_BY_TYPE =
             String.format("select * from %s where type=?", TABLE_NAME);
     private final String QUERY_GRAPHIC_CARDS_BY_BRAND =
@@ -107,6 +111,20 @@ public class GraphicCardDAOImpl implements GraphicCardDAO {
             );
         }
         catch (EmptyResultDataAccessException err) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<GraphicCard> getGraphicCardByProductId(String productId) {
+        try {
+            return jdbcTemplate.query(
+                    QUERY_GRAPHIC_CARDS_BY_PRODUCT_ID,
+                    new GraphicCardMapper(),
+                    productId
+            );
+        }
+        catch (Exception err) {
             return null;
         }
     }

@@ -14,6 +14,7 @@ public interface HardDriveDAO {
     int update(HardDrive hardDrive);
     int delete(long hardDriveId);
     List<HardDrive> getAllHardDrive();
+    List<HardDrive> getHardDriveByProductId(String productId);
     HardDrive findHardDriveById(long hardDriveId);
     List<HardDrive> getHardDrivesByType(HardDriveType type);
 }

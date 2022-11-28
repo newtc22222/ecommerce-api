@@ -15,6 +15,7 @@ public interface GraphicCardDAO {
     int delete(long cardId);
     List<GraphicCard> getAllGraphicCards();
     GraphicCard findGraphicCardById(long graphicCardId);
+    List<GraphicCard> getGraphicCardByProductId(String productId);
     List<GraphicCard> getGraphicCardsByType(GraphicCardType type);
     List<GraphicCard> getGraphicCardsByBrand(String brand);
     List<GraphicCard> getGraphicCardsByTypeAndBrand(GraphicCardType type, String brand);
