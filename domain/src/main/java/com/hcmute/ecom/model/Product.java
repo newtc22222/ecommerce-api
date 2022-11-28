@@ -7,48 +7,9 @@ import java.util.Objects;
 /**
  * @author Nhat Phi
  * @since 2022-11-18
- * @version 1.1
+ * @version 1.2
  * */
 public class Product {
-    private String id;
-    private String name;
-    private Long brand_id;
-    private Long category_id;
-    private Date released_date;
-    private Integer quantity_in_stock;
-    private BigDecimal listed_price;
-    private BigDecimal price;
-
-    // Laptop's extra information
-    private Byte ram_capacity;
-    private String cpu_brand;
-    private String cpu_type;
-    private String cpu_more_infor_html;
-    private String more_description_html;
-    private Long screen_id;
-
-    public Product(String id, String name, Long brand_id, Long category_id, Date released_date,
-                   Integer quantity_in_stock, BigDecimal listed_price, BigDecimal price, Byte ram_capacity,
-                   String cpu_brand, String cpu_type, String cpu_more_infor_html, String more_description_html,
-                   Long screen_id) {
-        this.id = id;
-        this.name = name;
-        this.brand_id = brand_id;
-        this.category_id = category_id;
-        this.released_date = released_date;
-        this.quantity_in_stock = quantity_in_stock;
-        this.listed_price = listed_price;
-        this.price = price;
-        this.ram_capacity = ram_capacity;
-        this.cpu_brand = cpu_brand;
-        this.cpu_type = cpu_type;
-        this.cpu_more_infor_html = cpu_more_infor_html;
-        this.more_description_html = more_description_html;
-        this.screen_id = screen_id;
-    }
-    
-    public Product() {}
-
     public String getId() {
         return id;
     }
@@ -113,53 +74,27 @@ public class Product {
         this.price = price;
     }
 
-    public Long getScreenId() {
-        return screen_id;
+    private String id;
+    private String name;
+    private Long brand_id;
+    private Long category_id;
+    private Date released_date;
+    private Integer quantity_in_stock;
+    private BigDecimal listed_price;
+    private BigDecimal price;
+
+    public Product(String id, String name, Long brand_id, Long category_id, Date released_date, Integer quantity_in_stock, BigDecimal listed_price, BigDecimal price) {
+        this.id = id;
+        this.name = name;
+        this.brand_id = brand_id;
+        this.category_id = category_id;
+        this.released_date = released_date;
+        this.quantity_in_stock = quantity_in_stock;
+        this.listed_price = listed_price;
+        this.price = price;
     }
 
-    public void setScreenId(Long screen_id) {
-        this.screen_id = screen_id;
-    }
-
-    public Byte getRamCapacity() {
-        return ram_capacity;
-    }
-
-    public void setRamCapacity(Byte ram_capacity) {
-        this.ram_capacity = ram_capacity;
-    }
-
-    public String getCpuBrand() {
-        return cpu_brand;
-    }
-
-    public void setCpuBrand(String cpu_brand) {
-        this.cpu_brand = cpu_brand;
-    }
-
-    public String getCpuType() {
-        return cpu_type;
-    }
-
-    public void setCpuType(String cpu_type) {
-        this.cpu_type = cpu_type;
-    }
-
-    public String getCpuMoreInformationHTML() {
-        return cpu_more_infor_html;
-    }
-
-    public void setCpuMoreInformationHTML(String cpu_more_infor_html) {
-        this.cpu_more_infor_html = cpu_more_infor_html;
-    }
-
-    public String getMoreDescriptionHTML() {
-        return more_description_html;
-    }
-
-    public void setMoreDescriptionHTML(String more_description_html) {
-        this.more_description_html = more_description_html;
-    }
+    public Product() {}
 
     @Override
     public boolean equals(Object o) {
@@ -173,18 +108,12 @@ public class Product {
                 && released_date.equals(product.released_date)
                 && quantity_in_stock.equals(product.quantity_in_stock)
                 && listed_price.equals(product.listed_price)
-                && price.equals(product.price)
-                && ram_capacity.equals(product.ram_capacity)
-                && cpu_brand.equals(product.cpu_brand)
-                && Objects.equals(cpu_type, product.cpu_type)
-                && cpu_more_infor_html.equals(product.cpu_more_infor_html)
-                && more_description_html.equals(product.more_description_html)
-                && Objects.equals(screen_id, product.screen_id);
+                && price.equals(product.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, brand_id, category_id, listed_price, screen_id);
+        return Objects.hash(id, brand_id, category_id, listed_price, price);
     }
 
     @Override
@@ -198,12 +127,6 @@ public class Product {
                 ", quantity_in_stock=" + quantity_in_stock +
                 ", listed_price=" + listed_price +
                 ", price=" + price +
-                ", screen_id=" + screen_id +
-                ", ram_capacity=" + ram_capacity +
-                ", cpu_brand='" + cpu_brand + '\'' +
-                ", cpu_type='" + cpu_type + '\'' +
-                ", cpu_more_infor_html='" + cpu_more_infor_html + '\'' +
-                ", more_description_html='" + more_description_html + '\'' +
                 '}';
     }
 }

@@ -2,36 +2,26 @@ package com.hcmute.ecom.service;
 
 import com.hcmute.ecom.dto.request.LaptopDTORequest;
 import com.hcmute.ecom.dto.request.ProductDTORequest;
-import com.hcmute.ecom.enums.ImageType;
-import com.hcmute.ecom.model.Product;
+import com.hcmute.ecom.model.laptop.Laptop;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Map;
 
 /**
  * @author Nhat Phi
  * @since 2022-11-22
  */
 public interface ProductService {
-    ResponseEntity<?> insert(Product product);
-    ResponseEntity<?> updateAll(Product product, String productId);
+    ResponseEntity<?> insert(Laptop product);
+    ResponseEntity<?> updateAll(Laptop product, String productId);
     ResponseEntity<?> updatePrice(ProductDTORequest productDTO);
     ResponseEntity<?> updateLaptopProperties(LaptopDTORequest laptopDTO);
     ResponseEntity<?> delete(String productId);
+    ResponseEntity<?> insertDiscount(String productId, long discountId);
+    ResponseEntity<?> deleteDiscount(String productId, long discountId);
     ResponseEntity<?> getAllProduct();
     ResponseEntity<?> findProductById(String productId);
 
     // For searching...
-    ResponseEntity<?> findProductsByConditions(Object ...args);
-
-//    ResponseEntity<?> findProductsByName(String name);
-//    ResponseEntity<?> getProductsByBrand(long brandId);
-//    ResponseEntity<?> getProductsByCategory(long categoryId);
-//    ResponseEntity<?> getProductsByReleasedYear(int year);
-//    ResponseEntity<?> getProductsByPriceRange(BigDecimal startPrice, BigDecimal endPrice);
-//    ResponseEntity<?> getLaptopsByRamCapacity(int ramCapacity);
-//    ResponseEntity<?> getLaptopsByCPU(String cpuBrand, String cpuType);
-//    ResponseEntity<?> getLaptopsByScreenSize(float screenSize);
-//    ResponseEntity<?> getLaptopsByGraphicCardType(GraphicCardType type);
-//    ResponseEntity<?> getLaptopsByHardDrive(HardDriveType type, int capacity);
-    // Images
-
+    ResponseEntity<?> filter(Map<String, String> params);
 }

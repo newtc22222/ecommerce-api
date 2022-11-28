@@ -1,9 +1,12 @@
 package com.hcmute.ecom.service.impl;
 
 import com.hcmute.ecom.dao.ProductDAO;
+import com.hcmute.ecom.dao.ProductDiscountDAO;
 import com.hcmute.ecom.dto.request.LaptopDTORequest;
 import com.hcmute.ecom.dto.request.ProductDTORequest;
-import com.hcmute.ecom.model.Product;
+import com.hcmute.ecom.enums.product.GraphicCardType;
+import com.hcmute.ecom.enums.product.HardDriveType;
+import com.hcmute.ecom.model.laptop.Laptop;
 import com.hcmute.ecom.service.ProductService;
 import com.hcmute.ecom.service.model.ResponseCUDObject;
 import com.hcmute.ecom.service.model.ResponseObject;
@@ -12,7 +15,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Nhat Phi
@@ -22,9 +29,11 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductDAO productDAO;
+    @Autowired
+    private ProductDiscountDAO productDiscountDAO;
 
     @Override
-    public ResponseEntity<?> insert(Product product) {
+    public ResponseEntity<?> insert(Laptop product) {
         return ResponseCUDObject.of(
             productDAO.insert(product) > 0,
             HttpStatus.CREATED,
@@ -35,8 +44,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseEntity<?> updateAll(Product product, String productId) {
-        Product oldProduct = productDAO.findProductById(productId);
+    public ResponseEntity<?> updateAll(Laptop product, String productId) {
+        Laptop oldProduct = productDAO.findProductById(productId);
 
         if(oldProduct == null) {
             return ResponseEntity
@@ -74,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<?> updatePrice(ProductDTORequest productDTO) {
-        Product oldProduct = productDAO.findProductById(productDTO.getId());
+        Laptop oldProduct = productDAO.findProductById(productDTO.getId());
 
         if(oldProduct == null) {
             return ResponseEntity
@@ -96,7 +105,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<?> updateLaptopProperties(LaptopDTORequest laptopDTO) {
-        Product oldProduct = productDAO.findProductById(laptopDTO.getId());
+        Laptop oldProduct = productDAO.findProductById(laptopDTO.getId());
 
         if(oldProduct == null) {
             return ResponseEntity
@@ -137,8 +146,30 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ResponseEntity<?> insertDiscount(String productId, long discountId) {
+        return ResponseCUDObject.of(
+                productDiscountDAO.insert(productId, discountId) > 0,
+                HttpStatus.CREATED,
+                "Insert discount to product successfully!",
+                HttpStatus.NOT_IMPLEMENTED,
+                "Cannot insert discount to this product!"
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> deleteDiscount(String productId, long discountId) {
+        return ResponseCUDObject.of(
+                productDiscountDAO.delete(productId, discountId) > 0,
+                HttpStatus.OK,
+                "Delete discount from product successfully!",
+                HttpStatus.NOT_IMPLEMENTED,
+                "Cannot delete discount from this product!"
+        );
+    }
+
+    @Override
     public ResponseEntity<?> getAllProduct() {
-        List<Product> products = productDAO.getAllProduct();
+        List<Laptop> products = productDAO.getAllProduct();
         if(products == null) {
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
@@ -152,7 +183,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<?> findProductById(String productId) {
-        Product product = productDAO.findProductById(productId);
+        Laptop product = productDAO.findProductById(productId);
         if(product == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -165,7 +196,111 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseEntity<?> findProductsByConditions(Object... args) {
-        return null;
+    public ResponseEntity<?> filter(Map<String, String> params) {
+        Set<Laptop> productSet = new HashSet<>(productDAO.getAllProduct());
+        Set<Laptop> notSuit = new HashSet<>();
+        
+        if(params.containsKey("name")){
+            List<Laptop> productList = productDAO.findProductsByName(params.get("name"));
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("brandId")) {
+            List<Laptop> productList = productDAO.getProductsByBrand(Long.parseLong(params.get("brandId")));
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("categoryId")) {
+            List<Laptop> productList = productDAO.getProductsByCategory(Long.parseLong(params.get("categoryId")));
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("releasedYear")) {
+            List<Laptop> productList = productDAO.getProductsByReleasedYear(Integer.parseInt(params.get("releasedYear")));
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("startPrice") && params.containsKey("endPrice")) {
+            List<Laptop> productList = productDAO.getProductsByPriceRange(
+                    new BigDecimal(params.get("startPrice")),
+                    new BigDecimal(params.get("endPrice"))
+            );
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("ramCapacity")) {
+            List<Laptop> productList = productDAO.getLaptopsByRamCapacity(Integer.parseInt(params.get("ramCapacity")));
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("cpuBrand") && params.containsKey("cpuType")) {
+            List<Laptop> productList = productDAO.getLaptopsByCPU(
+                    params.get("cpuBrand"),
+                    params.get("cpuType")
+            );
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("screenSize")) {
+            List<Laptop> productList = productDAO.getLaptopsByScreenSize(Float.parseFloat(params.get("screenSize")));
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("graphicCardType")) {
+            List<Laptop> productList = productDAO.getLaptopsByGraphicCardType(
+                    GraphicCardType.valueOf(params.get("graphicCardType")));
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("hardDriveType") && params.containsKey("capacity")) {
+            List<Laptop> productList = productDAO.getLaptopsByHardDrive(
+                    HardDriveType.valueOf(params.get("hardDriveType")),
+                    Integer.parseInt(params.get("capacity"))
+            );
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+
+        productSet.removeAll(notSuit);
+        if(productSet.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find product which suit this conditions!"
+                    ));
+        }
+
+        return ResponseEntity.ok(productSet);
     }
 }

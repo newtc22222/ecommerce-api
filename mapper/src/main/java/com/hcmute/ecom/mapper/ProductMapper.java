@@ -1,6 +1,6 @@
 package com.hcmute.ecom.mapper;
 
-import com.hcmute.ecom.model.Product;
+import com.hcmute.ecom.model.laptop.Laptop;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -10,11 +10,11 @@ import java.sql.SQLException;
  * @author Nhat Phi
  * @since 2022-11-21
  * */
-public class ProductMapper implements RowMapper<Product> {
+public class ProductMapper implements RowMapper<Laptop> {
     @Override
-    public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Product product = new Product();
-        product.setId(rs.getString("id"));
+    public Laptop mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Laptop product = new Laptop();
+        product.setId(rs.getString("_id"));
         product.setName(rs.getNString("name"));
         product.setBrandId(rs.getLong("brand_id"));
         product.setCategoryId(rs.getLong("category_id"));

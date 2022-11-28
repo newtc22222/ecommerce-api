@@ -4,7 +4,7 @@ import com.hcmute.ecom.dto.request.LaptopDTORequest;
 import com.hcmute.ecom.dto.request.ProductDTORequest;
 import com.hcmute.ecom.enums.product.GraphicCardType;
 import com.hcmute.ecom.enums.product.HardDriveType;
-import com.hcmute.ecom.model.Product;
+import com.hcmute.ecom.model.laptop.Laptop;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,25 +14,25 @@ import java.util.List;
  * @since 2022-11-21
  * */
 public interface ProductDAO {
-    int insert(Product product);
-    int updateAll(Product product);
+    int insert(Laptop product);
+    int updateAll(Laptop product);
     int updatePrice(ProductDTORequest productDTO);
     int updateLaptopProperties(LaptopDTORequest laptopDTO);
     int delete(String productId);
-    List<Product> getAllProduct();
-    Product findProductById(String productId);
+    List<Laptop> getAllProduct();
+    Laptop findProductById(String productId);
 
     // For product searching...
-    List<Product> findProductsByName(String name);
-    List<Product> getProductsByBrand(long brandId);
-    List<Product> getProductsByCategory(long categoryId);
-    List<Product> getProductsByReleasedYear(int year);
-    List<Product> getProductsByPriceRange(BigDecimal startPrice, BigDecimal endPrice);
+    List<Laptop> findProductsByName(String name);
+    List<Laptop> getProductsByBrand(long brandId);
+    List<Laptop> getProductsByCategory(long categoryId);
+    List<Laptop> getProductsByReleasedYear(int year);
+    List<Laptop> getProductsByPriceRange(BigDecimal startPrice, BigDecimal endPrice);
 
     // For laptop searching...
-    List<Product> getLaptopsByRamCapacity(int ramCapacity);
-    List<Product> getLaptopsByCPU(String cpuBrand, String cpuType);
-    List<Product> getLaptopsByScreenSize(float screenSize);
-    List<Product> getLaptopsByGraphicCardType(GraphicCardType type);
-    List<Product> getLaptopsByHardDrive(HardDriveType type, int capacity);
+    List<Laptop> getLaptopsByRamCapacity(int ramCapacity);
+    List<Laptop> getLaptopsByCPU(String cpuBrand, String cpuType);
+    List<Laptop> getLaptopsByScreenSize(float screenSize);
+    List<Laptop> getLaptopsByGraphicCardType(GraphicCardType type);
+    List<Laptop> getLaptopsByHardDrive(HardDriveType type, int capacity);
 }

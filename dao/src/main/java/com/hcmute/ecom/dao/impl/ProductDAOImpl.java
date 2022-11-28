@@ -6,7 +6,7 @@ import com.hcmute.ecom.dto.request.ProductDTORequest;
 import com.hcmute.ecom.enums.product.GraphicCardType;
 import com.hcmute.ecom.enums.product.HardDriveType;
 import com.hcmute.ecom.mapper.ProductMapper;
-import com.hcmute.ecom.model.Product;
+import com.hcmute.ecom.model.laptop.Laptop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -69,7 +69,7 @@ public class ProductDAOImpl implements ProductDAO {
                     " WHERE phd.hard_drive_id = hd.id AND hd.type = ? AND hd.capacity = ?)", TABLE_NAME);
 
     @Override
-    public int insert(Product product) {
+    public int insert(Laptop product) {
         try {
             return jdbcTemplate.update(
                     INSERT,
@@ -95,7 +95,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public int updateAll(Product product) {
+    public int updateAll(Laptop product) {
         try {
             return jdbcTemplate.update(
                     UPDATE_ALL,
@@ -170,7 +170,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getAllProduct() {
+    public List<Laptop> getAllProduct() {
         try {
             return jdbcTemplate.query(
                     QUERY_ALL,
@@ -183,7 +183,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public Product findProductById(String productId) {
+    public Laptop findProductById(String productId) {
         try {
             return jdbcTemplate.queryForObject(
                     QUERY_ONE_BY_ID,
@@ -197,7 +197,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> findProductsByName(String name) {
+    public List<Laptop> findProductsByName(String name) {
         try {
             return jdbcTemplate.query(
                     QUERY_PRODUCTS_BY_NAME,
@@ -211,7 +211,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getProductsByBrand(long brandId) {
+    public List<Laptop> getProductsByBrand(long brandId) {
         try {
             return jdbcTemplate.query(
                     QUERY_PRODUCTS_BY_BRAND_ID,
@@ -225,7 +225,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getProductsByCategory(long categoryId) {
+    public List<Laptop> getProductsByCategory(long categoryId) {
         try {
             return jdbcTemplate.query(
                     QUERY_PRODUCTS_BY_CATEGORY_ID,
@@ -239,7 +239,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getProductsByReleasedYear(int year) {
+    public List<Laptop> getProductsByReleasedYear(int year) {
         try {
             return jdbcTemplate.query(
                     QUERY_PRODUCTS_BY_RELEASED_YEAR,
@@ -253,7 +253,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getProductsByPriceRange(BigDecimal startPrice, BigDecimal endPrice) {
+    public List<Laptop> getProductsByPriceRange(BigDecimal startPrice, BigDecimal endPrice) {
         try {
             return jdbcTemplate.query(
                     QUERY_PRODUCTS_BY_PRICE_RANGE,
@@ -268,7 +268,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getLaptopsByRamCapacity(int ramCapacity) {
+    public List<Laptop> getLaptopsByRamCapacity(int ramCapacity) {
         try {
             return jdbcTemplate.query(
                     QUERY_LAPTOPS_BY_RAM_CAPACITY,
@@ -282,7 +282,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getLaptopsByCPU(String cpuBrand, String cpuType) {
+    public List<Laptop> getLaptopsByCPU(String cpuBrand, String cpuType) {
         try {
             return jdbcTemplate.query(
                     QUERY_LAPTOPS_BY_CPU,
@@ -297,7 +297,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getLaptopsByScreenSize(float screenSize) {
+    public List<Laptop> getLaptopsByScreenSize(float screenSize) {
         try {
             return jdbcTemplate.query(
                     QUERY_LAPTOPS_BY_SCREEN_SIZE,
@@ -311,7 +311,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getLaptopsByGraphicCardType(GraphicCardType type) {
+    public List<Laptop> getLaptopsByGraphicCardType(GraphicCardType type) {
         try {
             return jdbcTemplate.query(
                     QUERY_LAPTOPS_BY_GRAPHIC_CARD_TYPE,
@@ -325,7 +325,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getLaptopsByHardDrive(HardDriveType type, int capacity) {
+    public List<Laptop> getLaptopsByHardDrive(HardDriveType type, int capacity) {
         try {
             return jdbcTemplate.query(
                     QUERY_LAPTOPS_BY_HARD_DRIVE,
