@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * @author Nhat Phi
@@ -23,6 +24,8 @@ public interface InvoiceService {
     ResponseEntity<?> getAllInvoices();
     ResponseEntity<?> getInvoiceById(String invoiceId);
     ResponseEntity<?> getInvoicesByUserId(long userId);
+    ResponseEntity<?> filter(Map<String, String> params);
+
     ResponseEntity<?> getInvoicesByAddress(String address);
     ResponseEntity<?> getInvoicesByDate(LocalDate date);
     ResponseEntity<?> getInvoicesByDateRange(LocalDateTime startDate, LocalDateTime endDate);

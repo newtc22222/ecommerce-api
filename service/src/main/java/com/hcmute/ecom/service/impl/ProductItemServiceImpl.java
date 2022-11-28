@@ -111,6 +111,20 @@ public class ProductItemServiceImpl implements ProductItemService {
     }
 
     @Override
+    public ResponseEntity<?> getProductItemsByCartId(String cartId) {
+        List<ProductItem> productItemList = productItemDAO.getProductItemsByCartId(cartId);
+        if(productItemList == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find any items which suit this condition!"
+                    ));
+        }
+        return ResponseEntity.ok(productItemList);
+    }
+
+    @Override
     public ResponseEntity<?> getProductItemsByInvoiceId(String invoiceId) {
         List<ProductItem> productItemList = productItemDAO.getProductItemsByInvoiceId(invoiceId);
         if(productItemList == null) {

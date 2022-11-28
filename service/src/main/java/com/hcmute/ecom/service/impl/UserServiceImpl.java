@@ -2,6 +2,7 @@ package com.hcmute.ecom.service.impl;
 
 import com.hcmute.ecom.dao.UserDAO;
 import com.hcmute.ecom.dto.request.UserDTORequest;
+import com.hcmute.ecom.enums.Gender;
 import com.hcmute.ecom.model.User;
 import com.hcmute.ecom.service.UserService;
 import com.hcmute.ecom.service.model.ResponseCUDObject;
@@ -11,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Nhat Phi
@@ -50,7 +53,7 @@ public class UserServiceImpl implements UserService {
             oldUser.setPhone(user.getPhone());
             oldUser.setEmail(user.getEmail());
             oldUser.setDateOfBirth(user.getDateOfBirth());
-            oldUser.setCreatedDate(user.getCreatedDate());
+            //oldUser.setCreatedDate(user.getCreatedDate());
             oldUser.setLastUpdatedDate(user.getLastUpdatedDate());
         }
         return ResponseCUDObject.of(
@@ -63,8 +66,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> updateInformation(UserDTORequest userDTO) {
-        User oldUser = userDAO.findUserById(userDTO.getId());
+    public ResponseEntity<?> updateInformation(UserDTORequest userDTO, long userId) {
+        User oldUser = userDAO.findUserById(userId);
         if(oldUser == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -74,6 +77,8 @@ public class UserServiceImpl implements UserService {
                     ));
         }
 
+
+        userDTO.setId(userId);
         return ResponseCUDObject.of(
                 userDAO.updateInformation(userDTO) > 0,
                 HttpStatus.OK,
@@ -149,7 +154,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> findUserByConditions(Object... args) {
-        return null;
+    public ResponseEntity<?> filter(String name, String gender) {
+        Set<User> userSet = new HashSet<>(userDAO.getAllUsers());
+        Set<User> notSuit = new HashSet<>();
+        if(name != null) {
+            List<User> userList = userDAO.findUsersByName(name);
+            userSet.forEach(user -> {
+                if(!userList.contains(user)) {
+                    notSuit.add(user);
+                }
+            });
+        }
+        if(gender != null) {
+            List<User> userList = userDAO.getUsersByGender(Gender.valueOf(gender.toUpperCase()));
+            userSet.forEach(user -> {
+                if(!userList.contains(user)) {
+                    notSuit.add(user);
+                }
+            });
+        }
+
+        userSet.removeAll(notSuit);
+        if(userSet.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find any user in this condition!"
+                    ));
+        }
+        return ResponseEntity.ok(userSet);
     }
 }

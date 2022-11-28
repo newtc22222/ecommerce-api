@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -105,7 +108,59 @@ public class ScreenServiceImpl implements ScreenService {
     }
 
     @Override
-    public ResponseEntity<?> getScreenByConditions(Object... args) {
-        return null;
+    public ResponseEntity<?> filter(Map<String, String> params) {
+        Set<Screen> screenSet = new HashSet<>(screenDAO.getAllScreens());
+        Set<Screen> notSuit = new HashSet<>();
+        if(params.containsKey("size")) {
+            List<Screen> screenList = screenDAO.getScreensBySize(Float.parseFloat(params.get("size")));
+            screenSet.forEach(screen -> {
+                if(!screenList.contains(screen)) {
+                    notSuit.add(screen);
+                }
+            });
+        }
+        if(params.containsKey("resolution")) {
+            List<Screen> screenList = screenDAO.getScreensByResolution(params.get("resolution"));
+            screenSet.forEach(screen -> {
+                if(!screenList.contains(screen)) {
+                    notSuit.add(screen);
+                }
+            });
+        }
+        if(params.containsKey("type")) {
+            List<Screen> screenList = screenDAO.getScreensByType(params.get("type"));
+            screenSet.forEach(screen -> {
+                if(!screenList.contains(screen)) {
+                    notSuit.add(screen);
+                }
+            });
+        }
+        if(params.containsKey("panel")) {
+            List<Screen> screenList = screenDAO.getScreensByPanel(params.get("panel"));
+            screenSet.forEach(screen -> {
+                if(!screenList.contains(screen)) {
+                    notSuit.add(screen);
+                }
+            });
+        }
+        if(params.containsKey("hasTouchScreen")) {
+            List<Screen> screenList = screenDAO.getScreensByTouchScreenType(Boolean.parseBoolean(params.get("hasTouchScreen")));
+            screenSet.forEach(screen -> {
+                if(!screenList.contains(screen)) {
+                    notSuit.add(screen);
+                }
+            });
+        }
+
+        screenSet.removeAll(notSuit);
+        if (screenSet.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find screen which suit all of this conditions!"
+                    ));
+        }
+        return ResponseEntity.ok(screenSet);
     }
 }

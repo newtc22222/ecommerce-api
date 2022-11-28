@@ -13,7 +13,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Nhat Phi
@@ -188,6 +192,51 @@ public class InvoiceServiceImpl implements InvoiceService {
                     ));
         }
         return ResponseEntity.ok(invoices);
+    }
+
+    @Override
+    public ResponseEntity<?> filter(Map<String, String> params) {
+        Set<Invoice> invoiceSet = new HashSet<>();
+        if (params.containsKey("address")) {
+            List<Invoice> invoiceList = invoiceDAO.getInvoicesByAddress(params.get("address"));
+            invoiceSet.addAll(invoiceList);
+        }
+        if (params.containsKey("date")) {
+            List<Invoice> invoiceList = invoiceDAO.getInvoicesByDate(
+                    LocalDate.parse(params.get("date"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            invoiceSet.addAll(invoiceList);
+        }
+        if (params.containsKey("startDate") &&  params.containsKey("endDate")) {
+            DateTimeFormatter DATE_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            List<Invoice> invoiceList = invoiceDAO.getInvoicesByDateRange(
+                    LocalDateTime.parse(params.get("startDate"), DATE_TIME_PATTERN),
+                    LocalDateTime.parse(params.get("endDate"), DATE_TIME_PATTERN)
+            );
+            invoiceSet.addAll(invoiceList);
+        }
+        if (params.containsKey("paymentType")) {
+            List<Invoice> invoiceList = invoiceDAO.getInvoicesByPaymentType(params.get("paymentType"));
+            invoiceSet.addAll(invoiceList);
+        }
+        if (params.containsKey("status")) {
+            List<Invoice> invoiceList = invoiceDAO.getInvoicesByOrderStatus(OrderStatus.valueOf(params.get("status")));
+            invoiceSet.addAll(invoiceList);
+        }
+        if (params.containsKey("isPaid")) {
+            List<Invoice> invoiceList = invoiceDAO.getInvoicesByPaidStatus(Boolean.parseBoolean(params.get("isPaid")));
+            invoiceSet.addAll(invoiceList);
+        }
+
+        if(invoiceSet.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find invoice which suit this conditions!"
+                    ));
+        }
+        return ResponseEntity.ok(invoiceSet);
     }
 
     @Override
