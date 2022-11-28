@@ -12,9 +12,11 @@ import java.util.Map;
 public class ProductImageDTO {
     public static ProductImage transform(Map<String, String> request) {
         ProductImage image = new ProductImage();
-        image.setId(request.get("id"));
+        if (request.containsKey("id")) {
+            image.setId(request.get("id"));
+        }
         image.setProductId(request.get("productId"));
-        if (request.get("feedbackId") != null) {
+        if (request.containsKey("feedbackId")) {
             image.setFeedbackId(Long.getLong(request.get("feedbackId")));
         }
         image.setPath(request.get("path"));

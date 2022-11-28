@@ -15,7 +15,7 @@ public class BrandDTO {
         brand.setName(request.get("name"));
         brand.setCountry(request.get("country"));
 
-        if(request.get("establishDate") != null) {
+        if(request.containsKey("establishDate")) {
             brand.setEstablishDate(Date.valueOf(request.get("establishDate")));
         }
 

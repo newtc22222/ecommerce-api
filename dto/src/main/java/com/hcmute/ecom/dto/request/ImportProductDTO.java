@@ -19,7 +19,7 @@ public class ImportProductDTO {
         ticket.setProductId(request.get("productId"));
         ticket.setQuantity(Long.getLong(request.get("quantity")));
         ticket.setImportedPrice(new BigDecimal(request.get("importedPrice")));
-        if(request.get("importedDate") != null) {
+        if(request.containsKey("importedDate")) {
             ticket.setImportedDate(LocalDateTime.parse("importedDate", DATE_TIME_PATTERN));
         }
         return ticket;

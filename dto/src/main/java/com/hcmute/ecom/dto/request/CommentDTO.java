@@ -15,7 +15,7 @@ public class CommentDTO {
 
     public static Comment transform(Map<String, String> request) {
         Comment comment = new Comment();
-        if(request.get("rootCommentId") != null){
+        if(request.containsKey("rootCommentId")){
             comment.setRootCommentId(Long.getLong(request.get("rootCommentId")));
         }
         comment.setProductId(request.get("productId"));
@@ -23,7 +23,7 @@ public class CommentDTO {
         comment.setPhone(request.get("phone"));
         comment.setContent(request.get("content"));
 
-        if(request.get("createdDate") != null) {
+        if(request.containsKey("createdDate")) {
             comment.setCreatedDate(LocalDateTime.parse(request.get("createdDate"), DATE_TIME_PATTERN));
         }
         return comment;

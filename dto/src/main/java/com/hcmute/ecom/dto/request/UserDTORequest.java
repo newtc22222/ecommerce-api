@@ -1,15 +1,20 @@
 package com.hcmute.ecom.dto.request;
 
 import com.hcmute.ecom.enums.Gender;
+import com.hcmute.ecom.model.User;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 /**
  * @author Nhat Phi
  * @since 2022-11-21
  * */
 public class UserDTORequest {
+    private static final DateTimeFormatter DATE_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     private Long id;
     private String name;
     private Gender gender;
@@ -24,6 +29,10 @@ public class UserDTORequest {
         this.email = email;
         this.date_of_birth = date_of_birth;
         this.last_updated_date = last_updated_date;
+    }
+
+    public UserDTORequest() {
+        this.last_updated_date = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -72,5 +81,45 @@ public class UserDTORequest {
 
     public void setLastUpdatedDate(LocalDateTime last_updated_date) {
         this.last_updated_date = last_updated_date;
+    }
+
+    /**
+     * update All information of User
+     * */
+    public static User transform(Map<String, String> request) {
+        User user = new User();
+        user.setName(request.get("name"));
+        user.setGender(Gender.valueOf(request.get("gender")));
+        user.setPhone(request.get("phone"));
+        user.setEmail(request.get("email"));
+        user.setDateOfBirth(Date.valueOf(request.get("dateOfBirth")));
+        if(request.containsKey("createdDate")) {
+            user.setCreatedDate(LocalDateTime.parse(request.get("createdDate"), DATE_TIME_PATTERN));
+        }
+        if(request.containsKey("lastUpdatedDate")) {
+            user.setLastUpdatedDate(LocalDateTime.parse(request.get("lastUpdatedDate"), DATE_TIME_PATTERN));
+        }
+        return user;
+    }
+
+    /**
+     * update some information of User
+     * except Phone, created Date
+     * */
+    public static UserDTORequest getData(Map<String, String> request) {
+        UserDTORequest user = new UserDTORequest();
+        user.setName(request.get("name"));
+        user.setGender(Gender.valueOf(request.get("gender")));
+        user.setEmail(request.get("email"));
+        try {
+            user.setDateOfBirth(Date.valueOf(request.get("dateOfBirth")));
+        }
+        catch (Exception err) {
+            throw new RuntimeException(err);
+        }
+        if(request.containsKey("lastUpdatedDate")) {
+            user.setLastUpdatedDate(LocalDateTime.parse(request.get("lastUpdatedDate"), DATE_TIME_PATTERN));
+        }
+        return user;
     }
 }

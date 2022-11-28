@@ -20,7 +20,7 @@ public class DiscountDTO {
          discount.setCode(request.get("code"));
          discount.setRate(Float.valueOf(request.get("rate")));
 
-         if (request.get("appliedType") != null){
+         if (request.containsKey("appliedType")){
             discount.setDiscountType(DiscountType.valueOf(request.get("appliedType")));
          }
 
