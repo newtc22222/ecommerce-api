@@ -12,7 +12,15 @@ import java.util.Map;
 public class HardDriveDTO {
     public static HardDrive transform(Map<String, String> request) {
         HardDrive drive = new HardDrive();
-        drive.setType(HardDriveType.valueOf(request.get("type")));
+        try {
+            drive.setType(HardDriveType.valueOf(request.get("type")));
+        }
+        catch (Exception err) {
+            throw new RuntimeException(err);
+        }
+        finally {
+            drive.setType(HardDriveType.SSD);
+        }
         drive.setModel(request.get("model"));
         drive.setCapacity(Long.parseLong(request.get("capacity")));
         drive.setStandard(request.get("standard"));

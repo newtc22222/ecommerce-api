@@ -12,7 +12,15 @@ import java.util.Map;
 public class GraphicCardDTO {
     public static GraphicCard transform(Map<String, String> request) {
         GraphicCard card = new GraphicCard();
-        card.setType(GraphicCardType.valueOf(request.get("type")));
+        try {
+            card.setType(GraphicCardType.valueOf(request.get("type")));
+        }
+        catch (Exception err) {
+            throw new RuntimeException(err);
+        }
+        finally {
+            card.setType(GraphicCardType.ON_BOARD);
+        }
         card.setBrand(request.get("brand"));
         card.setModel(request.get("model"));
         card.setMaxClockSpeed(Integer.getInteger(request.get("maxClockSpeed")));

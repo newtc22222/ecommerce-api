@@ -13,8 +13,6 @@ import java.util.Map;
  * @since 2022-11-25
  * */
 public class DiscountDTO {
-    private static final DateTimeFormatter DATE_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     public static Discount transform(Map<String, String> request) {
          Discount discount = new Discount();
          discount.setCode(request.get("code"));
@@ -25,8 +23,8 @@ public class DiscountDTO {
          }
 
          discount.setMaxAmount(new BigDecimal(request.get("maxAmount")));
-         discount.setAppliedDate(LocalDateTime.parse(request.get("appliedDate"), DATE_TIME_PATTERN));
-         discount.setEndedDate(LocalDateTime.parse(request.get("endedDate"), DATE_TIME_PATTERN));
+         discount.setAppliedDate(LocalDateTime.parse(request.get("appliedDate"), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+         discount.setEndedDate(LocalDateTime.parse(request.get("endedDate"), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
          return discount;
     }
 }
