@@ -30,8 +30,11 @@ public class BannerDAOImpl implements BannerDAO {
     private final String QUERY_ALL = String.format("select * from %s", TABLE_NAME);
     private final String QUERY_ONE_BY_ID = String.format("select * from %s where id=? limit 1", TABLE_NAME);
     // started_date - using_date(use-end) - ended_date
-    private final String QUERY_ALL_BY_DATE_RANGE = String.format("select * from %s " +
+    private final String QUERY_BANNERS_BY_DATE_RANGE = String.format("select * from %s " +
             "where ended_date > ? or used_date < ?", TABLE_NAME);
+    private final String QUERY_BANNERS_BY_DATE = String.format("select * from %s " +
+            "where ? between used_date and ended_date", TABLE_NAME);
+    private final String QUERY_BANNERS_BY_TYPE = String.format("select * from %s where type = ?", TABLE_NAME);
 
     @Override
     public int insert(Banner banner) {
@@ -96,10 +99,39 @@ public class BannerDAOImpl implements BannerDAO {
     public List<Banner> getAllBannerByDateRange(Date start_date, Date ended_date) {
         try {
             return jdbcTemplate.query(
-                    QUERY_ALL_BY_DATE_RANGE,
+                    QUERY_BANNERS_BY_DATE_RANGE,
                     new BannerMapper(),
                     start_date,
                     ended_date
+            );
+        }
+        catch (EmptyResultDataAccessException err) {
+            return null;
+        }
+    }
+
+
+    @Override
+    public List<Banner> getBannersByDate(Date date) {
+        try {
+            return jdbcTemplate.query(
+                    QUERY_BANNERS_BY_DATE,
+                    new BannerMapper(),
+                    date
+            );
+        }
+        catch (EmptyResultDataAccessException err) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Banner> getBannersByType(String type) {
+        try {
+            return jdbcTemplate.query(
+                    QUERY_BANNERS_BY_TYPE,
+                    new BannerMapper(),
+                    type
             );
         }
         catch (EmptyResultDataAccessException err) {

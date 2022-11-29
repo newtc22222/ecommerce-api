@@ -9,7 +9,7 @@ import com.hcmute.ecom.model.Cart;
 public interface CartDAO {
     int insert(Cart cart);
     int update(Cart cart);
-    int delete(String cartId, long userId);
+    int delete(long userId);
 //    List<Cart> getAllCart();
     Cart findCartByUserId(long userId);
 }

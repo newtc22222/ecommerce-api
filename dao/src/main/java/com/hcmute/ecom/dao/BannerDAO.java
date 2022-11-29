@@ -18,5 +18,7 @@ public interface BannerDAO {
      * Find banner is being used in system
      * */
     List<Banner> getAllBannerByDateRange(Date start_date, Date end_date);
+    List<Banner> getBannersByDate(Date date);
+    List<Banner> getBannersByType(String type);
     Banner findBannerById(long bannerId);
 }

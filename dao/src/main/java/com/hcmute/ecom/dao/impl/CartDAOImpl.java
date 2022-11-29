@@ -22,7 +22,7 @@ public class CartDAOImpl implements CartDAO {
     private final String INSERT = String.format("insert into %s values (?, ?, ?)", TABLE_NAME);
     private final String UPDATE = String.format("update %s " +
             "set discount_id=? where id=? and user_id=?", TABLE_NAME);
-    private final String DELETE = String.format("delete from %s where id=? and user_id=?", TABLE_NAME);
+    private final String DELETE = String.format("delete from %s where id=?", TABLE_NAME);
 
 //    private final String QUERY_ALL = String.format("select * from %s", TABLE_NAME);
 //    private final String QUERY_ONE_BY_ID = String.format("select * from %s where _id=? limit 1", TABLE_NAME);
@@ -59,11 +59,10 @@ public class CartDAOImpl implements CartDAO {
     }
 
     @Override
-    public int delete(String cartId, long userId) {
+    public int delete(long userId) {
         try {
             return jdbcTemplate.update(
                     DELETE,
-                    cartId,
                     userId
             );
         }
