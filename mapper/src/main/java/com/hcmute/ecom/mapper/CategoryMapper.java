@@ -17,7 +17,7 @@ public class CategoryMapper implements RowMapper<Category> {
         category.setId(rs.getLong("id"));
         category.setName(rs.getNString("name"));
         category.setImage(rs.getString("image"));
-        category.setDescription(rs.getNString(rs.getNString("description")));
+        category.setDescription(rs.getNString("description"));
         return category;
     }
 }

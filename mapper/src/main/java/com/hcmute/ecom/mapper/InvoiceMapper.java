@@ -7,12 +7,14 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author Nhat Phi
  * @since 2022-11-21
  * */
 public class InvoiceMapper implements RowMapper<Invoice> {
+    private static final DateTimeFormatter DATE_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     @Override
     public Invoice mapRow(ResultSet rs, int rowNum) throws SQLException {
         Invoice invoice = new Invoice();
@@ -25,7 +27,7 @@ public class InvoiceMapper implements RowMapper<Invoice> {
         invoice.setDiscountId(rs.getLong("discount_id"));
         invoice.setTax(rs.getBigDecimal("tax"));
         invoice.setFinalTotalCost(rs.getBigDecimal("final_total_cost"));
-        invoice.setCreatedDate(LocalDateTime.parse(rs.getString("created_date")));
+        invoice.setCreatedDate(LocalDateTime.parse(rs.getString("created_date"), DATE_TIME_PATTERN));
         invoice.setPaymentType(rs.getNString("payment_type"));
         invoice.setStatus(OrderStatus.valueOf(rs.getString("status")));
         invoice.setPaid(rs.getBoolean("is_paid"));

@@ -6,12 +6,15 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author Nhat Phi
  * @since 2022-11-21
  * */
 public class CommentMapper implements RowMapper<Comment> {
+    private static final DateTimeFormatter DATE_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     @Override
     public Comment mapRow(ResultSet rs, int rowNum) throws SQLException {
         Comment comment = new Comment();
@@ -21,7 +24,7 @@ public class CommentMapper implements RowMapper<Comment> {
         comment.setUsername(rs.getNString("username"));
         comment.setPhone(rs.getString("phone"));
         comment.setContent(rs.getNString("content"));
-        comment.setCreatedDate(LocalDateTime.parse(rs.getString("created_date")));
+        comment.setCreatedDate(LocalDateTime.parse(rs.getString("created_date"), DATE_TIME_PATTERN));
         return comment;
     }
 }
