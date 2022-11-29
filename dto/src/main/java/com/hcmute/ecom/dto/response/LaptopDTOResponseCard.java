@@ -24,6 +24,7 @@ public class LaptopDTOResponseCard {
     private HardDrive hardDrive;
     private GraphicCard graphicCard;
     private Screen screen;
+    private Float ratingPoint;
 
     public LaptopDTOResponseCard() {}
 
@@ -115,11 +116,21 @@ public class LaptopDTOResponseCard {
         this.screen = screen;
     }
 
+    public Float getRatingPoint() {
+        return ratingPoint;
+    }
+
+    public void setRatingPoint(Float ratingPoint) {
+        this.ratingPoint = ratingPoint;
+    }
+
     public static LaptopDTOResponseCard getData(Laptop product, GraphicCard graphicCard, String imagePath,
-                                                HardDrive hardDrive, Screen screen, Discount discount) {
+                                                HardDrive hardDrive, Screen screen, Discount discount,
+                                                float ratingPoint) {
         LaptopDTOResponseCard laptop = new LaptopDTOResponseCard();
         laptop.setId(product.getId());
         laptop.setName(product.getName());
+        laptop.setImage(imagePath);
         laptop.setPrice(product.getPrice());
 
         if(discount != null) {
@@ -139,7 +150,10 @@ public class LaptopDTOResponseCard {
         laptop.setRamCapacity(product.getRamCapacity());
         laptop.setCpuBrand(product.getCpuBrand());
         laptop.setCpuType(product.getCpuType());
+        laptop.setGraphicCard(graphicCard);
+        laptop.setHardDrive(hardDrive);
         laptop.setScreen(screen);
+        laptop.setRatingPoint(ratingPoint);
         return laptop;
     }
 }

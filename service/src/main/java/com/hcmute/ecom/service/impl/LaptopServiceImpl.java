@@ -7,6 +7,7 @@ import com.hcmute.ecom.enums.ImageType;
 import com.hcmute.ecom.model.Brand;
 import com.hcmute.ecom.model.Category;
 import com.hcmute.ecom.model.Discount;
+import com.hcmute.ecom.model.Feedback;
 import com.hcmute.ecom.model.laptop.GraphicCard;
 import com.hcmute.ecom.model.laptop.HardDrive;
 import com.hcmute.ecom.model.laptop.Laptop;
@@ -45,6 +46,8 @@ public class LaptopServiceImpl implements LaptopService {
     private HardDriveDAO hardDriveDAO;
     @Autowired
     private ProductHardDriveDAO productHardDriveDAO;
+    @Autowired
+    private FeedbackDAO feedbackDAO;
     @Autowired
     private ScreenDAO screenDAO;
 
@@ -96,6 +99,8 @@ public class LaptopServiceImpl implements LaptopService {
                     .getProductImagesByProductIdAndImageType(laptopId, ImageType.ADVERTISE).get(0).getPath();
             Screen screen = screenDAO.findScreenById(laptop.getScreenId());
             Discount discount = discountDAO.getDiscountOfProductInDate(laptopId);
+            List<Feedback> feedbackList = feedbackDAO.getAllFeedbacksOfProduct(laptopId);
+
             return ResponseEntity
                     .ok(LaptopDTOResponseCard.getData(
                             laptop,
@@ -103,7 +108,12 @@ public class LaptopServiceImpl implements LaptopService {
                             imagePath,
                             (hardDriveList != null) ? hardDriveList.get(0) : null,
                             screen,
-                            discount
+                            discount,
+                            (feedbackList != null)
+                                    ? feedbackList.stream()
+                                        .map(feedback -> feedback.getRatingPoint().intValue())
+                                        .reduce(0, Integer::sum) / (feedbackList.size() * 1f)
+                                    : 0f
                     ));
         }
     }
