@@ -25,6 +25,7 @@ public class LaptopDTOResponseCard {
     private GraphicCard graphicCard;
     private Screen screen;
     private Float ratingPoint;
+    private Integer feedbackCount;
 
     public LaptopDTOResponseCard() {}
 
@@ -124,9 +125,17 @@ public class LaptopDTOResponseCard {
         this.ratingPoint = ratingPoint;
     }
 
+    public Integer getFeedbackCount() {
+        return feedbackCount;
+    }
+
+    public void setFeedbackCount(Integer feedbackCount) {
+        this.feedbackCount = feedbackCount;
+    }
+
     public static LaptopDTOResponseCard getData(Laptop product, GraphicCard graphicCard, String imagePath,
                                                 HardDrive hardDrive, Screen screen, Discount discount,
-                                                float ratingPoint) {
+                                                float ratingPoint, int feedbackCount) {
         LaptopDTOResponseCard laptop = new LaptopDTOResponseCard();
         laptop.setId(product.getId());
         laptop.setName(product.getName());
@@ -137,10 +146,14 @@ public class LaptopDTOResponseCard {
             BigDecimal discountPrice = laptop.getPrice().multiply(BigDecimal.valueOf(discount.getRate()));
 
             if(discountPrice.compareTo(discount.getMaxAmount()) > 0) {
-                laptop.setDiscountPrice(discount.getMaxAmount());
+                laptop.setDiscountPrice(
+                        laptop.getPrice().subtract(discount.getMaxAmount())
+                );
             }
             else {
-                laptop.setDiscountPrice(discountPrice);
+                laptop.setDiscountPrice(
+                        laptop.getPrice().subtract(discountPrice)
+                );
             }
         }
         else {
@@ -154,6 +167,7 @@ public class LaptopDTOResponseCard {
         laptop.setHardDrive(hardDrive);
         laptop.setScreen(screen);
         laptop.setRatingPoint(ratingPoint);
+        laptop.setFeedbackCount(feedbackCount);
         return laptop;
     }
 }

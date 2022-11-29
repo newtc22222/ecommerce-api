@@ -100,6 +100,14 @@ public class LaptopServiceImpl implements LaptopService {
             Screen screen = screenDAO.findScreenById(laptop.getScreenId());
             Discount discount = discountDAO.getDiscountOfProductInDate(laptopId);
             List<Feedback> feedbackList = feedbackDAO.getAllFeedbacksOfProduct(laptopId);
+            float ratingPoint = 0;
+            int feedbackCount = 0;
+            if(feedbackList != null && feedbackList.size() > 0) {
+                int sum = feedbackList.stream().map(feedback -> feedback.getRatingPoint().intValue())
+                            .reduce(0, Integer::sum);
+                feedbackCount = feedbackList.size();
+                ratingPoint = sum * 1f / feedbackCount;
+            }
 
             return ResponseEntity
                     .ok(LaptopDTOResponseCard.getData(
@@ -109,11 +117,8 @@ public class LaptopServiceImpl implements LaptopService {
                             (hardDriveList != null) ? hardDriveList.get(0) : null,
                             screen,
                             discount,
-                            (feedbackList != null)
-                                    ? feedbackList.stream()
-                                        .map(feedback -> feedback.getRatingPoint().intValue())
-                                        .reduce(0, Integer::sum) / (feedbackList.size() * 1f)
-                                    : 0f
+                            ratingPoint,
+                            feedbackCount
                     ));
         }
     }
