@@ -11,6 +11,7 @@
         <module name="statistical-service" />
         <module name="dao" />
         <module name="service" />
+        <module name="file-upload-support" />
         <module name="domain" />
         <module name="web-api" />
         <module name="mapper" />
@@ -30,6 +31,7 @@
       <module name="domain" options="-parameters" />
       <module name="dto" options="-parameters" />
       <module name="ecommerce-api" options="-parameters" />
+      <module name="file-upload-support" options="-parameters" />
       <module name="filter" options="-parameters" />
       <module name="mapper" options="-parameters" />
       <module name="service" options="-parameters" />
