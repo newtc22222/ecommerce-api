@@ -42,7 +42,6 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public ResponseEntity<?> update(Invoice invoice, String invoiceId) {
         Invoice oldInvoice = invoiceDAO.getInvoiceById(invoiceId);
-
         if(oldInvoice == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -78,7 +77,6 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public ResponseEntity<?> updateStatus(String invoiceId, OrderStatus status) {
         Invoice oldInvoice = invoiceDAO.getInvoiceById(invoiceId);
-
         if(oldInvoice == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -87,7 +85,6 @@ public class InvoiceServiceImpl implements InvoiceService {
                             "Cannot find invoice with id = " + invoiceId
                     ));
         }
-
         return ResponseCUDObject.of(
                 invoiceDAO.updateStatus(invoiceId, status) > 0,
                 HttpStatus.OK,
@@ -100,7 +97,6 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public ResponseEntity<?> updatePaymentType(String invoiceId, String paymentType) {
         Invoice oldInvoice = invoiceDAO.getInvoiceById(invoiceId);
-
         if(oldInvoice == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -109,7 +105,6 @@ public class InvoiceServiceImpl implements InvoiceService {
                             "Cannot find invoice with id = " + invoiceId
                     ));
         }
-
         return ResponseCUDObject.of(
                 invoiceDAO.updatePaymentType(invoiceId, paymentType) > 0,
                 HttpStatus.OK,
@@ -122,7 +117,6 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public ResponseEntity<?> updatePaidStatus(String invoiceId, boolean isPaid) {
         Invoice oldInvoice = invoiceDAO.getInvoiceById(invoiceId);
-
         if(oldInvoice == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -131,7 +125,6 @@ public class InvoiceServiceImpl implements InvoiceService {
                             "Cannot find invoice with id = " + invoiceId
                     ));
         }
-
         return ResponseCUDObject.of(
                 invoiceDAO.updatePaidStatus(invoiceId, isPaid) > 0,
                 HttpStatus.OK,
@@ -143,27 +136,35 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public ResponseEntity<?> delete(String invoiceId) {
+        if(invoiceDAO.getInvoiceById(invoiceId) == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find invoice with id = " + invoiceId
+                    ));
+        }
         return ResponseCUDObject.of(
                 invoiceDAO.delete(invoiceId) > 0,
                 HttpStatus.OK,
                 "Delete invoice successfully!",
-                HttpStatus.NOT_FOUND,
-                "Cannot find invoice with id = " + invoiceId
+                HttpStatus.NOT_IMPLEMENTED,
+                "Cannot delete invoice with id = " + invoiceId
         );
     }
 
     @Override
     public ResponseEntity<?> getAllInvoices() {
-        List<Invoice> invoices = invoiceDAO.getAllInvoices();
-        if(invoices == null) {
+        List<Invoice> invoiceList = invoiceDAO.getAllInvoices();
+        if(invoiceList == null || invoiceList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
-                            "Cannot find any invoices!"
+                            "Cannot find any invoiceList!"
                     ));
         }
-        return ResponseEntity.ok(invoices);
+        return ResponseEntity.ok(invoiceList);
     }
 
     @Override
@@ -171,10 +172,10 @@ public class InvoiceServiceImpl implements InvoiceService {
         Invoice invoice = invoiceDAO.getInvoiceById(invoiceId);
         if(invoice == null) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find invoices with id = " + invoiceId
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find invoiceList with id = " + invoiceId
                     ));
         }
         return ResponseEntity.ok(invoice);
@@ -182,144 +183,85 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public ResponseEntity<?> getInvoicesByUserId(long userId) {
-        List<Invoice> invoices = invoiceDAO.getInvoicesByUserId(userId);
-        if (invoices == null) {
+        List<Invoice> invoiceList = invoiceDAO.getInvoicesByUserId(userId);
+        if (invoiceList == null || invoiceList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
-                            "Cannot find any invoices of this user!"
+                            "Cannot find any invoiceList of this user!"
                     ));
         }
-        return ResponseEntity.ok(invoices);
+        return ResponseEntity.ok(invoiceList);
     }
 
     @Override
     public ResponseEntity<?> filter(Map<String, String> params) {
-        Set<Invoice> invoiceSet = new HashSet<>();
+        Set<Invoice> invoiceSet = new HashSet<>(invoiceDAO.getAllInvoices());
+        Set<Invoice> notSuit = new HashSet<>();
+
         if (params.containsKey("address")) {
             List<Invoice> invoiceList = invoiceDAO.getInvoicesByAddress(params.get("address"));
-            invoiceSet.addAll(invoiceList);
+            invoiceSet.forEach(invoice -> {
+                if(!invoiceList.contains(invoice)) {
+                    notSuit.add(invoice);
+                }
+            });
         }
         if (params.containsKey("date")) {
             List<Invoice> invoiceList = invoiceDAO.getInvoicesByDate(
-                    LocalDate.parse(params.get("date"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            invoiceSet.addAll(invoiceList);
+                    LocalDate.parse(params.get("date"), DateTimeFormatter.ISO_LOCAL_DATE));
+            invoiceSet.forEach(invoice -> {
+                if(!invoiceList.contains(invoice)) {
+                    notSuit.add(invoice);
+                }
+            });
         }
         if (params.containsKey("startDate") &&  params.containsKey("endDate")) {
-            DateTimeFormatter DATE_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
             List<Invoice> invoiceList = invoiceDAO.getInvoicesByDateRange(
-                    LocalDateTime.parse(params.get("startDate"), DATE_TIME_PATTERN),
-                    LocalDateTime.parse(params.get("endDate"), DATE_TIME_PATTERN)
+                    LocalDateTime.parse(params.get("startDate"), DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                    LocalDateTime.parse(params.get("endDate"), DateTimeFormatter.ISO_LOCAL_DATE_TIME)
             );
-            invoiceSet.addAll(invoiceList);
+            invoiceSet.forEach(invoice -> {
+                if(!invoiceList.contains(invoice)) {
+                    notSuit.add(invoice);
+                }
+            });
         }
         if (params.containsKey("paymentType")) {
             List<Invoice> invoiceList = invoiceDAO.getInvoicesByPaymentType(params.get("paymentType"));
-            invoiceSet.addAll(invoiceList);
+            invoiceSet.forEach(invoice -> {
+                if(!invoiceList.contains(invoice)) {
+                    notSuit.add(invoice);
+                }
+            });
         }
         if (params.containsKey("status")) {
             List<Invoice> invoiceList = invoiceDAO.getInvoicesByOrderStatus(OrderStatus.valueOf(params.get("status")));
-            invoiceSet.addAll(invoiceList);
+            invoiceSet.forEach(invoice -> {
+                if(!invoiceList.contains(invoice)) {
+                    notSuit.add(invoice);
+                }
+            });
         }
         if (params.containsKey("isPaid")) {
             List<Invoice> invoiceList = invoiceDAO.getInvoicesByPaidStatus(Boolean.parseBoolean(params.get("isPaid")));
-            invoiceSet.addAll(invoiceList);
+            invoiceSet.forEach(invoice -> {
+                if(!invoiceList.contains(invoice)) {
+                    notSuit.add(invoice);
+                }
+            });
         }
 
+        invoiceSet.removeAll(notSuit);
         if(invoiceSet.isEmpty()) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find invoice which suit this conditions!"
                     ));
         }
         return ResponseEntity.ok(invoiceSet);
-    }
-
-    @Override
-    public ResponseEntity<?> getInvoicesByAddress(String address) {
-        List<Invoice> invoices = invoiceDAO.getInvoicesByAddress(address);
-        if(invoices == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any invoices which suit this condition!"
-                    ));
-        }
-        return ResponseEntity.ok(invoices);
-    }
-
-    @Override
-    public ResponseEntity<?> getInvoicesByDate(LocalDate date) {
-        List<Invoice> invoices = invoiceDAO.getInvoicesByDate(date);
-        if(invoices == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any invoices which suit this condition!"
-                    ));
-        }
-        return ResponseEntity.ok(invoices);
-    }
-
-    @Override
-    public ResponseEntity<?> getInvoicesByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
-        List<Invoice> invoices = invoiceDAO.getInvoicesByDateRange(startDate, endDate);
-        if(invoices == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any invoices which suit this condition!"
-                    ));
-        }
-        return ResponseEntity.ok(invoices);
-    }
-
-    @Override
-    public ResponseEntity<?> getInvoicesByPaymentType(String paymentType) {
-        List<Invoice> invoices = invoiceDAO.getInvoicesByPaymentType(paymentType);
-        if(invoices == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any invoices which suit this condition!"
-                    ));
-        }
-        return ResponseEntity.ok(invoices);
-    }
-
-    @Override
-    public ResponseEntity<?> getInvoicesByOrderStatus(OrderStatus status) {
-        List<Invoice> invoices = invoiceDAO.getInvoicesByOrderStatus(status);
-        if(invoices == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any invoices which suit this condition!"
-                    ));
-        }
-        return ResponseEntity.ok(invoices);
-    }
-
-    @Override
-    public ResponseEntity<?> getInvoicesByPaidStatus(boolean isPaid) {
-        List<Invoice> invoices = invoiceDAO.getInvoicesByPaidStatus(isPaid);
-        if(invoices == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any invoices which suit this condition!"
-                    ));
-        }
-        return ResponseEntity.ok(invoices);
     }
 }

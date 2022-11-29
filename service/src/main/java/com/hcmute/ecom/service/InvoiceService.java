@@ -24,12 +24,6 @@ public interface InvoiceService {
     ResponseEntity<?> getAllInvoices();
     ResponseEntity<?> getInvoiceById(String invoiceId);
     ResponseEntity<?> getInvoicesByUserId(long userId);
-    ResponseEntity<?> filter(Map<String, String> params);
 
-    ResponseEntity<?> getInvoicesByAddress(String address);
-    ResponseEntity<?> getInvoicesByDate(LocalDate date);
-    ResponseEntity<?> getInvoicesByDateRange(LocalDateTime startDate, LocalDateTime endDate);
-    ResponseEntity<?> getInvoicesByPaymentType(String paymentType);
-    ResponseEntity<?> getInvoicesByOrderStatus(OrderStatus status);
-    ResponseEntity<?> getInvoicesByPaidStatus(boolean isPaid);
+    ResponseEntity<?> filter(Map<String, String> params);
 }

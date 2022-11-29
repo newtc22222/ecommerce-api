@@ -46,7 +46,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseEntity<?> updateAll(Laptop product, String productId) {
         Laptop oldProduct = productDAO.findProductById(productId);
-
         if(oldProduct == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -71,7 +70,6 @@ public class ProductServiceImpl implements ProductService {
             oldProduct.setMoreDescriptionHTML(product.getMoreDescriptionHTML());
             oldProduct.setScreenId(product.getScreenId());
         }
-
         return ResponseCUDObject.of(
                 productDAO.updateAll(product) > 0,
                 HttpStatus.OK,
@@ -84,7 +82,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseEntity<?> updatePrice(ProductDTORequest productDTO) {
         Laptop oldProduct = productDAO.findProductById(productDTO.getId());
-
         if(oldProduct == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -93,7 +90,6 @@ public class ProductServiceImpl implements ProductService {
                             "Cannot find product with id = " + productDTO.getId()
                     ));
         }
-
         return ResponseCUDObject.of(
                 productDAO.updatePrice(productDTO) > 0,
                 HttpStatus.OK,
@@ -106,7 +102,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseEntity<?> updateLaptopProperties(LaptopDTORequest laptopDTO) {
         Laptop oldProduct = productDAO.findProductById(laptopDTO.getId());
-
         if(oldProduct == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -115,7 +110,6 @@ public class ProductServiceImpl implements ProductService {
                             "Cannot find product with id = " + laptopDTO.getId()
                     ));
         }
-
         return ResponseCUDObject.of(
                 productDAO.updateLaptopProperties(laptopDTO) > 0,
                 HttpStatus.OK,
@@ -135,7 +129,6 @@ public class ProductServiceImpl implements ProductService {
                             "Cannot find product with id = " + productId
                     ));
         }
-
         return ResponseCUDObject.of(
                 productDAO.delete(productId) > 0,
                 HttpStatus.OK,
@@ -169,16 +162,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<?> getAllProduct() {
-        List<Laptop> products = productDAO.getAllProduct();
-        if(products == null) {
+        List<Laptop> productList = productDAO.getAllProduct();
+        if(productList == null || productList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any product!"
                     ));
         }
-        return ResponseEntity.ok(products);
+        return ResponseEntity.ok(productList);
     }
 
     @Override
@@ -199,7 +192,7 @@ public class ProductServiceImpl implements ProductService {
     public ResponseEntity<?> filter(Map<String, String> params) {
         Set<Laptop> productSet = new HashSet<>(productDAO.getAllProduct());
         Set<Laptop> notSuit = new HashSet<>();
-        
+
         if(params.containsKey("name")){
             List<Laptop> productList = productDAO.findProductsByName(params.get("name"));
             productSet.forEach(product -> {
@@ -294,13 +287,12 @@ public class ProductServiceImpl implements ProductService {
         productSet.removeAll(notSuit);
         if(productSet.isEmpty()) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find product which suit this conditions!"
                     ));
         }
-
         return ResponseEntity.ok(productSet);
     }
 }

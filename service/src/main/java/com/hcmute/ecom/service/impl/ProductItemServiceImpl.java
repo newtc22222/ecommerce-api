@@ -36,7 +36,6 @@ public class ProductItemServiceImpl implements ProductItemService {
     @Override
     public ResponseEntity<?> update(ProductItem productItem, String itemId) {
         ProductItem oldProductItem = productItemDAO.findProductItemById(itemId);
-
         if(oldProductItem == null){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -53,7 +52,6 @@ public class ProductItemServiceImpl implements ProductItemService {
             oldProductItem.setItemPrice(productItem.getItemPrice());
             oldProductItem.setItemDiscountPrice(productItem.getItemDiscountPrice());
         }
-
         return ResponseCUDObject.of(
                 productItemDAO.update(oldProductItem) > 0,
                 HttpStatus.OK,
@@ -66,7 +64,6 @@ public class ProductItemServiceImpl implements ProductItemService {
     @Override
     public ResponseEntity<?> updateProductItemProperties(String itemId, int quantity, BigDecimal price, BigDecimal discount_price) {
         ProductItem oldProductItem = productItemDAO.findProductItemById(itemId);
-
         if(oldProductItem == null){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -75,7 +72,6 @@ public class ProductItemServiceImpl implements ProductItemService {
                             "Cannot find product item with id = " + itemId
                     ));
         }
-
         return ResponseCUDObject.of(
                 productItemDAO.updateProductItemProperties(itemId, quantity, price, discount_price) > 0,
                 HttpStatus.OK,
@@ -87,12 +83,20 @@ public class ProductItemServiceImpl implements ProductItemService {
 
     @Override
     public ResponseEntity<?> delete(String itemId) {
+        if(productItemDAO.findProductItemById(itemId) == null){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find product item with id = " + itemId
+                    ));
+        }
         return ResponseCUDObject.of(
                 productItemDAO.delete(itemId) > 0,
                 HttpStatus.OK,
                 "Delete product item successfully!",
-                HttpStatus.NOT_FOUND,
-                "Cannot find product image item id = " + itemId
+                HttpStatus.NOT_IMPLEMENTED,
+                "Cannot delete product item with id = " + itemId
         );
     }
 
@@ -113,9 +117,9 @@ public class ProductItemServiceImpl implements ProductItemService {
     @Override
     public ResponseEntity<?> getProductItemsByCartId(String cartId) {
         List<ProductItem> productItemList = productItemDAO.getProductItemsByCartId(cartId);
-        if(productItemList == null) {
+        if(productItemList == null || productItemList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any items which suit this condition!"
@@ -127,9 +131,9 @@ public class ProductItemServiceImpl implements ProductItemService {
     @Override
     public ResponseEntity<?> getProductItemsByInvoiceId(String invoiceId) {
         List<ProductItem> productItemList = productItemDAO.getProductItemsByInvoiceId(invoiceId);
-        if(productItemList == null) {
+        if(productItemList == null || productItemList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any items which suit this condition!"

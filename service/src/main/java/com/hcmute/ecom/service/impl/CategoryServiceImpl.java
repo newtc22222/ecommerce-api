@@ -5,6 +5,7 @@ import com.hcmute.ecom.model.Category;
 import com.hcmute.ecom.service.CategoryService;
 import com.hcmute.ecom.service.model.ResponseCUDObject;
 import com.hcmute.ecom.service.model.ResponseObject;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         return ResponseCUDObject.of(
-                categoryDAO.update(category) > 0,
+                categoryDAO.update(oldCategory) > 0,
                 HttpStatus.OK,
                 "Update category successfully!",
                 HttpStatus.NOT_IMPLEMENTED,
@@ -61,21 +62,30 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ResponseEntity<?> delete(long categoryId) {
+        if (categoryDAO.findCategoryById(categoryId) == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find category with id = " + categoryId
+                    ));
+        }
+
         return ResponseCUDObject.of(
                 categoryDAO.delete(categoryId) > 0,
                 HttpStatus.OK,
                 "Delete category successfully!",
-                HttpStatus.NOT_FOUND,
-                "Cannot find category with id = " + categoryId
+                HttpStatus.NOT_IMPLEMENTED,
+                "Failed to delete category with id = " + categoryId
         );
     }
 
     @Override
     public ResponseEntity<?> getAllCategory() {
         List<Category> categories = categoryDAO.getAllCategory();
-        if (categories == null) {
+        if (categories == null || categories.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any category!"

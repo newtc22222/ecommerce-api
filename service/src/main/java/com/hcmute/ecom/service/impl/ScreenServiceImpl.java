@@ -38,7 +38,6 @@ public class ScreenServiceImpl implements ScreenService {
     @Override
     public ResponseEntity<?> update(Screen screen, long screenId) {
         Screen oldScreen = screenDAO.findScreenById(screenId);
-
         if(oldScreen == null){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -58,7 +57,6 @@ public class ScreenServiceImpl implements ScreenService {
             oldScreen.setColorCoverage(screen.getColorCoverage());
             oldScreen.setHasTouchScreen(screen.getHasTouchScreen());
         }
-
         return ResponseCUDObject.of(
                 screenDAO.update(oldScreen) > 0,
                 HttpStatus.OK,
@@ -70,27 +68,35 @@ public class ScreenServiceImpl implements ScreenService {
 
     @Override
     public ResponseEntity<?> delete(long screenId) {
+        if(screenDAO.findScreenById(screenId) == null){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find screen with id = " + screenId
+                    ));
+        }
         return ResponseCUDObject.of(
                 screenDAO.delete(screenId) > 0,
                 HttpStatus.OK,
                 "Delete screen successfully!",
-                HttpStatus.NOT_FOUND,
-                "Cannot find screen with id = " + screenId
+                HttpStatus.NOT_IMPLEMENTED,
+                "Cannot delete screen with id = " + screenId
         );
     }
 
     @Override
     public ResponseEntity<?> getAllScreens() {
-        List<Screen> screens = screenDAO.getAllScreens();
-        if (screens == null) {
+        List<Screen> screenList = screenDAO.getAllScreens();
+        if (screenList == null || screenList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any screen!"
                     ));
         }
-        return ResponseEntity.ok(screens);
+        return ResponseEntity.ok(screenList);
     }
 
     @Override
@@ -111,6 +117,7 @@ public class ScreenServiceImpl implements ScreenService {
     public ResponseEntity<?> filter(Map<String, String> params) {
         Set<Screen> screenSet = new HashSet<>(screenDAO.getAllScreens());
         Set<Screen> notSuit = new HashSet<>();
+
         if(params.containsKey("size")) {
             List<Screen> screenList = screenDAO.getScreensBySize(Float.parseFloat(params.get("size")));
             screenSet.forEach(screen -> {
@@ -155,7 +162,7 @@ public class ScreenServiceImpl implements ScreenService {
         screenSet.removeAll(notSuit);
         if (screenSet.isEmpty()) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find screen which suit all of this conditions!"

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author Nhat Phi
@@ -15,8 +16,7 @@ public interface BannerService {
     ResponseEntity<?> update(Banner banner, long bannerId);
     ResponseEntity<?> delete(long bannerId);
     ResponseEntity<?> getAllBanner();
-    ResponseEntity<?> getBannersByDateRange(LocalDate start_date, LocalDate end_date);
     ResponseEntity<?> findBannerById(long bannerId);
-//    ResponseEntity<?> getBannersByDate(Date date);
-//    ResponseEntity<?> getBannersByType(String type);
+    ResponseEntity<?> getBannersByDateRange(LocalDate start_date, LocalDate end_date);
+    ResponseEntity<?> filter(Map<String, String> params);
 }

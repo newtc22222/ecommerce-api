@@ -85,7 +85,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         List<Feedback> feedbacks = feedbackDAO.getAllFeedbacksOfProduct(productId);
         if(feedbacks == null) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any feedback in this product!"
@@ -99,7 +99,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         List<Feedback> feedbacks = feedbackDAO.getAllFeedbacksOfProductByRatingPoint(productId, ratingPoint);
         if(feedbacks == null) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any feedback in this product of this point!"
@@ -111,55 +111,48 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public ResponseEntity<?> getAllFeedbacksOfUser(long userId) {
         List<Feedback> feedbackList = feedbackDAO.getAllFeedbacksOfUser(userId);
-
-        if(feedbackList == null) {
+        if(feedbackList == null || feedbackList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any feedback of user with id = " + userId
                     ));
         }
-
         return ResponseEntity.ok(feedbackList);
     }
 
     @Override
     public ResponseEntity<?> getNewFeedbacks(int limit) {
         List<Feedback> feedbackList = feedbackDAO.getNewFeedbacks(limit);
-
-        if(feedbackList == null) {
+        if(feedbackList == null || feedbackList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any feedback!"
                     ));
         }
-
         return ResponseEntity.ok(feedbackList);
     }
 
     @Override
     public ResponseEntity<?> getAllFeedbacksByRatingPoint(byte ratingPoint) {
         List<Feedback> feedbackList = feedbackDAO.getAllFeedbacksByRatingPoint(ratingPoint);
-
-        if(feedbackList == null) {
+        if(feedbackList == null || feedbackList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any feedback which suit this condition!"
                     ));
         }
-
         return ResponseEntity.ok(feedbackList);
     }
 
     @Override
     public ResponseEntity<?> findFeedbackById(long feedbackId) {
         Feedback feedback = feedbackDAO.findFeedbackById(feedbackId);
-
         if(feedback == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)

@@ -64,21 +64,29 @@ public class GraphicCardServiceImpl implements GraphicCardService {
 
     @Override
     public ResponseEntity<?> delete(long graphicCardId) {
+        if(graphicCardDAO.findGraphicCardById(graphicCardId) == null){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find graphic card with id = " + graphicCardId
+                    ));
+        }
         return ResponseCUDObject.of(
                 graphicCardDAO.delete(graphicCardId) > 0,
                 HttpStatus.OK,
                 "Delete graphic card successfully!",
-                HttpStatus.NOT_FOUND,
-                "Cannot find graphic card with id = " + graphicCardId
+                HttpStatus.NOT_IMPLEMENTED,
+                "Cannot delete graphic card with id = " + graphicCardId
         );
     }
 
     @Override
     public ResponseEntity<?> getAllGraphicCards() {
         List<GraphicCard> graphicCardList = graphicCardDAO.getAllGraphicCards();
-        if (graphicCardList == null) {
+        if (graphicCardList == null || graphicCardList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any graphic card!"
@@ -106,7 +114,7 @@ public class GraphicCardServiceImpl implements GraphicCardService {
         List<GraphicCard> graphicCardList = graphicCardDAO.getGraphicCardsByType(type);
         if (graphicCardList == null) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any graphic card which suit this condition!"
@@ -118,9 +126,9 @@ public class GraphicCardServiceImpl implements GraphicCardService {
     @Override
     public ResponseEntity<?> getGraphicCardsByBrand(String brand) {
         List<GraphicCard> graphicCardList = graphicCardDAO.getGraphicCardsByBrand(brand);
-        if (graphicCardList == null) {
+        if (graphicCardList == null || graphicCardList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any graphic card which suit this condition!"
@@ -132,9 +140,9 @@ public class GraphicCardServiceImpl implements GraphicCardService {
     @Override
     public ResponseEntity<?> getGraphicCardsByTypeAndBrand(GraphicCardType type, String brand) {
         List<GraphicCard> graphicCardList = graphicCardDAO.getGraphicCardsByTypeAndBrand(type, brand);
-        if (graphicCardList == null) {
+        if (graphicCardList == null || graphicCardList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any graphic card which suit this condition!"

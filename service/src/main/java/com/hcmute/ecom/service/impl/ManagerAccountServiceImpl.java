@@ -34,20 +34,18 @@ public class ManagerAccountServiceImpl implements ManagerAccountService {
     @Override
     public ResponseEntity<?> update(ManagerAccount account, String username) {
         ManagerAccount oldAccount = managerAccountDAO.findAccountByUsername(username);
-
         if(oldAccount == null){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NOT_FOUND,
-                            "Cannot find address with username = " + username
+                            "Cannot find username = " + username
                     ));
         }
         else {
             oldAccount.setPassword(account.getPassword());
             oldAccount.setLastUpdatedDate(account.getLastUpdatedDate());
         }
-
         return ResponseCUDObject.of(
                 managerAccountDAO.updatePassword(oldAccount) > 0,
                 HttpStatus.OK,
@@ -59,19 +57,26 @@ public class ManagerAccountServiceImpl implements ManagerAccountService {
 
     @Override
     public ResponseEntity<?> delete(String username) {
+        if(managerAccountDAO.findAccountByUsername(username) == null){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find account with username = " + username
+                    ));
+        }
         return ResponseCUDObject.of(
                 managerAccountDAO.delete(username) > 0,
                 HttpStatus.OK,
                 "Delete account successfully!",
-                HttpStatus.NOT_FOUND,
-                "Cannot find account with username = " + username
+                HttpStatus.NOT_IMPLEMENTED,
+                "Cannot delete account with username = " + username
         );
     }
 
     @Override
     public ResponseEntity<?> findAccount(AccountDTO account) {
         ManagerAccount findAccount = managerAccountDAO.findAccount(account.getUsername(), account.getPassword());
-
         if(findAccount == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -80,7 +85,6 @@ public class ManagerAccountServiceImpl implements ManagerAccountService {
                             "Username or password is not valid! Please check your account again!"
                     ));
         }
-
         return ResponseEntity.ok(findAccount);
     }
 }

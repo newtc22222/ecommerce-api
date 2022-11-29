@@ -36,7 +36,6 @@ public class ProductImageServiceImpl implements ProductImageService {
     @Override
     public ResponseEntity<?> update(ProductImage productImage, String imageId) {
         ProductImage oldProductImage = productImageDAO.findProductImageById(imageId);
-
         if(oldProductImage == null){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -50,7 +49,6 @@ public class ProductImageServiceImpl implements ProductImageService {
             oldProductImage.setPath(productImage.getPath());
             oldProductImage.setImageType(productImage.getImageType());
         }
-
         return ResponseCUDObject.of(
                 productImageDAO.update(oldProductImage) > 0,
                 HttpStatus.OK,
@@ -63,7 +61,6 @@ public class ProductImageServiceImpl implements ProductImageService {
     @Override
     public ResponseEntity<?> updatePathAndType(String imageId, String path, ImageType type) {
         ProductImage oldProductImage = productImageDAO.findProductImageById(imageId);
-
         if(oldProductImage == null){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -72,7 +69,6 @@ public class ProductImageServiceImpl implements ProductImageService {
                             "Cannot find product image with id = " + imageId
                     ));
         }
-
         return ResponseCUDObject.of(
                 productImageDAO.updatePathAndType(imageId, path, type) > 0,
                 HttpStatus.OK,
@@ -84,22 +80,29 @@ public class ProductImageServiceImpl implements ProductImageService {
     
     @Override
     public ResponseEntity<?> delete(String imageId) {
+        if(productImageDAO.findProductImageById(imageId) == null){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find product image with id = " + imageId
+                    ));
+        }
         return ResponseCUDObject.of(
                 productImageDAO.delete(imageId) > 0,
                 HttpStatus.OK,
                 "Delete product image successfully!",
-                HttpStatus.NOT_FOUND,
-                "Cannot find product image with id = " + imageId
+                HttpStatus.NOT_IMPLEMENTED,
+                "Cannot delete product image with id = " + imageId
         );
     }
-
 
     @Override
     public ResponseEntity<?> getAllProductImages() {
         List<ProductImage> productImageList = productImageDAO.getAllProductImages();
-        if(productImageList == null) {
+        if(productImageList == null || productImageList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any product image!"
@@ -125,9 +128,9 @@ public class ProductImageServiceImpl implements ProductImageService {
     @Override
     public ResponseEntity<?> getProductImagesByImageType(ImageType type) {
         List<ProductImage> productImageList = productImageDAO.getProductImagesByImageType(type);
-        if(productImageList == null) {
+        if(productImageList == null || productImageList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any product image which suit this condition!"
@@ -138,29 +141,29 @@ public class ProductImageServiceImpl implements ProductImageService {
 
     @Override
     public ResponseEntity<?> getProductImagesByProductId(String productId) {
-        List<ProductImage> images = productImageDAO.getProductImagesByProductId(productId);
-        if(images == null) {
+        List<ProductImage> productImageList = productImageDAO.getProductImagesByProductId(productId);
+        if(productImageList == null || productImageList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any images in this product!"
                     ));
         }
-        return ResponseEntity.ok(images);
+        return ResponseEntity.ok(productImageList);
     }
 
     @Override
     public ResponseEntity<?> getProductImagesByProductIdAndImageType(String productId, ImageType type) {
-        List<ProductImage> images = productImageDAO.getProductImagesByProductIdAndImageType(productId, type);
-        if(images == null) {
+        List<ProductImage> productImageList = productImageDAO.getProductImagesByProductIdAndImageType(productId, type);
+        if(productImageList == null || productImageList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any images in this product of this type!"
                     ));
         }
-        return ResponseEntity.ok(images);
+        return ResponseEntity.ok(productImageList);
     }
 }

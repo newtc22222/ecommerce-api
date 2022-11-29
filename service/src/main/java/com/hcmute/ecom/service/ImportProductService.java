@@ -19,4 +19,6 @@ public interface ImportProductService {
     ResponseEntity<?> getImportProductTicketsByProductId(String productId);
     ResponseEntity<?> getImportProductTicketsByDate(LocalDate date);
     ResponseEntity<?> getImportProductTicketsByDateRange(LocalDateTime startDate, LocalDateTime endDate);
+//    ResponseEntity<?> getImportProductTicketsByProductIdAndDate(String productId, LocalDate date);
+//    ResponseEntity<?> getImportProductTicketsByProductIdAndDateRange(String productId, LocalDateTime startDate, LocalDateTime endDate);
 }

@@ -12,7 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Nhat Phi
@@ -66,21 +70,29 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public ResponseEntity<?> delete(long discountId) {
+        if(discountDAO.findDiscountById(discountId) == null){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find discount with id = " + discountId
+                    ));
+        }        
         return ResponseCUDObject.of(
                 discountDAO.delete(discountId) > 0,
                 HttpStatus.OK,
                 "Delete discount successfully!",
-                HttpStatus.NOT_FOUND,
-                "Cannot find discount with id = " + discountId
+                HttpStatus.NOT_IMPLEMENTED,
+                "Cannot delete discount with id = " + discountId
         );
     }
 
     @Override
     public ResponseEntity<?> getAllDiscounts() {
         List<Discount> discountList = discountDAO.getAllDiscounts();
-        if (discountList == null) {
+        if (discountList == null || discountList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any discount!"
@@ -105,63 +117,66 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public ResponseEntity<?> getDiscountsByProduct(String productId) {
-        List<Discount> discounts = discountDAO.getDiscountsByProduct(productId);
-        if(discounts == null) {
+        List<Discount> discountList = discountDAO.getDiscountsByProduct(productId);
+        if(discountList == null || discountList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any discount in this product!"
                     ));
         }
-        return ResponseEntity.ok(discounts);
-    }
-
-    @Override
-    public ResponseEntity<?> findDiscountsByCode(String code) {
-        List<Discount> discountList = discountDAO.findDiscountsByCode(code);
-
-        if(discountList == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any discount which suit this condition!"
-                    ));
-        }
-
         return ResponseEntity.ok(discountList);
     }
 
     @Override
-    public ResponseEntity<?> getDiscountByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
-        List<Discount> discountList = discountDAO.getDiscountsByDateRange(startDate, endDate);
+    public ResponseEntity<?> filter(Map<String, String> params) {
+        Set<Discount> discountSet = new HashSet<>(discountDAO.getAllDiscounts());
+        Set<Discount> notSuit = new HashSet<>();
 
-        if(discountList == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any discount which suit this condition!"
-                    ));
+        if(params.containsKey("code")) {
+            List<Discount> discountList = discountDAO.findDiscountsByCode(params.get("code"));
+            discountSet.forEach(discount -> {
+                if(!discountList.contains(discount)) {
+                    notSuit.add(discount);
+                }
+            });
+        }
+        if(params.containsKey("startDate") && params.containsKey("endDate")) {
+            List<Discount> discountList = discountDAO.getDiscountsByDateRange(
+                    LocalDateTime.parse(params.get("startDate"), DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                    LocalDateTime.parse(params.get("endDate"), DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            );
+            discountSet.forEach(discount -> {
+                if(!discountList.contains(discount)) {
+                    notSuit.add(discount);
+                }
+            });
+        }
+        if(params.containsKey("type")) {
+            String type = params.get("type");
+            if(type.equalsIgnoreCase(DiscountType.PRODUCT.toString())
+                    || type.equalsIgnoreCase(DiscountType.PURCHASE.toString()))
+            {
+                List<Discount> discountList = discountDAO.getDiscountsByType(
+                        DiscountType.valueOf(type.toUpperCase()));
+                discountSet.forEach(discount -> {
+                    if(!discountList.contains(discount)) {
+                        notSuit.add(discount);
+                    }
+                });
+            }
         }
 
-        return ResponseEntity.ok(discountList);
-    }
-
-    @Override
-    public ResponseEntity<?> getDiscountByType(DiscountType type) {
-        List<Discount> discountList = discountDAO.getDiscountsByType(type);
-
-        if(discountList == null) {
+        discountSet.removeAll(notSuit);
+        if(discountSet.isEmpty()) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
-                            "Cannot find any discount which suit this condition!"
+                            "Cannot find discount which suit this conditions!"
                     ));
         }
-
-        return ResponseEntity.ok(discountList);
+        return ResponseEntity.ok(discountSet);
     }
 }

@@ -37,7 +37,6 @@ public class ImportProductServiceImpl implements ImportProductService {
     @Override
     public ResponseEntity<?> update(ImportProduct importProduct, long ticketId) {
         ImportProduct oldImportProduct = importProductDAO.findImportProductTicket(ticketId);
-
         if(oldImportProduct == null){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -52,7 +51,6 @@ public class ImportProductServiceImpl implements ImportProductService {
             oldImportProduct.setImportedDate(importProduct.getImportedDate());
             oldImportProduct.setImportedPrice(importProduct.getImportedPrice());
         }
-
         return ResponseCUDObject.of(
                 importProductDAO.update(oldImportProduct) > 0,
                 HttpStatus.OK,
@@ -64,21 +62,29 @@ public class ImportProductServiceImpl implements ImportProductService {
 
     @Override
     public ResponseEntity<?> delete(long ticketId) {
+        if(importProductDAO.findImportProductTicket(ticketId) == null){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find import product ticket with ticket_id = " + ticketId
+                    ));
+        }
         return ResponseCUDObject.of(
                 importProductDAO.delete(ticketId) > 0,
                 HttpStatus.OK,
                 "Delete import product ticket successfully!",
-                HttpStatus.NOT_FOUND,
-                "Cannot find import product with ticket_id = " + ticketId
+                HttpStatus.NOT_IMPLEMENTED,
+                "Cannot delete import product ticket with ticket_id = " + ticketId
         );
     }
 
     @Override
     public ResponseEntity<?> getAllImportProductTicket() {
         List<ImportProduct> importProductList = importProductDAO.getAllImportProductTicket();
-        if(importProductList == null) {
+        if(importProductList == null || importProductList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any import product ticket!"
@@ -104,9 +110,9 @@ public class ImportProductServiceImpl implements ImportProductService {
     @Override
     public ResponseEntity<?> getImportProductTicketsByProductId(String productId) {
         List<ImportProduct> importProductList = importProductDAO.getImportProductTicketsByProductId(productId);
-        if(importProductList == null) {
+        if(importProductList == null || importProductList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any import product ticket which suit this condition!"
@@ -118,9 +124,9 @@ public class ImportProductServiceImpl implements ImportProductService {
     @Override
     public ResponseEntity<?> getImportProductTicketsByDate(LocalDate date) {
         List<ImportProduct> importProductList = importProductDAO.getImportProductTicketsByDate(date);
-        if(importProductList == null) {
+        if(importProductList == null || importProductList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any import product ticket which suit this condition!"
@@ -132,9 +138,9 @@ public class ImportProductServiceImpl implements ImportProductService {
     @Override
     public ResponseEntity<?> getImportProductTicketsByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         List<ImportProduct> importProductList = importProductDAO.getImportProductTicketsByDateRange(startDate, endDate);
-        if(importProductList == null) {
+        if(importProductList == null || importProductList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any import product ticket which suit this condition!"

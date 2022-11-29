@@ -5,6 +5,7 @@ import com.hcmute.ecom.model.Address;
 import com.hcmute.ecom.service.AddressService;
 import com.hcmute.ecom.service.model.ResponseCUDObject;
 import com.hcmute.ecom.service.model.ResponseObject;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,8 +45,7 @@ public class AddressServiceImpl implements AddressService {
                             "Cannot find address with id = " + addressId
                     ));
         }
-        else {  // change information
-//            oldAddress.setUserId(address.getUserId());
+        else {
             oldAddress.setCountry(address.getCountry());
             oldAddress.setLine1(address.getLine1());
             oldAddress.setLine2(address.getLine2());
@@ -94,7 +94,7 @@ public class AddressServiceImpl implements AddressService {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
-                            HttpStatus.NOT_FOUND,
+                            HttpStatus.NO_CONTENT,
                             "Cannot find any address of this user!"
                     ));
         }

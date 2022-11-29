@@ -76,8 +76,6 @@ public class UserServiceImpl implements UserService {
                             "Cannot find user with id = " + userDTO.getId()
                     ));
         }
-
-
         userDTO.setId(userId);
         return ResponseCUDObject.of(
                 userDAO.updateInformation(userDTO) > 0,
@@ -98,7 +96,6 @@ public class UserServiceImpl implements UserService {
                             "Cannot find user with id = " + userId
                     ));
         }
-
         return ResponseCUDObject.of(
                 userDAO.delete(userId) > 0,
                 HttpStatus.CREATED,
@@ -110,23 +107,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> getAllUsers() {
-        List<User> users = userDAO.getAllUsers();
-        if(users == null) {
+        List<User> userList = userDAO.getAllUsers();
+        if(userList == null || userList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any user in system!"
                     ));
         }
-
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(userList);
     }
 
     @Override
     public ResponseEntity<?> findUserById(long userId) {
         User user = userDAO.findUserById(userId);
-
         if(user == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -141,7 +136,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> findUserByPhone(String phone) {
         User user = userDAO.findUserByPhone(phone);
-
         if(user == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -157,6 +151,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> filter(String name, String gender) {
         Set<User> userSet = new HashSet<>(userDAO.getAllUsers());
         Set<User> notSuit = new HashSet<>();
+
         if(name != null) {
             List<User> userList = userDAO.findUsersByName(name);
             userSet.forEach(user -> {
@@ -166,18 +161,23 @@ public class UserServiceImpl implements UserService {
             });
         }
         if(gender != null) {
-            List<User> userList = userDAO.getUsersByGender(Gender.valueOf(gender.toUpperCase()));
-            userSet.forEach(user -> {
-                if(!userList.contains(user)) {
-                    notSuit.add(user);
-                }
-            });
+            if(gender.equalsIgnoreCase("MALE")
+                    || gender.equalsIgnoreCase("FEMALE")
+                    || gender.equalsIgnoreCase("OTHER"))
+            {
+                List<User> userList = userDAO.getUsersByGender(Gender.valueOf(gender.toUpperCase()));
+                userSet.forEach(user -> {
+                    if(!userList.contains(user)) {
+                        notSuit.add(user);
+                    }
+                });
+            }
         }
 
         userSet.removeAll(notSuit);
         if(userSet.isEmpty()) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any user in this condition!"

@@ -5,6 +5,7 @@ import com.hcmute.ecom.model.Discount;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * @author Nhat Phi
@@ -19,8 +20,5 @@ public interface DiscountService {
     ResponseEntity<?> getDiscountById(long discountId);
     ResponseEntity<?> getDiscountsByProduct(String productId);
 
-    // Filter
-    ResponseEntity<?> findDiscountsByCode(String code);
-    ResponseEntity<?> getDiscountByDateRange(LocalDateTime startDate, LocalDateTime endDate);
-    ResponseEntity<?> getDiscountByType(DiscountType type);
+    ResponseEntity<?> filter(Map<String, String> params);
 }

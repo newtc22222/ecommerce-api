@@ -61,20 +61,29 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public ResponseEntity<?> delete(long brandId) {
+        if (brandDAO.findBrandById(brandId) == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find brand with id = " + brandId
+                    ));
+        }
+
         return ResponseCUDObject.of(
                 brandDAO.delete(brandId) > 0,
                 HttpStatus.OK,
                 "Delete brand successfully!",
-                HttpStatus.NOT_FOUND,
-                "Cannot find brand with id = " + brandId);
+                HttpStatus.NOT_IMPLEMENTED,
+                "Failed to delete brand with id = " + brandId);
     }
 
     @Override
     public ResponseEntity<?> getAllBrand() {
         List<Brand> brands = brandDAO.getAllBrand();
-        if (brands == null) {
+        if (brands == null  || brands.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find address of this user!"

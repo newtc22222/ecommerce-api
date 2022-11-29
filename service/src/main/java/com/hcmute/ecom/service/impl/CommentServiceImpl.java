@@ -45,8 +45,12 @@ public class CommentServiceImpl implements CommentService {
                     ));
         }
 
+        oldComment.setPhone(comment.getPhone());
+        oldComment.setUsername(comment.getUsername());
+        oldComment.setContent(comment.getContent());
+
         return ResponseCUDObject.of(
-                commentDAO.update(comment) > 0,
+                commentDAO.update(oldComment) > 0,
                 HttpStatus.OK,
                 "Update comment successfully!",
                 HttpStatus.NOT_IMPLEMENTED,
@@ -56,12 +60,21 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public ResponseEntity<?> delete(long commentId) {
+        if(commentDAO.findCommentById(commentId) == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find comment with id = " + commentId
+                    ));
+        }
+
         return ResponseCUDObject.of(
                 commentDAO.delete(commentId) > 0,
                 HttpStatus.OK,
                 "Delete comment successfully!",
-                HttpStatus.NOT_FOUND,
-                "Cannot find comment with id = " + commentId
+                HttpStatus.NOT_IMPLEMENTED,
+                "Cannot delete comment with id = " + commentId
         );
     }
 
@@ -70,7 +83,7 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> comments = commentDAO.getAllCommentsOfProduct(productId);
         if(comments == null || comments.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any comment in this product!"
@@ -96,7 +109,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public ResponseEntity<?> getNewComments(int limit) {
         List<Comment> comments = commentDAO.getNewComments(limit);
-        if(comments == null){
+        if(comments == null || comments.size() == 0){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(

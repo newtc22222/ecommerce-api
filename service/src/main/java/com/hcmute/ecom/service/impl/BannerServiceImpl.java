@@ -5,6 +5,7 @@ import com.hcmute.ecom.model.Banner;
 import com.hcmute.ecom.service.BannerService;
 import com.hcmute.ecom.service.model.ResponseCUDObject;
 import com.hcmute.ecom.service.model.ResponseObject;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Nhat Phi
@@ -64,41 +68,35 @@ public class BannerServiceImpl implements BannerService {
 
     @Override
     public ResponseEntity<?> delete(long bannerId) {
+        if(bannerDAO.findBannerById(bannerId) == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find banner with id = " + bannerId
+                    ));
+        }
+
         return ResponseCUDObject.of(
                 bannerDAO.delete(bannerId) > 0,
                 HttpStatus.CREATED,
                 "Delete banner successfully!",
-                HttpStatus.NOT_FOUND,
-                "Cannot find banner with id = " + bannerId
+                HttpStatus.NOT_IMPLEMENTED,
+                "Failed to delete banner with id = " + bannerId
         );
     }
 
     @Override
     public ResponseEntity<?> getAllBanner() {
         List<Banner> banners = bannerDAO.getAllBanner();
-        if (banners == null) {
+        if (banners == null || banners.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any banners!"
                     ));
         }
-        return ResponseEntity.ok(banners);
-    }
-
-    @Override
-    public ResponseEntity<?> getBannersByDateRange(LocalDate start_date, LocalDate end_date) {
-        List<Banner> banners = bannerDAO.getAllBannerByDateRange(Date.valueOf(start_date), Date.valueOf(end_date));
-        if(banners == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find data in conditions!"
-                    ));
-        }
-
         return ResponseEntity.ok(banners);
     }
 
@@ -115,4 +113,64 @@ public class BannerServiceImpl implements BannerService {
 
         return ResponseEntity.ok(banner);
     }
+
+    @Override
+    public ResponseEntity<?> getBannersByDateRange(LocalDate start_date, LocalDate end_date) {
+        List<Banner> banners = bannerDAO.getAllBannerByDateRange(Date.valueOf(start_date), Date.valueOf(end_date));
+        if(banners == null || banners.size() == 0) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find data in condition!"
+                    ));
+        }
+
+        return ResponseEntity.ok(banners);
+    }
+
+    @Override
+    public ResponseEntity<?> filter(Map<String, String> params) {
+        Set<Banner> bannerSet = new HashSet<>(bannerDAO.getAllBanner());
+        Set<Banner> notSuit = new HashSet<>();
+
+        if(params.containsKey("startDate") && params.containsKey("endDate")) {
+            Date startDate = Date.valueOf(params.get("startDate"));
+            Date endDate = Date.valueOf(params.get("endDate"));
+            List<Banner> bannerList = bannerDAO.getAllBannerByDateRange(startDate, endDate);
+            bannerSet.forEach(banner -> {
+                if(!bannerList.contains(banner)) {
+                    notSuit.add(banner);
+                }
+            });
+        }
+        if(params.containsKey("date")) {
+            List<Banner> bannerList = bannerDAO.getBannersByDate(Date.valueOf(params.get("date")));
+            bannerSet.forEach(banner -> {
+                if(!bannerList.contains(banner)) {
+                    notSuit.add(banner);
+                }
+            });
+        }
+        if(params.containsKey("type")) {
+            List<Banner> bannerList = bannerDAO.getBannersByType(params.get("type"));
+            bannerSet.forEach(banner -> {
+                if(!bannerList.contains(banner)) {
+                    notSuit.add(banner);
+                }
+            });
+        }
+
+        bannerSet.removeAll(notSuit);
+        if(bannerSet.isEmpty()){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find banner which suit this conditions"
+                    ));
+        }
+        return ResponseEntity.ok(bannerSet);
+    }
+
 }

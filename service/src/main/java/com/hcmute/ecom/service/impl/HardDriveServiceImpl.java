@@ -36,7 +36,6 @@ public class HardDriveServiceImpl implements HardDriveService {
     @Override
     public ResponseEntity<?> update(HardDrive hardDrive, long hardDriveId) {
         HardDrive oldHardDrive = hardDriveDAO.findHardDriveById(hardDriveId);
-
         if(oldHardDrive == null){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -51,7 +50,6 @@ public class HardDriveServiceImpl implements HardDriveService {
             oldHardDrive.setCapacity(hardDrive.getCapacity());
             oldHardDrive.setStandard(hardDrive.getStandard());
         }
-
         return ResponseCUDObject.of(
                 hardDriveDAO.update(oldHardDrive) > 0,
                 HttpStatus.OK,
@@ -63,21 +61,29 @@ public class HardDriveServiceImpl implements HardDriveService {
 
     @Override
     public ResponseEntity<?> delete(long hardDriveId) {
+        if(hardDriveDAO.findHardDriveById(hardDriveId) == null){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find hard drive with id = " + hardDriveId
+                    ));
+        }
         return ResponseCUDObject.of(
                 hardDriveDAO.delete(hardDriveId) > 0,
                 HttpStatus.OK,
                 "Delete hard drive successfully!",
-                HttpStatus.NOT_FOUND,
-                "Cannot find hard drive with id = " + hardDriveId
+                HttpStatus.NOT_IMPLEMENTED,
+                "Cannot delete hard drive with id = " + hardDriveId
         );
     }
 
     @Override
     public ResponseEntity<?> getAllHardDrive() {
         List<HardDrive> hardDriveList = hardDriveDAO.getAllHardDrive();
-        if (hardDriveList == null) {
+        if (hardDriveList == null || hardDriveList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any hard drive!"
@@ -103,9 +109,9 @@ public class HardDriveServiceImpl implements HardDriveService {
     @Override
     public ResponseEntity<?> getHardDrivesByType(HardDriveType type) {
         List<HardDrive> hardDriveList = hardDriveDAO.getHardDrivesByType(type);
-        if (hardDriveList == null) {
+        if (hardDriveList == null || hardDriveList.size() == 0) {
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(new ResponseObject(
                             HttpStatus.NO_CONTENT,
                             "Cannot find any hard drive which suit this condition!"
