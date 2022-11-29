@@ -31,8 +31,8 @@ public class GraphicCardDAOImpl implements GraphicCardDAO {
     private final String QUERY_ONE_BY_ID = String.format("select * from %s where id=? limit 1", TABLE_NAME);
     private final String QUERY_GRAPHIC_CARDS_BY_PRODUCT_ID =
             String.format("select gc.* " +
-                    "from %s gc, joshua_tbl_product_graphic_card pgc " +
-                    "where gc._id = pgc.graphic_card_id and pgc.product_id = ?", TABLE_NAME);
+                    "from %s gc, tbl_product_graphic_card pgc " +
+                    "where gc.id = pgc.graphic_card_id and pgc.product_id = ?", TABLE_NAME);
     private final String QUERY_GRAPHIC_CARDS_BY_TYPE =
             String.format("select * from %s where type=?", TABLE_NAME);
     private final String QUERY_GRAPHIC_CARDS_BY_BRAND =

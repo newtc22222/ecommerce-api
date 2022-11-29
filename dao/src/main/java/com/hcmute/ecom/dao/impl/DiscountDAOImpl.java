@@ -48,7 +48,7 @@ public class DiscountDAOImpl implements DiscountDAO {
             String.format("select d.* " +
                     "from %s d, tbl_product_discount pd " +
                     "where d.id = pd.discount_id " +
-                    "and pd.product_id = ?" +
+                    "and pd.product_id = ? " +
                     "and ? between d.applied_date and d.ended_date " +
                     "limit 1;", TABLE_NAME);
     private final String QUERY_DISCOUNTS_BY_DATE_RANGE =

@@ -31,8 +31,8 @@ public class HardDriveDAOImpl implements HardDriveDAO {
     private final String QUERY_ONE_BY_ID = String.format("select * from %s where id=? limit 1", TABLE_NAME);
     private final String QUERY_HARD_DRIVES_BY_PRODUCT_ID =
             String.format("select hd.* " +
-                    "from %s hd, joshua_tbl_product_hard_drive phd " +
-                    "where hd._id = phd.hard_drive_id and phd.product_id = ?", TABLE_NAME);
+                    "from %s hd, tbl_product_hard_drive phd " +
+                    "where hd.id = phd.hard_drive_id and phd.product_id = ?", TABLE_NAME);
     private final String QUERY_HARD_DRIVES_BY_TYPE = String.format("select * from %s where type=?", TABLE_NAME);
 
     @Override
