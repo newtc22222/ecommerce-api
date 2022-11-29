@@ -18,6 +18,7 @@ public interface DiscountDAO {
     Discount findDiscountById(long discountId);
     List<Discount> findDiscountsByCode(String code);
     List<Discount> getDiscountsByProduct(String productId);
+    Discount getDiscountOfProductInDate(String productId);
     List<Discount> getDiscountsByDateRange(LocalDateTime startDate, LocalDateTime endDate);
     List<Discount> getDiscountsByType(DiscountType type);
 }

@@ -9,7 +9,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,9 +40,17 @@ public class DiscountDAOImpl implements DiscountDAO {
      * */
     private final String QUERY_DISCOUNTS_BY_PRODUCT_ID =
             String.format("select d.* " +
-                    "from %s d, tbl_product_discount " +
-                    "where d.id = tbl_product_discount.discount_id " +
-                    "and tbl_product_discount.product_id = ?", TABLE_NAME);
+                    "from %s d, tbl_product_discount pd " +
+                    "where d.id = pd.discount_id " +
+                    "and pd.product_id = ?", TABLE_NAME);
+
+    private final String QUERY_DISCOUNT_OF_PRODUCT_IN_DATE =
+            String.format("select d.* " +
+                    "from %s d, tbl_product_discount pd " +
+                    "where d.id = pd.discount_id " +
+                    "and pd.product_id = ?" +
+                    "and ? between d.applied_date and d.ended_date " +
+                    "limit 1;", TABLE_NAME);
     private final String QUERY_DISCOUNTS_BY_DATE_RANGE =
             String.format("select * from %s where ended_date >= ? or applied_date <= ?", TABLE_NAME);
     private final String QUERY_DISCOUNTS_BY_TYPE =
@@ -144,6 +154,21 @@ public class DiscountDAOImpl implements DiscountDAO {
                     QUERY_DISCOUNTS_BY_PRODUCT_ID,
                     new DiscountMapper(),
                     productId
+            );
+        }
+        catch (EmptyResultDataAccessException err) {
+            return null;
+        }
+    }
+
+    @Override
+    public Discount getDiscountOfProductInDate(String productId) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    QUERY_DISCOUNT_OF_PRODUCT_IN_DATE,
+                    new DiscountMapper(),
+                    productId,
+                    Date.valueOf(LocalDate.now())
             );
         }
         catch (EmptyResultDataAccessException err) {

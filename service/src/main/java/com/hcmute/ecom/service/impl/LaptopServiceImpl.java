@@ -2,8 +2,11 @@ package com.hcmute.ecom.service.impl;
 
 import com.hcmute.ecom.dao.*;
 import com.hcmute.ecom.dto.response.LaptopDTOResponse;
+import com.hcmute.ecom.dto.response.LaptopDTOResponseCard;
+import com.hcmute.ecom.enums.ImageType;
 import com.hcmute.ecom.model.Brand;
 import com.hcmute.ecom.model.Category;
+import com.hcmute.ecom.model.Discount;
 import com.hcmute.ecom.model.laptop.GraphicCard;
 import com.hcmute.ecom.model.laptop.HardDrive;
 import com.hcmute.ecom.model.laptop.Laptop;
@@ -30,6 +33,10 @@ public class LaptopServiceImpl implements LaptopService {
     private BrandDAO brandDAO;
     @Autowired
     private CategoryDAO categoryDAO;
+    @Autowired
+    private DiscountDAO discountDAO;
+    @Autowired
+    private ProductImageDAO productImageDAO;
     @Autowired
     private GraphicCardDAO graphicCardDAO;
     @Autowired
@@ -67,6 +74,36 @@ public class LaptopServiceImpl implements LaptopService {
                             graphicCardList,
                             hardDriveList,
                             screen
+                    ));
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getLaptopCard(String laptopId) {
+        Laptop laptop = productDAO.findProductById(laptopId);
+        if(laptop == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find product with id = " + laptopId
+                    ));
+        }
+        else {
+            List<GraphicCard> graphicCardList = graphicCardDAO.getGraphicCardByProductId(laptop.getId());
+            List<HardDrive> hardDriveList = hardDriveDAO.getHardDriveByProductId(laptopId);
+            String imagePath = productImageDAO
+                    .getProductImagesByProductIdAndImageType(laptopId, ImageType.ADVERTISE).get(0).getPath();
+            Screen screen = screenDAO.findScreenById(laptop.getScreenId());
+            Discount discount = discountDAO.getDiscountOfProductInDate(laptopId);
+            return ResponseEntity
+                    .ok(LaptopDTOResponseCard.getData(
+                            laptop,
+                            (graphicCardList != null) ? graphicCardList.get(0) : null,
+                            imagePath,
+                            (hardDriveList != null) ? hardDriveList.get(0) : null,
+                            screen,
+                            discount
                     ));
         }
     }
