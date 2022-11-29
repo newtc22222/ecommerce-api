@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author Nhat Phi
  * @since 2022-11-22
@@ -23,17 +25,17 @@ public class ProductController {
 
     @GetMapping("")
     public ResponseEntity<?> getAllProduct(@RequestParam(value = "name", required = false) String name,
-                                           @RequestParam(value = "brandId", required = false) String brandId,
+                                           @RequestParam(value = "brandId", required = false) List<String> brandId,
                                            @RequestParam(value = "categoryId", required = false) String categoryId,
                                            @RequestParam(value = "releasedYear", required = false) String releasedYear,
                                            @RequestParam(value = "startPrice", required = false) String startPrice,
                                            @RequestParam(value = "endPrice", required = false) String endPrice,
-                                           @RequestParam(value = "ramCapacity", required = false) String ramCapacity,
+                                           @RequestParam(value = "ramCapacity", required = false) List<String> ramCapacity,
                                            @RequestParam(value = "cpuBrand", required = false) String cpuBrand,
                                            @RequestParam(value = "cpuType", required = false) String cpuType,
                                            @RequestParam(value = "screenSize", required = false) String screenSize,
-                                           @RequestParam(value = "graphicCardType", required = false) String graphicCardType,
-                                           @RequestParam(value = "hardDriveType", required = false) String hardDriveType,
+                                           @RequestParam(value = "graphicCardType", required = false) List<String> graphicCardType,
+                                           @RequestParam(value = "hardDriveType", required = false) List<String> hardDriveType,
                                            @RequestParam(value = "capacity", required = false) String capacity) {
         return productService.getAllProduct();
     }

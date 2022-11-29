@@ -3,6 +3,8 @@ package com.hcmute.ecom.controller;
 import com.hcmute.ecom.dto.request.BannerDTO;
 import com.hcmute.ecom.model.Banner;
 import com.hcmute.ecom.service.BannerService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -29,7 +29,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/search")
+    @GetMapping("/login")
     public ResponseEntity<?> findUserByPhone(@RequestParam(value = "phoneNumber", required = false) String phone) {
         if (phone.charAt(0) == '0') {
             phone = phone.replaceAll("^.", "+84");

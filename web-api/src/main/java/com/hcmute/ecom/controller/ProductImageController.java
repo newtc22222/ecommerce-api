@@ -3,10 +3,13 @@ package com.hcmute.ecom.controller;
 import com.hcmute.ecom.dto.request.ProductImageDTO;
 import com.hcmute.ecom.enums.ImageType;
 import com.hcmute.ecom.service.ProductImageService;
+import com.hcmute.ecom.service.model.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -23,7 +26,17 @@ public class ProductImageController {
     @GetMapping("/images")
     public ResponseEntity<?> getAllImages(@RequestParam(value = "type", required = false) String type) {
         if(type != null) {
-            return productImageService.getProductImagesByImageType(ImageType.valueOf(type));
+            try {
+                return productImageService.getProductImagesByImageType(ImageType.valueOf(type.toUpperCase()));
+            }
+            catch (Exception err) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new ResponseObject(
+                                HttpStatus.BAD_REQUEST,
+                                "Please check your \"type\" input!"
+                        ));
+            }
         }
         return productImageService.getAllProductImages();
     }
@@ -37,7 +50,20 @@ public class ProductImageController {
     public ResponseEntity<?> getProductImagesByProductId(@PathVariable("productId") String productId,
                                                          @RequestParam(value = "type", required = false) String type) {
         if(type != null) {
-            return productImageService.getProductImagesByProductIdAndImageType(productId, ImageType.valueOf(type));
+            try {
+                return productImageService.getProductImagesByProductIdAndImageType(
+                        productId,
+                        ImageType.valueOf(type.toLowerCase(Locale.ROOT))
+                );
+            }
+            catch (Exception err) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new ResponseObject(
+                                HttpStatus.BAD_REQUEST,
+                                "Please check your \"type\" input!"
+                        ));
+            }
         }
         return productImageService.getProductImagesByProductId(productId);
     }

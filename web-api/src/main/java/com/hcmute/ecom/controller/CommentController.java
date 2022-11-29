@@ -32,9 +32,6 @@ public class CommentController {
 
     @GetMapping("/comments")
     public ResponseEntity<?> getCommentsOfUser(@RequestParam("phoneNumber") String phone) {
-        if (phone.charAt(0) == '0') {
-            phone = phone.replaceAll("^.", "+84");
-        }
         return commentService.getAllCommentsOfUser(phone);
     }
 

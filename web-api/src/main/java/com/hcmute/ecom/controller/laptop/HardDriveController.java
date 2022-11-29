@@ -4,6 +4,7 @@ import com.hcmute.ecom.dto.request.HardDriveDTO;
 import com.hcmute.ecom.enums.product.HardDriveType;
 import com.hcmute.ecom.service.HardDriveService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,12 @@ public class HardDriveController {
     public ResponseEntity<?> getAllHardDrives(@RequestParam(value = "type", required = false) String type) {
 
         if(type != null) {
-            return hardDriveService.getHardDrivesByType(HardDriveType.valueOf(type.toUpperCase()));
+            try {
+                return hardDriveService.getHardDrivesByType(HardDriveType.valueOf(type.toUpperCase()));
+            }
+            catch (Exception err) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please check your \"hard drive type\" request!");
+            }
         }
         return hardDriveService.getAllHardDrive();
     }

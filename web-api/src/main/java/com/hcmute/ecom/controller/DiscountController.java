@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -27,8 +28,8 @@ public class DiscountController {
         if(code == null && startDate == null && endDate == null && type == null) {
             return discountService.getAllDiscounts();
         }
-        // filter
-        return null;
+        Map<String, String> params = new HashMap<>();
+        return discountService.filter(params);
     }
 
     @GetMapping("/discounts/{id}")
