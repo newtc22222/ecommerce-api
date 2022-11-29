@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "server.main.web-application-type",
+      "type": "java.lang.String",
+      "description": "Description for server.main.web-application-type."
+  }
+] }

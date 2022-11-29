@@ -1,6 +1,23 @@
 server:
   port: 8088
 
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+
+#springdoc:
+#  swagger-ui:
+#    path: /swagger-ui.html
+
+#management:
+#  server:
+#    port: 9000
+#  endpoint:
+#    shutdown:
+#      enabled: true
+
+
 #spring:
 #  security:
 #    user:
