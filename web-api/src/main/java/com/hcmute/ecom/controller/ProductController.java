@@ -16,14 +16,14 @@ import java.util.List;
  * */
 @CrossOrigin(value = { "*" })
 @RestController
-@RequestMapping("/api/v1/products")
+@RequestMapping("/api/v1")
 public class ProductController {
     @Autowired
     private ProductService productService;
     @Autowired
     private LaptopService laptopService;
 
-    @GetMapping("")
+    @GetMapping("/products")
     public ResponseEntity<?> getAllProduct(@RequestParam(value = "name", required = false) String name,
                                            @RequestParam(value = "brandId", required = false) List<String> brandId,
                                            @RequestParam(value = "categoryId", required = false) String categoryId,
@@ -40,63 +40,73 @@ public class ProductController {
         return productService.getAllProduct();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/products/{id}")
     public ResponseEntity<?> getProductById(@PathVariable("id") String productId) {
         return productService.findProductById(productId);
     }
 
-    @GetMapping("{id}/details")
+    @GetMapping("/brands/{brandId}/products")
+    public ResponseEntity<?> getProductsByBrand(@PathVariable("brandId") long brandId) {
+        return productService.getProductsByBrand(brandId);
+    }
+
+    @GetMapping("/products/{id}/details")
     public ResponseEntity<?> getLaptopDetail(@PathVariable("id") String laptopId) {
         return laptopService.getLaptopDetail(laptopId);
     }
 
-    @PostMapping("")
+    @GetMapping("/products/{id}/card")
+    public ResponseEntity<?> getLaptopCard(@PathVariable("id") String laptopId) {
+        return laptopService.getLaptopCard(laptopId);
+    }
+
+    @PostMapping("/products")
     public ResponseEntity<?> createNewProduct(@RequestBody Laptop product) {
         return productService.insert(product);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/products/{id}")
     public ResponseEntity<?> updateAllForProduct(@PathVariable("id") String productId, @RequestBody Laptop product) {
         return productService.updateAll(product, productId);
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/products/{id}")
     public ResponseEntity<?> updatePriceOfProduct(@PathVariable("id") String productId, @RequestBody ProductDTORequest productDTO) {
         return productService.updatePrice(productDTO);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/products/{id}")
     public ResponseEntity<?> removeProduct(@PathVariable("id") String productId) {
         return productService.delete(productId);
     }
 
-    @PostMapping("/{id}/discount")
+    @PostMapping("/products/{id}/discount")
     public ResponseEntity<?> addDiscountToProduct(@PathVariable("id") String productId, @RequestBody long discountId) {
         return productService.insertDiscount(productId, discountId);
     }
 
-    @DeleteMapping("/{id}/discount")
+    @DeleteMapping("/products/{id}/discount")
     public ResponseEntity<?> removeDiscountToProduct(@PathVariable("id") String productId, @RequestBody long discountId) {
         return productService.deleteDiscount(productId, discountId);
     }
 
     // Laptop
-    @PostMapping("/{id}/graphic-cards")
+    @PostMapping("/products/{id}/graphic-cards")
     public ResponseEntity<?> addGraphicCardToLaptop(@PathVariable("id") String laptopId, @RequestBody long graphicCardId) {
         return laptopService.insertGraphicCard(laptopId, graphicCardId);
     }
 
-    @DeleteMapping("/{id}/graphic-cards")
+    @DeleteMapping("/products/{id}/graphic-cards")
     public ResponseEntity<?> removeGraphicCardToLaptop(@PathVariable("id") String laptopId, @RequestBody long graphicCardId) {
         return laptopService.deleteGraphicCard(laptopId, graphicCardId);
     }
 
-    @PostMapping("/{id}/hard-drives")
+    @PostMapping("/products/{id}/hard-drives")
     public ResponseEntity<?> addHardDriveToLaptop(@PathVariable("id") String laptopId, @RequestBody long hardDriveId) {
         return laptopService.insertHardDrive(laptopId, hardDriveId);
     }
 
-    @DeleteMapping("/{id}/hard-drives")
+    @DeleteMapping("/products/{id}/hard-drives")
     public ResponseEntity<?> removeHardDriveToLaptop(@PathVariable("id") String laptopId, @RequestBody long hardDriveId) {
         return laptopService.deleteHardDrive(laptopId, hardDriveId);
     }

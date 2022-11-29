@@ -161,7 +161,7 @@ public class ProductImageDAOImpl implements ProductImageDAO {
                     QUERY_PRODUCT_IMAGES_BY_PRODUCT_ID_AND_IMAGE_TYPE,
                     new ProductImageMapper(),
                     productId,
-                    type
+                    type.toString()
             );
         }
         catch (EmptyResultDataAccessException err) {

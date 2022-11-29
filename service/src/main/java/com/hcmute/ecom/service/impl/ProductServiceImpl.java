@@ -189,6 +189,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ResponseEntity<?> getProductsByBrand(long brandId) {
+        List<Laptop> productList = productDAO.getProductsByBrand(brandId);
+        if(productList == null || productList.size() == 0) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find any product of this brand!"
+                    ));
+        }
+        return ResponseEntity.ok(productList);
+    }
+
+    @Override
     public ResponseEntity<?> filter(Map<String, String> params) {
         Set<Laptop> productSet = new HashSet<>(productDAO.getAllProduct());
         Set<Laptop> notSuit = new HashSet<>();
