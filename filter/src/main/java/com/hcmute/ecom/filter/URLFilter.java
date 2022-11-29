@@ -17,7 +17,7 @@ public class URLFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-       log.info("{} - {}", request.getMethod(), request.getRequestURI());
+       log.info("{} - {} {}", request.getMethod(), request.getRequestURI(), request.getParameterMap());
        request.getInputStream();
        filterChain.doFilter(request, response);
     }
