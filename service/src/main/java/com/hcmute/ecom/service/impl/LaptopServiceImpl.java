@@ -4,10 +4,7 @@ import com.hcmute.ecom.dao.*;
 import com.hcmute.ecom.dto.response.LaptopDTOResponse;
 import com.hcmute.ecom.dto.response.LaptopDTOResponseCard;
 import com.hcmute.ecom.enums.ImageType;
-import com.hcmute.ecom.model.Brand;
-import com.hcmute.ecom.model.Category;
-import com.hcmute.ecom.model.Discount;
-import com.hcmute.ecom.model.Feedback;
+import com.hcmute.ecom.model.*;
 import com.hcmute.ecom.model.laptop.GraphicCard;
 import com.hcmute.ecom.model.laptop.HardDrive;
 import com.hcmute.ecom.model.laptop.Laptop;
@@ -21,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -86,8 +84,8 @@ public class LaptopServiceImpl implements LaptopService {
         String laptopId = laptop.getId();
         List<GraphicCard> graphicCardList = graphicCardDAO.getGraphicCardByProductId(laptopId);
         List<HardDrive> hardDriveList = hardDriveDAO.getHardDriveByProductId(laptopId);
-        String imagePath = productImageDAO
-                .getProductImagesByProductIdAndImageType(laptopId, ImageType.ADVERTISE).get(0).getPath();
+        List<ProductImage> imagePathList = productImageDAO
+                .getProductImagesByProductIdAndImageType(laptopId, ImageType.ADVERTISE);
         Screen screen = screenDAO.findScreenById(laptop.getScreenId());
         Discount discount = discountDAO.getDiscountOfProductInDate(laptopId);
         List<Feedback> feedbackList = feedbackDAO.getAllFeedbacksOfProduct(laptopId);
@@ -102,9 +100,9 @@ public class LaptopServiceImpl implements LaptopService {
 
         return LaptopDTOResponseCard.getData(
                 laptop,
-                (graphicCardList != null) ? graphicCardList.get(0) : null,
-                imagePath,
-                (hardDriveList != null) ? hardDriveList.get(0) : null,
+                (graphicCardList.size() > 0) ? graphicCardList.get(0) : null,
+                (imagePathList.size() > 0) ? imagePathList.get(0).getPath() : "",
+                (hardDriveList.size() > 0) ? hardDriveList.get(0) : null,
                 screen,
                 discount,
                 ratingPoint,
