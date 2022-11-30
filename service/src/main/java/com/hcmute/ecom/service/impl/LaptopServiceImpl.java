@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author Nhat Phi
@@ -81,6 +82,36 @@ public class LaptopServiceImpl implements LaptopService {
         }
     }
 
+    private LaptopDTOResponseCard getLaptopCardData(Laptop laptop) {
+        String laptopId = laptop.getId();
+        List<GraphicCard> graphicCardList = graphicCardDAO.getGraphicCardByProductId(laptopId);
+        List<HardDrive> hardDriveList = hardDriveDAO.getHardDriveByProductId(laptopId);
+        String imagePath = productImageDAO
+                .getProductImagesByProductIdAndImageType(laptopId, ImageType.ADVERTISE).get(0).getPath();
+        Screen screen = screenDAO.findScreenById(laptop.getScreenId());
+        Discount discount = discountDAO.getDiscountOfProductInDate(laptopId);
+        List<Feedback> feedbackList = feedbackDAO.getAllFeedbacksOfProduct(laptopId);
+        float ratingPoint = 0;
+        int feedbackCount = 0;
+        if(feedbackList != null && feedbackList.size() > 0) {
+            int sum = feedbackList.stream().map(feedback -> feedback.getRatingPoint().intValue())
+                    .reduce(0, Integer::sum);
+            feedbackCount = feedbackList.size();
+            ratingPoint = sum * 1f / feedbackCount;
+        }
+
+        return LaptopDTOResponseCard.getData(
+                laptop,
+                (graphicCardList != null) ? graphicCardList.get(0) : null,
+                imagePath,
+                (hardDriveList != null) ? hardDriveList.get(0) : null,
+                screen,
+                discount,
+                ratingPoint,
+                feedbackCount
+        );
+    }
+
     @Override
     public ResponseEntity<?> getLaptopCard(String laptopId) {
         Laptop laptop = productDAO.findProductById(laptopId);
@@ -93,34 +124,25 @@ public class LaptopServiceImpl implements LaptopService {
                     ));
         }
         else {
-            List<GraphicCard> graphicCardList = graphicCardDAO.getGraphicCardByProductId(laptop.getId());
-            List<HardDrive> hardDriveList = hardDriveDAO.getHardDriveByProductId(laptopId);
-            String imagePath = productImageDAO
-                    .getProductImagesByProductIdAndImageType(laptopId, ImageType.ADVERTISE).get(0).getPath();
-            Screen screen = screenDAO.findScreenById(laptop.getScreenId());
-            Discount discount = discountDAO.getDiscountOfProductInDate(laptopId);
-            List<Feedback> feedbackList = feedbackDAO.getAllFeedbacksOfProduct(laptopId);
-            float ratingPoint = 0;
-            int feedbackCount = 0;
-            if(feedbackList != null && feedbackList.size() > 0) {
-                int sum = feedbackList.stream().map(feedback -> feedback.getRatingPoint().intValue())
-                            .reduce(0, Integer::sum);
-                feedbackCount = feedbackList.size();
-                ratingPoint = sum * 1f / feedbackCount;
-            }
+            return ResponseEntity.ok(getLaptopCardData(laptop));
+        }
+    }
 
+    @Override
+    public ResponseEntity<?> getLaptopCards() {
+        List<Laptop> laptopList = productDAO.getAllProduct();
+        if(laptopList == null || laptopList.size() == 0) {
             return ResponseEntity
-                    .ok(LaptopDTOResponseCard.getData(
-                            laptop,
-                            (graphicCardList != null) ? graphicCardList.get(0) : null,
-                            imagePath,
-                            (hardDriveList != null) ? hardDriveList.get(0) : null,
-                            screen,
-                            discount,
-                            ratingPoint,
-                            feedbackCount
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NOT_FOUND,
+                            "Cannot find any product!"
                     ));
         }
+
+        Stream<LaptopDTOResponseCard> laptopCardList = laptopList.stream().map(this::getLaptopCardData);
+
+        return ResponseEntity.ok(laptopCardList);
     }
 
     @Override

@@ -55,9 +55,9 @@ public class ProductController {
         return laptopService.getLaptopDetail(laptopId);
     }
 
-    @GetMapping("/products/{id}/card")
-    public ResponseEntity<?> getLaptopCard(@PathVariable("id") String laptopId) {
-        return laptopService.getLaptopCard(laptopId);
+    @GetMapping("/products/cards")
+    public ResponseEntity<?> getLaptopCard() {
+        return laptopService.getLaptopCards();
     }
 
     @PostMapping("/products")

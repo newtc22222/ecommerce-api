@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 public interface LaptopService {
     ResponseEntity<?> getLaptopDetail(String laptopId);
     ResponseEntity<?> getLaptopCard(String laptopId);
+    ResponseEntity<?> getLaptopCards();
     ResponseEntity<?> insertGraphicCard(String laptopId, long graphicCardId);
     ResponseEntity<?> deleteGraphicCard(String laptopId, long graphicCardId);
     ResponseEntity<?> insertHardDrive(String laptopId, long hardDriveId);
