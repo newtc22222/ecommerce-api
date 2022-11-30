@@ -11,16 +11,17 @@
         <module name="statistical-service" />
         <module name="dao" />
         <module name="service" />
-        <module name="file-upload-support" />
         <module name="domain" />
         <module name="web-api" />
         <module name="mapper" />
+        <module name="storage-service" />
         <module name="config" />
         <module name="dto" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="controller" target="8" />
+      <module name="file-upload-support" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -36,6 +37,7 @@
       <module name="mapper" options="-parameters" />
       <module name="service" options="-parameters" />
       <module name="statistical-service" options="-parameters" />
+      <module name="storage-service" options="-parameters" />
       <module name="web-api" options="-parameters" />
     </option>
   </component>

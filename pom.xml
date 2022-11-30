@@ -13,8 +13,8 @@
 		<module>mapper</module>
         <module>statistical-service</module>
         <module>filter</module>
-        <module>file-upload-support</module>
-    </modules>
+		<module>storage-service</module>
+	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
