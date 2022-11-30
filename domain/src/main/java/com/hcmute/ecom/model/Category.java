@@ -17,7 +17,9 @@ public class Category {
         this.description = description;
     }
 
-    public Category() {}
+    public Category() {
+        this.id = 0L;
+    }
 
     public Long getId() {
         return id;

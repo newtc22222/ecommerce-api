@@ -23,7 +23,10 @@ public class ImportProduct {
         this.imported_date = imported_date;
     }
 
-    public ImportProduct() {}
+    public ImportProduct() {
+        this.ticket_id = 0L;
+        this.imported_date = LocalDateTime.now();
+    }
 
     public Long getTicketId() {
         return ticket_id;

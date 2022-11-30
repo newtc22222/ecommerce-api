@@ -22,7 +22,9 @@ public class Brand {
         this.logo = logo;
     }
 
-    public Brand() {}
+    public Brand() {
+        this.id = 0L;
+    }
 
     public Long getId() {
         return id;

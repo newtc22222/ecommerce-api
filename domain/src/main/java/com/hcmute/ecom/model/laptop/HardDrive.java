@@ -21,7 +21,10 @@ public class HardDrive {
         this.standard = standard;
     }
 
-    public HardDrive() {}
+    public HardDrive() {
+        this.id = 0L;
+        this.type = HardDriveType.SSD;
+    }
 
     public Long getId() {
         return id;

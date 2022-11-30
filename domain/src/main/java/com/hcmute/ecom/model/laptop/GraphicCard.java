@@ -24,7 +24,10 @@ public class GraphicCard {
         this.memory = memory;
     }
 
-    public GraphicCard() {}
+    public GraphicCard() {
+        this.id = 0L;
+        this.type = GraphicCardType.ON_BOARD;
+    }
 
     public Long getId() {
         return id;

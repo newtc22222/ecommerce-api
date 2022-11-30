@@ -32,7 +32,12 @@ public class User {
         this.last_updated_date = last_updated_date;
     }
 
-    public User() {}
+    public User() {
+        this.id = 0L;
+        this.gender = Gender.MALE;
+        this.created_date = LocalDateTime.now();
+        this.last_updated_date = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;

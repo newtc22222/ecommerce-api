@@ -24,7 +24,9 @@ public class ProductImage {
         this.type = type;
     }
 
-    public ProductImage() {}
+    public ProductImage() {
+        this.type = ImageType.ADVERTISE;
+    }
 
     public String getId() {
         return id;

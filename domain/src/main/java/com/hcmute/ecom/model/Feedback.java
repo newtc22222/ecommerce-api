@@ -23,7 +23,10 @@ public class Feedback {
         this.rating_point = rating_point;
     }
 
-    public Feedback() {}
+    public Feedback() {
+        this.id = 0L;
+        this.created_date = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;

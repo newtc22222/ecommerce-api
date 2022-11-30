@@ -83,7 +83,8 @@ public class Product {
     private BigDecimal listed_price;
     private BigDecimal price;
 
-    public Product(String id, String name, Long brand_id, Long category_id, Date released_date, Integer quantity_in_stock, BigDecimal listed_price, BigDecimal price) {
+    public Product(String id, String name, Long brand_id, Long category_id, Date released_date,
+                   Integer quantity_in_stock, BigDecimal listed_price, BigDecimal price) {
         this.id = id;
         this.name = name;
         this.brand_id = brand_id;

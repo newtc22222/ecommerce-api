@@ -32,7 +32,10 @@ public class Screen {
         this.has_touch_screen = has_touch_screen;
     }
 
-    public Screen() {}
+    public Screen() {
+        this.id = 0L;
+        this.has_touch_screen = false;
+    }
 
     public Long getId() {
         return id;

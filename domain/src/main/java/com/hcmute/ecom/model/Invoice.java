@@ -47,7 +47,11 @@ public class Invoice {
         this.trouble_reason = trouble_reason;
     }
 
-    public Invoice() {}
+    public Invoice() {
+        this.created_date = LocalDateTime.now();
+        this.status = OrderStatus.PENDING;
+        this.is_paid = false;
+    }
 
     public String getId() {
         return id;

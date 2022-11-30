@@ -25,7 +25,10 @@ public class Comment {
         this.created_date = created_date;
     }
 
-    public Comment() {}
+    public Comment() {
+        this.id = 0L;
+        this.created_date = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;

@@ -30,7 +30,9 @@ public class Address {
         this.street = street;
     }
 
-    public Address() {}
+    public Address() {
+        this.id = 0L;
+    }
 
     public Long getId() {
         return id;

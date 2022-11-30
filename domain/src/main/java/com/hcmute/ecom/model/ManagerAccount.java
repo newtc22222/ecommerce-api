@@ -20,7 +20,10 @@ public class ManagerAccount {
         this.last_updated_date = last_updated_date;
     }
     
-    public ManagerAccount() {}
+    public ManagerAccount() {
+        this.created_date = LocalDateTime.now();
+        this.last_updated_date = LocalDateTime.now();
+    }
 
     public String getUsername() {
         return username;

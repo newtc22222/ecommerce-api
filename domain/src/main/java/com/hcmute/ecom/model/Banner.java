@@ -1,6 +1,7 @@
 package com.hcmute.ecom.model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  * @author Nhat Phi
@@ -21,7 +22,11 @@ public class Banner {
         this.ended_date = ended_date;
     }
 
-    public Banner() {}
+    public Banner() {
+        this.id = 0L;
+        this.used_date = Date.valueOf(LocalDate.now());
+        this.ended_date = Date.valueOf(LocalDate.now().plusDays(7));
+    }
 
     public Long getId() {
         return id;
