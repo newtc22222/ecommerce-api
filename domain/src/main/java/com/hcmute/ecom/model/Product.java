@@ -3,6 +3,7 @@ package com.hcmute.ecom.model;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author Nhat Phi
@@ -95,7 +96,9 @@ public class Product {
         this.price = price;
     }
 
-    public Product() {}
+    public Product() {
+        this.id = UUID.randomUUID().toString();
+    }
 
     @Override
     public boolean equals(Object o) {

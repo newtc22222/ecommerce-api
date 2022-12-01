@@ -2,6 +2,8 @@ package com.hcmute.ecom.model;
 
 import com.hcmute.ecom.enums.ImageType;
 
+import java.util.UUID;
+
 /**
  * This class is a blueprint for the image of product <br/>
  * Image will save as path
@@ -25,6 +27,7 @@ public class ProductImage {
     }
 
     public ProductImage() {
+        this.id = UUID.randomUUID().toString();
         this.type = ImageType.ADVERTISE;
     }
 

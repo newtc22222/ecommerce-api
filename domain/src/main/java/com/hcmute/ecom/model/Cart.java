@@ -1,5 +1,7 @@
 package com.hcmute.ecom.model;
 
+import java.util.UUID;
+
 /**
  * @author Nhat Phi
  * @since 2022-11-18
@@ -20,7 +22,9 @@ public class Cart {
         this.user_id = user_id;
     }
 
-    public Cart() {}
+    public Cart() {
+        this.id = UUID.randomUUID().toString();
+    }
 
     public String getId() {
         return id;

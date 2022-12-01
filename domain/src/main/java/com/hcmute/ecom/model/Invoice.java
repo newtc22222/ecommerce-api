@@ -5,6 +5,7 @@ import com.hcmute.ecom.enums.OrderStatus;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author Nhat Phi
@@ -48,6 +49,7 @@ public class Invoice {
     }
 
     public Invoice() {
+        this.id = UUID.randomUUID().toString();
         this.created_date = LocalDateTime.now();
         this.status = OrderStatus.PENDING;
         this.is_paid = false;
