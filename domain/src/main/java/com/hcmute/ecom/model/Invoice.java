@@ -50,6 +50,7 @@ public class Invoice {
 
     public Invoice() {
         this.id = UUID.randomUUID().toString();
+        this.ship_fee = 0D;
         this.tax = BigDecimal.valueOf(0);
         this.created_date = LocalDateTime.now();
         this.status = OrderStatus.PENDING;
