@@ -16,7 +16,7 @@ public class DiscountDTO {
     public static Discount transform(Map<String, String> request) {
          Discount discount = new Discount();
          discount.setCode(request.get("code"));
-         discount.setRate(Float.valueOf(request.get("rate")));
+         discount.setRate(Float.parseFloat(request.get("rate")));
 
          if (request.containsKey("appliedType")){
             discount.setDiscountType(DiscountType.valueOf(request.get("appliedType")));

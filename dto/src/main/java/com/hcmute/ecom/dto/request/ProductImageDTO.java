@@ -17,7 +17,7 @@ public class ProductImageDTO {
         }
         image.setProductId(request.get("productId"));
         if (request.containsKey("feedbackId")) {
-            image.setFeedbackId(Long.getLong(request.get("feedbackId")));
+            image.setFeedbackId(Long.parseLong(request.get("feedbackId")));
         }
         image.setPath(request.get("path"));
         image.setImageType(ImageType.valueOf(request.get("type")));

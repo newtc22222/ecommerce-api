@@ -20,14 +20,16 @@ public class InvoiceDTO {
         if (request.containsKey("id")) {
             invoice.setId(request.get("id"));
         }
-        invoice.setUserId(Long.getLong(request.get("userId")));
-        invoice.setStockQuantity(Integer.getInteger(request.get("stockQuantity")));
+        invoice.setUserId(Long.parseLong(request.get("userId")));
+        invoice.setStockQuantity(Integer.parseInt(request.get("stockQuantity")));
         invoice.setAddress(request.get("address"));
         if (request.containsKey("shipFee")) {
             invoice.setShipFee(Double.valueOf(request.get("shipFee")));
         }
         invoice.setTotalCost(new BigDecimal(request.get("totalCost")));
-        invoice.setDiscountId(Long.getLong(request.get("discountId")));
+        if(request.containsKey("discountId")) {
+            invoice.setDiscountId(Long.parseLong(request.get("discountId")));
+        }
         if (request.containsKey("tax")) {
             invoice.setTax(new BigDecimal(request.get("tax")));
         }

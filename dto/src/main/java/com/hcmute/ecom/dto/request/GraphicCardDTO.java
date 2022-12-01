@@ -23,7 +23,7 @@ public class GraphicCardDTO {
         }
         card.setBrand(request.get("brand"));
         card.setModel(request.get("model"));
-        card.setMaxClockSpeed(Integer.getInteger(request.get("maxClockSpeed")));
+        card.setMaxClockSpeed(Integer.parseInt(request.get("maxClockSpeed")));
         card.setMemory(request.get("memory"));
         return card;
     }

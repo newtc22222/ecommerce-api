@@ -16,10 +16,10 @@ public class FeedbackDTO {
     public static Feedback transform(Map<String, String> request) {
         Feedback feedback = new Feedback();
         feedback.setProductId(request.get("productId"));
-        feedback.setUserId(Long.getLong(request.get("userId")));
+        feedback.setUserId(Long.parseLong(request.get("userId")));
         feedback.setContent(request.get("content"));
         feedback.setCreatedDate(LocalDateTime.parse(request.get("createdDate"), DATE_TIME_PATTERN));
-        feedback.setRatingPoint(Byte.valueOf(request.get("ratingPoint")));
+        feedback.setRatingPoint(Byte.parseByte(request.get("ratingPoint")));
         return feedback;
     }
 }
