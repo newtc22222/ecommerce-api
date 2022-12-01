@@ -1,4 +1,4 @@
-package com.hcmute.ecom.controller;
+package com.hcmute.ecom.controller.statistic;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
