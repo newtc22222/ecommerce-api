@@ -8,12 +8,18 @@ import java.util.List;
 public class ResponseObject {
     private HttpStatus status;
     private String message;
-    private List<Object> data;
+    private Object data;
 
     public ResponseObject(HttpStatus status, String message) {
         this.status = status;
         this.message = message;
-        this.data = new ArrayList<>();
+        this.data = "";
+    }
+
+    public ResponseObject(HttpStatus status, String message, Object data) {
+        this.status = status;
+        this.message = message;
+        this.data = data;
     }
 
     public HttpStatus getStatus() {
@@ -32,11 +38,11 @@ public class ResponseObject {
         this.message = message;
     }
 
-    public List<Object> getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(List<Object> data) {
+    public void setData(Object data) {
         this.data = data;
     }
 }

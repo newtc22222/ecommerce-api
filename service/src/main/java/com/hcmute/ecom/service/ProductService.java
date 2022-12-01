@@ -25,5 +25,5 @@ public interface ProductService {
     ResponseEntity<?> getProductsByBrand(long brandId);
 
     // For searching...
-    ResponseEntity<?> filter(Map<String, String> params);
+    ResponseEntity<?> filter(Map<String, Object> params);
 }

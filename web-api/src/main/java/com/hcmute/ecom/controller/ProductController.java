@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Nhat Phi
@@ -37,7 +39,27 @@ public class ProductController {
                                            @RequestParam(value = "graphicCardType", required = false) List<String> graphicCardType,
                                            @RequestParam(value = "hardDriveType", required = false) List<String> hardDriveType,
                                            @RequestParam(value = "capacity", required = false) String capacity) {
-        return productService.getAllProduct();
+        if(name == null && brandId == null && categoryId == null && releasedYear == null && startPrice == null
+                && endPrice == null && ramCapacity == null && cpuBrand == null && cpuType == null && screenSize == null
+                && graphicCardType == null && hardDriveType == null && capacity == null) {
+            return productService.getAllProduct();
+        }
+
+        Map<String, Object> params = new HashMap<>();
+        if(name != null) params.put("name", name);
+        if(brandId != null) params.put("brandId", brandId);
+        if(categoryId != null) params.put("categoryId", categoryId);
+        if(releasedYear != null) params.put("releasedYear", releasedYear);
+        if(startPrice != null) params.put("startPrice", startPrice);
+        if(endPrice != null) params.put("endPrice", endPrice);
+        if(ramCapacity != null) params.put("ramCapacity", ramCapacity);
+        if(cpuBrand != null) params.put("cpuBrand", cpuBrand);
+        if(cpuType != null) params.put("cpuType", cpuType);
+        if(screenSize != null) params.put("screenSize", screenSize);
+        if(graphicCardType != null) params.put("graphicCardType", graphicCardType);
+        if(hardDriveType != null) params.put("hardDriveType", hardDriveType);
+        if(capacity != null) params.put("capacity", capacity);
+        return productService.filter(params);
     }
 
     @GetMapping("/products/{id}")

@@ -16,10 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Nhat Phi
@@ -203,12 +200,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseEntity<?> filter(Map<String, String> params) {
+    public ResponseEntity<?> filter(Map<String, Object> params) {
         Set<Laptop> productSet = new HashSet<>(productDAO.getAllProduct());
         Set<Laptop> notSuit = new HashSet<>();
 
         if(params.containsKey("name")){
-            List<Laptop> productList = productDAO.findProductsByName(params.get("name"));
+            List<Laptop> productList =
+                    productDAO.findProductsByName(params.get("name").toString());
             productSet.forEach(product -> {
                 if(!productList.contains(product)){
                     notSuit.add(product);
@@ -216,7 +214,15 @@ public class ProductServiceImpl implements ProductService {
             });
         }
         if(params.containsKey("brandId")) {
-            List<Laptop> productList = productDAO.getProductsByBrand(Long.parseLong(params.get("brandId")));
+            List<String> brandIdList = (List<String>) params.get("brandId");
+            System.out.println(brandIdList);
+            List<Laptop> productList = new ArrayList<>();
+            brandIdList.forEach(brandId -> {
+                System.out.println(brandId);
+                List<Laptop> laptopList = productDAO.getProductsByBrand(Long.parseLong(brandId));
+                productList.addAll(laptopList);
+            });
+
             productSet.forEach(product -> {
                 if(!productList.contains(product)){
                     notSuit.add(product);
@@ -224,7 +230,8 @@ public class ProductServiceImpl implements ProductService {
             });
         }
         if(params.containsKey("categoryId")) {
-            List<Laptop> productList = productDAO.getProductsByCategory(Long.parseLong(params.get("categoryId")));
+            List<Laptop> productList =
+                    productDAO.getProductsByCategory(Long.parseLong(String.valueOf(params.get("categoryId"))));
             productSet.forEach(product -> {
                 if(!productList.contains(product)){
                     notSuit.add(product);
@@ -232,7 +239,8 @@ public class ProductServiceImpl implements ProductService {
             });
         }
         if(params.containsKey("releasedYear")) {
-            List<Laptop> productList = productDAO.getProductsByReleasedYear(Integer.parseInt(params.get("releasedYear")));
+            List<Laptop> productList =
+                    productDAO.getProductsByReleasedYear(Integer.parseInt(String.valueOf(params.get("releasedYear"))));
             productSet.forEach(product -> {
                 if(!productList.contains(product)){
                     notSuit.add(product);
@@ -241,8 +249,8 @@ public class ProductServiceImpl implements ProductService {
         }
         if(params.containsKey("startPrice") && params.containsKey("endPrice")) {
             List<Laptop> productList = productDAO.getProductsByPriceRange(
-                    new BigDecimal(params.get("startPrice")),
-                    new BigDecimal(params.get("endPrice"))
+                    new BigDecimal(String.valueOf(params.get("startPrice"))),
+                    new BigDecimal(String.valueOf(params.get("endPrice")))
             );
             productSet.forEach(product -> {
                 if(!productList.contains(product)){
@@ -251,7 +259,13 @@ public class ProductServiceImpl implements ProductService {
             });
         }
         if(params.containsKey("ramCapacity")) {
-            List<Laptop> productList = productDAO.getLaptopsByRamCapacity(Integer.parseInt(params.get("ramCapacity")));
+            List<String> ramCapacityList = (List<String>) params.get("ramCapacity");
+            List<Laptop> productList = new ArrayList<>();
+            ramCapacityList.forEach(type -> {
+                List<Laptop> laptopList = productDAO.getLaptopsByRamCapacity(Integer.parseInt(type));
+                productList.addAll(laptopList);
+            });
+
             productSet.forEach(product -> {
                 if(!productList.contains(product)){
                     notSuit.add(product);
@@ -260,8 +274,8 @@ public class ProductServiceImpl implements ProductService {
         }
         if(params.containsKey("cpuBrand") && params.containsKey("cpuType")) {
             List<Laptop> productList = productDAO.getLaptopsByCPU(
-                    params.get("cpuBrand"),
-                    params.get("cpuType")
+                    String.valueOf(params.get("cpuBrand")),
+                    String.valueOf(params.get("cpuType"))
             );
             productSet.forEach(product -> {
                 if(!productList.contains(product)){
@@ -270,7 +284,8 @@ public class ProductServiceImpl implements ProductService {
             });
         }
         if(params.containsKey("screenSize")) {
-            List<Laptop> productList = productDAO.getLaptopsByScreenSize(Float.parseFloat(params.get("screenSize")));
+            List<Laptop> productList =
+                    productDAO.getLaptopsByScreenSize(Float.parseFloat(String.valueOf(params.get("screenSize"))));
             productSet.forEach(product -> {
                 if(!productList.contains(product)){
                     notSuit.add(product);
@@ -278,8 +293,13 @@ public class ProductServiceImpl implements ProductService {
             });
         }
         if(params.containsKey("graphicCardType")) {
-            List<Laptop> productList = productDAO.getLaptopsByGraphicCardType(
-                    GraphicCardType.valueOf(params.get("graphicCardType")));
+            List<String> typeList = (List<String>) params.get("graphicCardType");
+            List<Laptop> productList = new ArrayList<>();
+            typeList.forEach(type -> {
+                List<Laptop> laptopList = productDAO.getLaptopsByGraphicCardType(GraphicCardType.valueOf(type));
+                productList.addAll(laptopList);
+            });
+
             productSet.forEach(product -> {
                 if(!productList.contains(product)){
                     notSuit.add(product);
@@ -287,10 +307,14 @@ public class ProductServiceImpl implements ProductService {
             });
         }
         if(params.containsKey("hardDriveType") && params.containsKey("capacity")) {
-            List<Laptop> productList = productDAO.getLaptopsByHardDrive(
-                    HardDriveType.valueOf(params.get("hardDriveType")),
-                    Integer.parseInt(params.get("capacity"))
-            );
+            List<String> typeList = (List<String>) params.get("hardDriveType");
+            int capacity = Integer.parseInt(String.valueOf(params.get("capacity")));
+            List<Laptop> productList = new ArrayList<>();
+            typeList.forEach(type -> {
+                List<Laptop> laptopList = productDAO.getLaptopsByHardDrive(HardDriveType.valueOf(type), capacity);
+                productList.addAll(laptopList);
+            });
+
             productSet.forEach(product -> {
                 if(!productList.contains(product)){
                     notSuit.add(product);

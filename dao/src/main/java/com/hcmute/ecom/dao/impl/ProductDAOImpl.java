@@ -202,7 +202,7 @@ public class ProductDAOImpl implements ProductDAO {
             return jdbcTemplate.query(
                     QUERY_PRODUCTS_BY_NAME,
                     new ProductMapper(),
-                    "% " + name + " %"
+                    "%" + name + "%"
             );
         }
         catch (EmptyResultDataAccessException err) {
