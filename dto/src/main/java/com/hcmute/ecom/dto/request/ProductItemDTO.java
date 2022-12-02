@@ -5,6 +5,10 @@ import com.hcmute.ecom.model.ProductItem;
 import java.math.BigDecimal;
 import java.util.Map;
 
+/**
+ * @author Nhat Phi
+ * @since 2022-11-29
+ * */
 public class ProductItemDTO {
     public static ProductItem transform(Map<String, String> request) {
         ProductItem item = new ProductItem();

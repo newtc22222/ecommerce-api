@@ -11,6 +11,10 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
+/**
+ * @author Nhat Phi
+ * @since 2022-11-29
+ * */
 public class LaptopDTOResponse {
     private String id;
     private String name;
