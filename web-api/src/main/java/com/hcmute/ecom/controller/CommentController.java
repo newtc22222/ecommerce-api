@@ -1,7 +1,6 @@
 package com.hcmute.ecom.controller;
 
 import com.hcmute.ecom.dto.request.CommentDTO;
-import com.hcmute.ecom.model.Comment;
 import com.hcmute.ecom.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

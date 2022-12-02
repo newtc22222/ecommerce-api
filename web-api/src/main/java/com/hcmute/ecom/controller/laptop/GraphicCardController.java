@@ -3,7 +3,7 @@ package com.hcmute.ecom.controller.laptop;
 import com.hcmute.ecom.dto.request.GraphicCardDTO;
 import com.hcmute.ecom.enums.product.GraphicCardType;
 import com.hcmute.ecom.service.GraphicCardService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
