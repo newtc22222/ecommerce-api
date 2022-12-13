@@ -60,7 +60,7 @@ public class UserDAOImpl implements UserDAO {
     public int updateAll(User user) {
         try {
             return jdbcTemplate.update(
-                    INSERT,
+                    UPDATE_ALL,
                     user.getName(),
                     user.getGender().toString(),
                     user.getPhone(),
@@ -80,7 +80,7 @@ public class UserDAOImpl implements UserDAO {
     public int updateInformation(UserDTORequest userDTO) {
         try {
             return jdbcTemplate.update(
-                    INSERT,
+                    UPDATE_INFORMATION,
                     userDTO.getName(),
                     userDTO.getGender().toString(),
                     userDTO.getEmail(),
