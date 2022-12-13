@@ -13,8 +13,6 @@ import java.util.Map;
  * @since 2022-11-21
  * */
 public class UserDTORequest {
-    private static final DateTimeFormatter DATE_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     private Long id;
     private String name;
     private Gender gender;
@@ -94,10 +92,10 @@ public class UserDTORequest {
         user.setEmail(request.get("email"));
         user.setDateOfBirth(Date.valueOf(request.get("dateOfBirth")));
         if(request.containsKey("createdDate")) {
-            user.setCreatedDate(LocalDateTime.parse(request.get("createdDate"), DATE_TIME_PATTERN));
+            user.setCreatedDate(LocalDateTime.parse(request.get("createdDate"), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         }
         if(request.containsKey("lastUpdatedDate")) {
-            user.setLastUpdatedDate(LocalDateTime.parse(request.get("lastUpdatedDate"), DATE_TIME_PATTERN));
+            user.setLastUpdatedDate(LocalDateTime.parse(request.get("lastUpdatedDate"), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         }
         return user;
     }
@@ -118,7 +116,7 @@ public class UserDTORequest {
             throw new RuntimeException(err);
         }
         if(request.containsKey("lastUpdatedDate")) {
-            user.setLastUpdatedDate(LocalDateTime.parse(request.get("lastUpdatedDate"), DATE_TIME_PATTERN));
+            user.setLastUpdatedDate(LocalDateTime.parse(request.get("lastUpdatedDate"), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         }
         return user;
     }

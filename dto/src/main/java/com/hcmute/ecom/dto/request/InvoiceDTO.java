@@ -13,8 +13,6 @@ import java.util.Map;
  * @since 2022-11-25
  * */
 public class InvoiceDTO {
-    private static final DateTimeFormatter DATE_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     public static Invoice transform(Map<String, String> request) {
         Invoice invoice = new Invoice();
         if (request.containsKey("id")) {
@@ -35,7 +33,7 @@ public class InvoiceDTO {
         }
         invoice.setFinalTotalCost(new BigDecimal(request.get("finalTotalCost")));
         if (request.containsKey("createdDate")) {
-            invoice.setCreatedDate(LocalDateTime.parse(request.get("createdDate"), DATE_TIME_PATTERN));
+            invoice.setCreatedDate(LocalDateTime.parse(request.get("createdDate"), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         }
         invoice.setPaymentType(request.get("paymentType"));
         invoice.setStatus(OrderStatus.valueOf(request.get("status")));
