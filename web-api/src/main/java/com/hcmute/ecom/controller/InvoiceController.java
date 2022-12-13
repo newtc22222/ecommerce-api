@@ -1,6 +1,7 @@
 package com.hcmute.ecom.controller;
 
 import com.hcmute.ecom.dto.request.InvoiceDTO;
+import com.hcmute.ecom.enums.OrderStatus;
 import com.hcmute.ecom.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -66,12 +67,18 @@ public class InvoiceController {
         return invoiceService.update(InvoiceDTO.transform(invoiceRequest), invoiceId);
     }
 
-    @PutMapping("/invoices/{id}/status")
+    @PatchMapping("/invoices/{id}")
     public ResponseEntity<?> updateInvoiceStatus(@PathVariable("id") String invoiceId,
-                                                 @RequestBody Map<String, String> invoiceStatusRequest) {
-//        return invoiceService.updateStatus(invoiceId, OrderStatus.valueOf(orderStatus));
-        return null;
+                                                 @RequestBody Map<String, String> request) {
+        return invoiceService.updateStatus(invoiceId, OrderStatus.valueOf(request.get("status")));
     }
+
+//    @PutMapping("/invoices/{id}/status")
+//    public ResponseEntity<?> updateInvoiceStatus(@PathVariable("id") String invoiceId,
+//                                                 @RequestBody Map<String, String> invoiceStatusRequest) {
+////        return invoiceService.updateStatus(invoiceId, OrderStatus.valueOf(orderStatus));
+//        return null;
+//    }
 
     @DeleteMapping("/invoices/{id}")
     public ResponseEntity<?> deleteInvoice(@PathVariable("id") String invoiceId) {
