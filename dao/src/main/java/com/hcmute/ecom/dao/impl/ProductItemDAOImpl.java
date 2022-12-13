@@ -43,7 +43,7 @@ public class ProductItemDAOImpl implements ProductItemDAO {
             return jdbcTemplate.update(
                     INSERT,
                     item.getId(),
-                    item.getCardId(),
+                    item.getCartId(),
                     item.getInvoiceId(),
                     item.getProductId(),
                     item.getItemQuantity(),
@@ -61,7 +61,7 @@ public class ProductItemDAOImpl implements ProductItemDAO {
         try {
             return jdbcTemplate.update(
                     UPDATE,
-                    item.getCardId(),
+                    item.getCartId(),
                     item.getInvoiceId(),
                     item.getProductId(),
                     item.getItemQuantity(),

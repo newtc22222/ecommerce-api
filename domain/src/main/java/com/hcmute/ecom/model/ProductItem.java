@@ -8,17 +8,17 @@ import java.math.BigDecimal;
  * */
 public class ProductItem {
     private String id;
-    private String card_id;
+    private String cart_id;
     private String invoice_id;
     private String product_id;
     private Integer item_quantity;
     private BigDecimal item_price;
     private BigDecimal item_discount_price;
 
-    public ProductItem(String id, String card_id, String invoice_id, String product_id, Integer item_quantity,
+    public ProductItem(String id, String cart_id, String invoice_id, String product_id, Integer item_quantity,
                        BigDecimal item_price, BigDecimal item_discount_price) {
         this.id = id;
-        this.card_id = card_id;
+        this.cart_id = cart_id;
         this.invoice_id = invoice_id;
         this.product_id = product_id;
         this.item_quantity = item_quantity;
@@ -36,12 +36,12 @@ public class ProductItem {
         this.id = id;
     }
 
-    public String getCardId() {
-        return card_id;
+    public String getCartId() {
+        return cart_id;
     }
 
-    public void setCardId(String card_id) {
-        this.card_id = card_id;
+    public void setCartId(String cart_id) {
+        this.cart_id = cart_id;
     }
 
     public String getInvoiceId() {

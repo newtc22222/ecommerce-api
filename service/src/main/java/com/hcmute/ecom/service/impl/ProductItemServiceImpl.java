@@ -45,7 +45,7 @@ public class ProductItemServiceImpl implements ProductItemService {
                     ));
         }
         else {
-            oldProductItem.setCardId(productItem.getCardId());
+            oldProductItem.setCartId(productItem.getCartId());
             oldProductItem.setInvoiceId(productItem.getInvoiceId());
             oldProductItem.setProductId(productItem.getProductId());
             oldProductItem.setItemQuantity(productItem.getItemQuantity());

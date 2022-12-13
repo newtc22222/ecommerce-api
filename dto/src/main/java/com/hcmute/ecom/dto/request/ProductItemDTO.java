@@ -13,7 +13,7 @@ public class ProductItemDTO {
     public static ProductItem transform(Map<String, String> request) {
         ProductItem item = new ProductItem();
         if(request.containsKey("cartId")) {
-            item.setCardId(request.get("cartId"));
+            item.setCartId(request.get("cartId"));
         }
         if(request.containsKey("invoiceId")) {
             item.setInvoiceId(request.get("invoiceId"));

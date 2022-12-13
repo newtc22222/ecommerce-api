@@ -15,7 +15,7 @@ public class ProductItemMapper implements RowMapper<ProductItem> {
     public ProductItem mapRow(ResultSet rs, int rowNum) throws SQLException {
         ProductItem item = new ProductItem();
         item.setId(rs.getString("id"));
-        item.setCardId(rs.getString("card_id"));
+        item.setCartId(rs.getString("cart_id"));
         item.setInvoiceId(rs.getString("invoice_id"));
         item.setProductId(rs.getString("product_id"));
         item.setItemQuantity(rs.getInt("item_quantity"));
