@@ -78,8 +78,45 @@ public class ProductController {
     }
 
     @GetMapping("/products/cards")
-    public ResponseEntity<?> getLaptopCard() {
-        return laptopService.getLaptopCards();
+    public ResponseEntity<?> getProductCards(@RequestParam(value = "name", required = false) String name,
+                                             @RequestParam(value = "brandId", required = false) List<String> brandId,
+                                             @RequestParam(value = "categoryId", required = false) String categoryId,
+                                             @RequestParam(value = "releasedYear", required = false) String releasedYear,
+                                             @RequestParam(value = "startPrice", required = false) String startPrice,
+                                             @RequestParam(value = "endPrice", required = false) String endPrice,
+                                             @RequestParam(value = "ramCapacity", required = false) List<String> ramCapacity,
+                                             @RequestParam(value = "cpuBrand", required = false) String cpuBrand,
+                                             @RequestParam(value = "cpuType", required = false) String cpuType,
+                                             @RequestParam(value = "screenSize", required = false) String screenSize,
+                                             @RequestParam(value = "graphicCardType", required = false) List<String> graphicCardType,
+                                             @RequestParam(value = "hardDriveType", required = false) List<String> hardDriveType,
+                                             @RequestParam(value = "capacity", required = false) String capacity) {
+        if(name == null && brandId == null && categoryId == null && releasedYear == null && startPrice == null
+                && endPrice == null && ramCapacity == null && cpuBrand == null && cpuType == null && screenSize == null
+                && graphicCardType == null && hardDriveType == null && capacity == null) {
+            return laptopService.getLaptopCards();
+        }
+
+        Map<String, Object> params = new HashMap<>();
+        if(name != null) params.put("name", name);
+        if(brandId != null) params.put("brandId", brandId);
+        if(categoryId != null) params.put("categoryId", categoryId);
+        if(releasedYear != null) params.put("releasedYear", releasedYear);
+        if(startPrice != null) params.put("startPrice", startPrice);
+        if(endPrice != null) params.put("endPrice", endPrice);
+        if(ramCapacity != null) params.put("ramCapacity", ramCapacity);
+        if(cpuBrand != null) params.put("cpuBrand", cpuBrand);
+        if(cpuType != null) params.put("cpuType", cpuType);
+        if(screenSize != null) params.put("screenSize", screenSize);
+        if(graphicCardType != null) params.put("graphicCardType", graphicCardType);
+        if(hardDriveType != null) params.put("hardDriveType", hardDriveType);
+        if(capacity != null) params.put("capacity", capacity);
+        return laptopService.getLaptopCardsFilter(params);
+    }
+
+    @GetMapping("/products/{productId}/cards")
+    public ResponseEntity<?> getProductCard(@PathVariable("productId") String productId) {
+        return laptopService.getLaptopCard(productId);
     }
 
     @PostMapping("/products")

@@ -2,6 +2,8 @@ package com.hcmute.ecom.service;
 
 import org.springframework.http.ResponseEntity;
 
+import java.util.Map;
+
 /**
  * @author Nhat Phi
  * @since 2022-11-28
@@ -14,4 +16,5 @@ public interface LaptopService {
     ResponseEntity<?> deleteGraphicCard(String laptopId, long graphicCardId);
     ResponseEntity<?> insertHardDrive(String laptopId, long hardDriveId);
     ResponseEntity<?> deleteHardDrive(String laptopId, long hardDriveId);
+    ResponseEntity<?> getLaptopCardsFilter(Map<String, Object> params);
 }

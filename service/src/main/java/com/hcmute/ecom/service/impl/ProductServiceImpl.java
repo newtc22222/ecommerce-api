@@ -199,8 +199,7 @@ public class ProductServiceImpl implements ProductService {
         return ResponseEntity.ok(productList);
     }
 
-    @Override
-    public ResponseEntity<?> filter(Map<String, Object> params) {
+    private Set<Laptop> getProductFilter(Map<String, Object> params) {
         Set<Laptop> productSet = new HashSet<>(productDAO.getAllProduct());
         Set<Laptop> notSuit = new HashSet<>();
 
@@ -323,6 +322,12 @@ public class ProductServiceImpl implements ProductService {
         }
 
         productSet.removeAll(notSuit);
+        return productSet;
+    }
+
+    @Override
+    public ResponseEntity<?> filter(Map<String, Object> params) {
+        Set<Laptop> productSet = getProductFilter(params);
         if(productSet.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)

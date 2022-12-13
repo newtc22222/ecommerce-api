@@ -4,6 +4,8 @@ import com.hcmute.ecom.dao.*;
 import com.hcmute.ecom.dto.response.LaptopDTOResponse;
 import com.hcmute.ecom.dto.response.LaptopDTOResponseCard;
 import com.hcmute.ecom.enums.ImageType;
+import com.hcmute.ecom.enums.product.GraphicCardType;
+import com.hcmute.ecom.enums.product.HardDriveType;
 import com.hcmute.ecom.model.*;
 import com.hcmute.ecom.model.laptop.GraphicCard;
 import com.hcmute.ecom.model.laptop.HardDrive;
@@ -17,7 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -141,6 +144,148 @@ public class LaptopServiceImpl implements LaptopService {
         Stream<LaptopDTOResponseCard> laptopCardList = laptopList.stream().map(this::getLaptopCardData);
 
         return ResponseEntity.ok(laptopCardList);
+    }
+
+    private Set<Laptop> getLaptopFilter(Map<String, Object> params) {
+        Set<Laptop> productSet = new HashSet<>(productDAO.getAllProduct());
+        Set<Laptop> notSuit = new HashSet<>();
+
+        if(params.containsKey("name")){
+            List<Laptop> productList =
+                    productDAO.findProductsByName(params.get("name").toString());
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("brandId")) {
+            List<String> brandIdList = (List<String>) params.get("brandId");
+            System.out.println(brandIdList);
+            List<Laptop> productList = new ArrayList<>();
+            brandIdList.forEach(brandId -> {
+                System.out.println(brandId);
+                List<Laptop> laptopList = productDAO.getProductsByBrand(Long.parseLong(brandId));
+                productList.addAll(laptopList);
+            });
+
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("categoryId")) {
+            List<Laptop> productList =
+                    productDAO.getProductsByCategory(Long.parseLong(String.valueOf(params.get("categoryId"))));
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("releasedYear")) {
+            List<Laptop> productList =
+                    productDAO.getProductsByReleasedYear(Integer.parseInt(String.valueOf(params.get("releasedYear"))));
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("startPrice") && params.containsKey("endPrice")) {
+            List<Laptop> productList = productDAO.getProductsByPriceRange(
+                    new BigDecimal(String.valueOf(params.get("startPrice"))),
+                    new BigDecimal(String.valueOf(params.get("endPrice")))
+            );
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("ramCapacity")) {
+            List<String> ramCapacityList = (List<String>) params.get("ramCapacity");
+            List<Laptop> productList = new ArrayList<>();
+            ramCapacityList.forEach(type -> {
+                List<Laptop> laptopList = productDAO.getLaptopsByRamCapacity(Integer.parseInt(type));
+                productList.addAll(laptopList);
+            });
+
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("cpuBrand") && params.containsKey("cpuType")) {
+            List<Laptop> productList = productDAO.getLaptopsByCPU(
+                    String.valueOf(params.get("cpuBrand")),
+                    String.valueOf(params.get("cpuType"))
+            );
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("screenSize")) {
+            List<Laptop> productList =
+                    productDAO.getLaptopsByScreenSize(Float.parseFloat(String.valueOf(params.get("screenSize"))));
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("graphicCardType")) {
+            List<String> typeList = (List<String>) params.get("graphicCardType");
+            List<Laptop> productList = new ArrayList<>();
+            typeList.forEach(type -> {
+                List<Laptop> laptopList = productDAO.getLaptopsByGraphicCardType(GraphicCardType.valueOf(type));
+                productList.addAll(laptopList);
+            });
+
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+        if(params.containsKey("hardDriveType") && params.containsKey("capacity")) {
+            List<String> typeList = (List<String>) params.get("hardDriveType");
+            int capacity = Integer.parseInt(String.valueOf(params.get("capacity")));
+            List<Laptop> productList = new ArrayList<>();
+            typeList.forEach(type -> {
+                List<Laptop> laptopList = productDAO.getLaptopsByHardDrive(HardDriveType.valueOf(type), capacity);
+                productList.addAll(laptopList);
+            });
+
+            productSet.forEach(product -> {
+                if(!productList.contains(product)){
+                    notSuit.add(product);
+                }
+            });
+        }
+
+        productSet.removeAll(notSuit);
+        return productSet;
+    }
+
+    @Override
+    public ResponseEntity<?> getLaptopCardsFilter(Map<String, Object> params) {
+        Set<Laptop> productSet = getLaptopFilter(params);
+        if(productSet.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject(
+                            HttpStatus.NO_CONTENT,
+                            "Cannot find product which suit this conditions!"
+                    ));
+        }
+
+        Stream<LaptopDTOResponseCard> laptopCardSet = productSet.stream().map(this::getLaptopCardData);
+        return ResponseEntity.ok(laptopCardSet);
     }
 
     @Override
