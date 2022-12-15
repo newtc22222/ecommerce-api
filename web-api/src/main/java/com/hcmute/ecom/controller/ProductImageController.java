@@ -69,19 +69,19 @@ public class ProductImageController {
     }
 
     @PostMapping("/images")
-    public ResponseEntity<?> createNewProductImage(@RequestParam Map<String, String> imageRequest) {
+    public ResponseEntity<?> createNewProductImage(@RequestBody Map<String, String> imageRequest) {
         return productImageService.insert(ProductImageDTO.transform(imageRequest));
     }
 
     @PutMapping("/images/{id}")
     public ResponseEntity<?> updateProductImage(@PathVariable("id") String imageId,
-                                                @RequestParam Map<String, String> imageRequest) {
+                                                @RequestBody Map<String, String> imageRequest) {
         return productImageService.update(ProductImageDTO.transform(imageRequest), imageId);
     }
 
     @PatchMapping("/images/{id}")
     public ResponseEntity<?> updateProductImagePathAndType(@PathVariable("id") String imageId,
-                                                           @RequestParam Map<String, String> imageRequest) {
+                                                           @RequestBody Map<String, String> imageRequest) {
         String path = imageRequest.get("path");
         ImageType type = ImageType.valueOf(imageRequest.get("type"));
         return productImageService.updatePathAndType(imageId, path, type);
