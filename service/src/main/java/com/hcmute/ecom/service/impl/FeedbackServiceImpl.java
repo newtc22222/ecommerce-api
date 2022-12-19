@@ -1,6 +1,8 @@
 package com.hcmute.ecom.service.impl;
 
 import com.hcmute.ecom.dao.FeedbackDAO;
+import com.hcmute.ecom.dao.UserDAO;
+import com.hcmute.ecom.dto.request.FeedbackDTO;
 import com.hcmute.ecom.model.Feedback;
 import com.hcmute.ecom.service.FeedbackService;
 import com.hcmute.ecom.service.model.ResponseCUDObject;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author Nhat Phi
@@ -20,6 +23,9 @@ import java.util.List;
 public class FeedbackServiceImpl implements FeedbackService {
     @Autowired
     private FeedbackDAO feedbackDAO;
+
+    @Autowired
+    private UserDAO userDAO;
 
     @Override
     public ResponseEntity<?> insert(Feedback feedback) {
@@ -91,7 +97,10 @@ public class FeedbackServiceImpl implements FeedbackService {
                             "Cannot find any feedback in this product!"
                     ));
         }
-        return ResponseEntity.ok(feedbacks);
+
+        Stream<FeedbackDTO> feedbackDTOList = feedbacks.stream()
+                .map(f -> FeedbackDTO.getData(f, userDAO.findUserById(f.getUserId()).getName()));
+        return ResponseEntity.ok(feedbackDTOList);
     }
 
     @Override
@@ -133,6 +142,8 @@ public class FeedbackServiceImpl implements FeedbackService {
                             "Cannot find any feedback!"
                     ));
         }
+
+
         return ResponseEntity.ok(feedbackList);
     }
 
