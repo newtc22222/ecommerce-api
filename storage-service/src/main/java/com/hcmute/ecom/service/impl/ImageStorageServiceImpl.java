@@ -69,7 +69,8 @@ public class ImageStorageServiceImpl implements IStorageService {
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFilePath, StandardCopyOption.REPLACE_EXISTING);
             }
-            return destinationFilePath.toAbsolutePath().toString();
+//            return destinationFilePath.toAbsolutePath().toString();
+            return "http://localhost:8088/api/v1/files/" + destinationFilePath.getFileName().toString();
         }
         catch (IOException err) {
             throw new RuntimeException(err);
