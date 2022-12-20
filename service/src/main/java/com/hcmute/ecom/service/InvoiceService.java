@@ -4,8 +4,6 @@ import com.hcmute.ecom.enums.OrderStatus;
 import com.hcmute.ecom.model.Invoice;
 import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -16,9 +14,8 @@ public interface InvoiceService {
     ResponseEntity<?> insert(Invoice invoice);
     ResponseEntity<?> update(Invoice invoice, String invoiceId);
     ResponseEntity<?> updateStatus(String invoiceId, OrderStatus status);
-    ResponseEntity<?> updatePaymentType(String invoiceId, String paymentType);
+    ResponseEntity<?> updateInvoicePaymentMethodAndPaidStatus(String invoiceId, String paymentType, boolean isPaid);
     ResponseEntity<?> updatePaidStatus(String invoiceId, boolean isPaid); // true -> was paid
-//    ResponseEntity<?> updateInvoiceStatus(InvoiceStatusDTO invoiceStatusDTO);
     ResponseEntity<?> delete(String invoiceId);
 
     ResponseEntity<?> getAllInvoices();

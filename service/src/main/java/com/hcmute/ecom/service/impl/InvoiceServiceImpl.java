@@ -95,7 +95,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public ResponseEntity<?> updatePaymentType(String invoiceId, String paymentType) {
+    public ResponseEntity<?> updateInvoicePaymentMethodAndPaidStatus(String invoiceId, String paymentType, boolean isPaid) {
         Invoice oldInvoice = invoiceDAO.getInvoiceById(invoiceId);
         if(oldInvoice == null) {
             return ResponseEntity
@@ -106,9 +106,9 @@ public class InvoiceServiceImpl implements InvoiceService {
                     ));
         }
         return ResponseCUDObject.of(
-                invoiceDAO.updatePaymentType(invoiceId, paymentType) > 0,
+                invoiceDAO.updateInvoicePaymentMethodAndPaidStatus(invoiceId, paymentType, isPaid) > 0,
                 HttpStatus.OK,
-                "Update payment's type of invoice successfully!",
+                "Update payment type and paid status of invoice successfully!",
                 HttpStatus.NOT_IMPLEMENTED,
                 "Fail when update this invoice! Please check your data again!"
         );

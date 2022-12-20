@@ -33,7 +33,8 @@ public class InvoiceDAOImpl implements InvoiceDAO {
             "tax=?, final_total_cost=?, created_date=?, payment_type=?, status=?, is_paid=?, " +
             "note=?, trouble_reason=?  where id=?", TABLE_NAME);
     private final String UPDATE_ORDER_STATUS = String.format("update %s set status=? where id=?", TABLE_NAME);
-    private final String UPDATE_PAYMENT_TYPE = String.format("update %s set payment_type=? where id=?", TABLE_NAME);
+    private final String UPDATE_PAYMENT_TYPE_AND_PAID_STATUS =
+            String.format("update %s set payment_type=?, is_paid=? where id=?", TABLE_NAME);
     private final String UPDATE_PAID_STATUS = String.format("update %s set is_paid=? where id=?", TABLE_NAME);
     private final String DELETE = String.format("delete from %s where id=?", TABLE_NAME);
 
@@ -124,11 +125,12 @@ public class InvoiceDAOImpl implements InvoiceDAO {
     }
 
     @Override
-    public int updatePaymentType(String invoiceId, String paymentType) {
+    public int updateInvoicePaymentMethodAndPaidStatus(String invoiceId, String paymentType, boolean isPaid) {
         try {
             return jdbcTemplate.update(
-                    UPDATE_PAYMENT_TYPE,
+                    UPDATE_PAYMENT_TYPE_AND_PAID_STATUS,
                     paymentType,
+                    isPaid,
                     invoiceId
             );
         }

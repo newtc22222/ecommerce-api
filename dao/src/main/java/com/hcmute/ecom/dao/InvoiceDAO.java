@@ -15,7 +15,7 @@ public interface InvoiceDAO {
     int insert(Invoice invoice);
     int update(Invoice invoice);
     int updateStatus(String invoiceId, OrderStatus status);
-    int updatePaymentType(String invoiceId, String paymentType);
+    int updateInvoicePaymentMethodAndPaidStatus(String invoiceId, String paymentType, boolean isPaid);
     int updatePaidStatus(String invoiceId, boolean isPaid); // true -> was paid
     int delete(String invoiceId);
     List<Invoice> getAllInvoices();
