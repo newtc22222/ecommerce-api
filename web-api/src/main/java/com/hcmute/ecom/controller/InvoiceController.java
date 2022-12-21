@@ -2,8 +2,9 @@ package com.hcmute.ecom.controller;
 
 import com.hcmute.ecom.dto.request.InvoiceDTO;
 import com.hcmute.ecom.enums.OrderStatus;
+import com.hcmute.ecom.model.Invoice;
 import com.hcmute.ecom.service.InvoiceService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.Map;
  * @author Nhat Phi
  * @since 2022-11-24
  * */
+@Api(tags = "Receipt of user", value =  "Invoice Controller")
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/")
@@ -22,7 +24,7 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
-    @ApiOperation("Get all invoices")
+    @ApiOperation(value = "Get all invoices", response = Invoice.class)
     @GetMapping("/invoices")
     public ResponseEntity<?> getAllInvoices(@RequestParam(value = "address", required = false) String address,
                                             @RequestParam(value = "date", required = false) String date,
@@ -48,33 +50,32 @@ public class InvoiceController {
         }
     }
 
-    @ApiOperation("Get one invoice with id")
+    @ApiOperation(value = "Get one invoice with id", response = Invoice.class)
     @GetMapping("/invoices/{id}")
     public ResponseEntity<?> getInvoiceById(@PathVariable("id") String invoiceId) {
         return invoiceService.getInvoiceById(invoiceId);
     }
 
-    @ApiOperation("Get all invoices of a user")
+    @ApiOperation(value = "Get all invoices of user", response = Invoice.class)
     @GetMapping("/users/{userId}/invoices")
     public ResponseEntity<?> getInvoicesOfUser(@PathVariable("userId") long userId) {
         return invoiceService.getInvoicesByUserId(userId);
     }
 
-    @ApiOperation("Create a new Invoice")
+    @ApiOperation(value = "Create a new Invoice", response = ResponseEntity.class)
     @PostMapping("/invoices")
-    public ResponseEntity<?> createNewInvoice(@RequestBody Map<String, String> invoiceRequest) {
-        return invoiceService.insert(InvoiceDTO.transform(invoiceRequest));
+    public ResponseEntity<?> createNewInvoice(@RequestBody InvoiceDTO invoiceDTO) {
+        return invoiceService.insert(InvoiceDTO.transform(invoiceDTO));
     }
 
-
-    @ApiOperation("Update all value of an invoice")
+    @ApiOperation(value = "Update all information of Invoice", response = ResponseEntity.class)
     @PutMapping("/invoices/{id}")
     public ResponseEntity<?> updateInvoice(@PathVariable("id") String invoiceId,
-                                           @RequestBody Map<String, String> invoiceRequest) {
-        return invoiceService.update(InvoiceDTO.transform(invoiceRequest), invoiceId);
+                                           @RequestBody InvoiceDTO invoiceDTO) {
+        return invoiceService.update(InvoiceDTO.transform(invoiceDTO), invoiceId);
     }
 
-    @ApiOperation("Update payment method and paid status of Invoice")
+    @ApiOperation(value = "Update payment method and paid status of invoice", response = ResponseEntity.class)
     @PatchMapping("/invoices/{id}")
     public ResponseEntity<?> updateInvoicePaymentMethodAndPaidStatus(@PathVariable("id") String invoiceId,
                                                                      @RequestBody Map<String, String> request) {
@@ -84,14 +85,14 @@ public class InvoiceController {
                 Boolean.parseBoolean(request.get("isPaid")));
     }
 
-    @ApiOperation("Update the delivery status of Invoice")
+    @ApiOperation(value = "Update the delivery status of Invoice", response = ResponseEntity.class)
     @PatchMapping("/invoices/{id}/status")
     public ResponseEntity<?> updateInvoiceStatus(@PathVariable("id") String invoiceId,
                                                  @RequestBody String status) {
         return invoiceService.updateStatus(invoiceId, OrderStatus.valueOf(status));
     }
 
-    @ApiOperation("Remove an invoice in system")
+    @ApiOperation(value = "Remove an invoice", response = ResponseEntity.class)
     @DeleteMapping("/invoices/{id}")
     public ResponseEntity<?> deleteInvoice(@PathVariable("id") String invoiceId) {
         return invoiceService.delete(invoiceId);

@@ -1,7 +1,10 @@
 package com.hcmute.ecom.controller;
 
 import com.hcmute.ecom.dto.request.DiscountDTO;
+import com.hcmute.ecom.model.Discount;
 import com.hcmute.ecom.service.DiscountService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +16,15 @@ import java.util.Map;
  * @author Nhat Phi
  * @since 2022-11-24
  * */
-@CrossOrigin
+@Api(tags = "Discount code in system", value = "Discount controller")
+@CrossOrigin(value = { "*" })
 @RestController
 @RequestMapping("/api/v1/")
 public class DiscountController {
     @Autowired
     private DiscountService discountService;
 
+    @ApiOperation(value = "Get all discounts in system", response = Discount.class)
     @GetMapping("/discounts")
     public ResponseEntity<?> getAllDiscount(@RequestParam(value = "code", required = false) String code,
                                             @RequestParam(value = "startDate", required = false) String startDate,
@@ -32,29 +37,34 @@ public class DiscountController {
         return discountService.filter(params);
     }
 
+    @ApiOperation(value = "Get one discount with id", response = Discount.class)
     @GetMapping("/discounts/{id}")
     public ResponseEntity<?> getDiscountById(@PathVariable("id") long discountId) {
         return discountService.getDiscountById(discountId);
     }
 
-    @PostMapping("/discounts")
-    public ResponseEntity<?> createNewDiscount(@RequestBody Map<String, String> discountRequest) {
-        return discountService.insert(DiscountDTO.transform(discountRequest));
-    }
-
-    @PutMapping("/discounts/{id}")
-    public ResponseEntity<?> updateDiscount(@PathVariable("id") long discountId,
-                                            @RequestBody Map<String, String> discountRequest) {
-        return discountService.update(DiscountDTO.transform(discountRequest), discountId);
-    }
-
-    @DeleteMapping("/discounts/{id}")
-    public ResponseEntity<?> deleteDiscount(@PathVariable("id") long discountId) {
-        return discountService.delete(discountId);
-    }
-
+    @ApiOperation(value = "Get all discounts of product (with productId)", response = Discount.class)
     @GetMapping("/products/{productId}/discounts")
     public ResponseEntity<?> getDiscountsOfProduct(@PathVariable("productId") String productId) {
         return discountService.getDiscountsByProduct(productId);
+    }
+
+    @ApiOperation(value = "Create a new discount", response = ResponseEntity.class)
+    @PostMapping("/discounts")
+    public ResponseEntity<?> createNewDiscount(@RequestBody DiscountDTO discountDTO) {
+        return discountService.insert(DiscountDTO.transform(discountDTO));
+    }
+
+    @ApiOperation(value = "Update a discount", response = ResponseEntity.class)
+    @PutMapping("/discounts/{id}")
+    public ResponseEntity<?> updateDiscount(@PathVariable("id") long discountId,
+                                            @RequestBody DiscountDTO discountDTO) {
+        return discountService.update(DiscountDTO.transform(discountDTO), discountId);
+    }
+
+    @ApiOperation(value = "Remove a discount", response = ResponseEntity.class)
+    @DeleteMapping("/discounts/{id}")
+    public ResponseEntity<?> deleteDiscount(@PathVariable("id") long discountId) {
+        return discountService.delete(discountId);
     }
 }

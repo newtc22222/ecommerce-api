@@ -2,27 +2,27 @@ package com.hcmute.ecom.controller.laptop;
 
 import com.hcmute.ecom.dto.request.GraphicCardDTO;
 import com.hcmute.ecom.enums.product.GraphicCardType;
+import com.hcmute.ecom.model.laptop.GraphicCard;
 import com.hcmute.ecom.service.GraphicCardService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 /**
  * @author Nhat Phi
  * @since 2022-11-24
  * */
-@CrossOrigin
+@Api(tags = "Graphic Card (display)", value = "GraphicCard controller")
+@CrossOrigin(value = { "*" })
 @RestController
 @RequestMapping("/api/v1/graphic-cards")
 public class GraphicCardController {
     @Autowired
     private GraphicCardService graphicCardService;
 
-    @ApiOperation("Get all graphic cards information")
+    @ApiOperation(value = "Get all graphic cards information", response = GraphicCard.class)
     @GetMapping("")
     public ResponseEntity<?> getAllGraphicCards(@RequestParam(value = "type", required = false) String type,
                                                 @RequestParam(value = "brand", required = false) String brand) {
@@ -43,26 +43,26 @@ public class GraphicCardController {
         return graphicCardService.getAllGraphicCards();
     }
 
-    @ApiOperation("Get graphic card by graphicCardId")
+    @ApiOperation(value = "Get graphic card by graphicCardId", response = GraphicCard.class)
     @GetMapping("{id}")
     public ResponseEntity<?> getGraphicCardById(@PathVariable("id") long graphicCardId) {
         return graphicCardService.findGraphicCardById(graphicCardId);
     }
 
-    @ApiOperation("Create new graphic card information")
+    @ApiOperation(value = "Create new graphic card information", response = ResponseEntity.class)
     @PostMapping("")
-    public ResponseEntity<?> createNewGraphicCard(@RequestBody Map<String, String> graphicCardRequest){
-        return graphicCardService.insert(GraphicCardDTO.transform(graphicCardRequest));
+    public ResponseEntity<?> createNewGraphicCard(@RequestBody GraphicCardDTO graphicCardDTO){
+        return graphicCardService.insert(GraphicCardDTO.transform(graphicCardDTO));
     }
 
-    @ApiOperation("Update old graphic card's information")
+    @ApiOperation(value = "Update old graphic card's information", response = ResponseEntity.class)
     @PutMapping("{id}")
     public ResponseEntity<?> updateGraphicCardInformation(@PathVariable("id") long graphicCardId,
-                                                          @RequestBody Map<String, String> graphicCardRequest) {
-        return graphicCardService.update(GraphicCardDTO.transform(graphicCardRequest), graphicCardId);
+                                                          @RequestBody GraphicCardDTO graphicCardDTO) {
+        return graphicCardService.update(GraphicCardDTO.transform(graphicCardDTO), graphicCardId);
     }
 
-    @ApiOperation("Remove graphic card from system")
+    @ApiOperation(value = "Remove graphic card from system", response = ResponseEntity.class)
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteGraphicCardInformation(@PathVariable("id") long graphicCardId) {
         return graphicCardService.delete(graphicCardId);

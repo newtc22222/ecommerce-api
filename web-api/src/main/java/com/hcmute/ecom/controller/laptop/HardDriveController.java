@@ -2,27 +2,28 @@ package com.hcmute.ecom.controller.laptop;
 
 import com.hcmute.ecom.dto.request.HardDriveDTO;
 import com.hcmute.ecom.enums.product.HardDriveType;
+import com.hcmute.ecom.model.laptop.HardDrive;
 import com.hcmute.ecom.service.HardDriveService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 /**
  * @author Nhat Phi
  * @since 2022-11-24
  * */
-@CrossOrigin
+@Api(tags = "Hard drive of laptop", value = "HardDrive controller")
+@CrossOrigin(value = { "*" })
 @RestController
 @RequestMapping("/api/v1/hard-drives")
 public class HardDriveController {
     @Autowired
     private HardDriveService hardDriveService;
 
-    @ApiOperation("Get all hard drives in system")
+    @ApiOperation(value = "Get all hard drives in system", response = HardDrive.class)
     @GetMapping("")
     public ResponseEntity<?> getAllHardDrives(@RequestParam(value = "type", required = false) String type) {
 
@@ -37,26 +38,26 @@ public class HardDriveController {
         return hardDriveService.getAllHardDrive();
     }
 
-    @ApiOperation("Get hard drive by hardDriveId")
+    @ApiOperation(value = "Get a hard drives with id", response = HardDrive.class)
     @GetMapping("{id}")
     public ResponseEntity<?> getHardDriveById(@PathVariable("id") long hardDriveId) {
         return hardDriveService.findHardDriveById(hardDriveId);
     }
 
-    @ApiOperation("Create new hard drive information")
+    @ApiOperation(value = "Create a new hard drive", response = ResponseEntity.class)
     @PostMapping("")
-    public ResponseEntity<?> createNewHardDrive(@RequestBody Map<String, String> hardDriveRequest){
-        return hardDriveService.insert(HardDriveDTO.transform(hardDriveRequest));
+    public ResponseEntity<?> createNewHardDrive(@RequestBody HardDriveDTO hardDriveDTO){
+        return hardDriveService.insert(HardDriveDTO.transform(hardDriveDTO));
     }
 
-    @ApiOperation("Update hard drive information")
+    @ApiOperation(value = "Update a hard drive", response = ResponseEntity.class)
     @PutMapping("{id}")
     public ResponseEntity<?> updateHardDriveInformation(@PathVariable("id") long hardDriveId,
-                                                          @RequestBody Map<String, String> hardDriveRequest) {
-        return hardDriveService.update(HardDriveDTO.transform(hardDriveRequest), hardDriveId);
+                                                        @RequestBody HardDriveDTO hardDriveDTO) {
+        return hardDriveService.update(HardDriveDTO.transform(hardDriveDTO), hardDriveId);
     }
 
-    @ApiOperation("Delete hard drive information")
+    @ApiOperation(value = "Remove a hard drive from system", response = ResponseEntity.class)
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteHardDriveInformation(@PathVariable("id") long hardDriveId) {
         return hardDriveService.delete(hardDriveId);

@@ -1,6 +1,7 @@
 package com.hcmute.ecom.controller;
 
 import com.hcmute.ecom.dto.request.BannerDTO;
+import com.hcmute.ecom.model.Banner;
 import com.hcmute.ecom.service.BannerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -8,14 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author Nhat Phi
  * @since 2022-11-22
  * */
-@Api(tags = "Banner Controller", value = "banner CRUD and filter")
+@Api(tags = "Big image for advertise", value = "Banner Controller")
 @CrossOrigin(value = { "*" })
 @RestController
 @RequestMapping("/api/v1/banners")
@@ -23,7 +28,7 @@ public class BannerController {
     @Autowired
     private BannerService bannerService;
 
-    @ApiOperation("Get all banners in system")
+    @ApiOperation(value = "Get all banners in system", response = Banner.class)
     @GetMapping("")
     public ResponseEntity<?> getBanners(@RequestParam(value = "start", required = false) String startDate,
                                         @RequestParam(value = "end", required = false) String endDate,
@@ -41,25 +46,26 @@ public class BannerController {
         return bannerService.filter(params);
     }
 
-    @ApiOperation("Get banner by bannerId")
+    @ApiOperation(value = "Get banner by bannerId", response = Banner.class)
     @GetMapping("{id}")
     public ResponseEntity<?> findBannerById(@PathVariable("id") long bannerId) {
         return bannerService.findBannerById(bannerId);
     }
 
-    @ApiOperation("Create new banner")
+    @ApiOperation(value = "Create new banner", response = ResponseEntity.class)
     @PostMapping("")
-    public ResponseEntity<?> insertBanner(@RequestBody Map<String, String> bannerRequest) {
-        return bannerService.insert(BannerDTO.transform(bannerRequest));
+    public ResponseEntity<?> insertBanner(@RequestBody BannerDTO bannerDTO) {
+        return bannerService.insert(BannerDTO.transform(bannerDTO));
     }
 
-    @ApiOperation("Update banner information")
+    @ApiOperation(value = "Change banner information", response = ResponseEntity.class)
     @PutMapping("{id}")
-    public ResponseEntity<?> updateBanner(@PathVariable("id") long bannerId, @RequestBody Map<String, String> bannerRequest) {
-        return bannerService.update(BannerDTO.transform(bannerRequest), bannerId);
+    public ResponseEntity<?> updateBanner(@PathVariable("id") long bannerId,
+                                          @RequestBody BannerDTO bannerDTO) {
+        return bannerService.update(BannerDTO.transform(bannerDTO), bannerId);
     }
 
-    @ApiOperation("Remove banner")
+    @ApiOperation(value = "Delete banner", response = ResponseEntity.class)
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteBanner(@PathVariable("id") long bannerId) {
         return bannerService.delete(bannerId);
