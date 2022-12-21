@@ -3,19 +3,56 @@ package com.hcmute.ecom.dto.request;
 import com.hcmute.ecom.model.Banner;
 
 import java.sql.Date;
-import java.util.Map;
 
 /**
  * @author Nhat Phi
  * @since 2022-11-25
+ * @version 1.0.2
  * */
 public class BannerDTO {
-    public static Banner transform(Map<String, String> request) {
+    private String path;
+    private String type;
+    private String usedDate;
+    private String endedDate;
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getUsedDate() {
+        return usedDate;
+    }
+
+    public void setUsedDate(String usedDate) {
+        this.usedDate = usedDate;
+    }
+
+    public String getEndedDate() {
+        return endedDate;
+    }
+
+    public void setEndedDate(String endedDate) {
+        this.endedDate = endedDate;
+    }
+
+    public static Banner transform(BannerDTO bannerDTO) {
         Banner banner = new Banner();
-        banner.setPath(request.get("path"));
-        banner.setType(request.get("type"));
-        banner.setUsedDate(Date.valueOf(request.get("usedDate")));
-        banner.setEndedDate(Date.valueOf(request.get("endedDate")));
+        banner.setPath(bannerDTO.getPath());
+        banner.setType(bannerDTO.getType());
+        banner.setUsedDate(Date.valueOf(bannerDTO.getUsedDate()));
+        banner.setEndedDate(Date.valueOf(bannerDTO.getEndedDate()));
         return banner;
     }
 }
