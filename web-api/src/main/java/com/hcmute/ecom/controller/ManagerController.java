@@ -1,6 +1,7 @@
 package com.hcmute.ecom.controller;
 
 import com.hcmute.ecom.dto.request.AccountDTO;
+import com.hcmute.ecom.model.ManagerAccount;
 import com.hcmute.ecom.service.ManagerAccountService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -8,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
-
-import java.util.Map;
 
 /**
  * @author Nhat Phi
@@ -31,7 +30,10 @@ public class ManagerController {
 
     @ApiIgnore
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
-        return managerAccountService.insert(null);
+    public ResponseEntity<?> register(@RequestBody AccountDTO accountDTO) {
+        ManagerAccount account = new ManagerAccount();
+        account.setUsername(accountDTO.getUsername());
+        account.setPassword(accountDTO.getPassword());
+        return managerAccountService.insert(account);
     }
 }
