@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
  * */
 @ApiModel("Class representing for invoice request body")
 public class InvoiceDTO {
+    private String id;
     @ApiModelProperty(required = true)
     private Long userId;
     @ApiModelProperty(required = true)
@@ -40,6 +41,14 @@ public class InvoiceDTO {
     private String createdDate;
     private String note;
     private String troubleReason;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Long getUserId() {
         return userId;
@@ -155,6 +164,9 @@ public class InvoiceDTO {
 
     public static Invoice transform(InvoiceDTO invoiceDTO) {
         Invoice invoice = new Invoice();
+        if(invoiceDTO.getId() != null) {
+            invoice.setId(invoiceDTO.getId());
+        }
         invoice.setUserId(invoiceDTO.getUserId());
         invoice.setStockQuantity(invoiceDTO.getStockQuantity());
         invoice.setAddress(invoiceDTO.getAddress());
