@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.sql.Timestamp;
 
 /**
+ * <a href="https://www.tutorialspoint.com/how-to-store-usernames-and-passwords-safely-in-mysql-database">md5() in mysql</a>
  * @author Nhat Phi
  * @since 2022-11-21
  * */
@@ -21,16 +22,16 @@ public class ManagerAccountDAOImpl implements ManagerAccountDAO {
 
     // Query String
     private final String TABLE_NAME = "tbl_manager_account";
-    private final String INSERT = String.format("insert into %s values (?, ?, ?, ?)", TABLE_NAME);
+    private final String INSERT = String.format("insert into %s values (?, md5(?), ?, ?)", TABLE_NAME);
     private final String UPDATE = String.format("update %s " +
-            "set password=?, created_date=?, last_updated_date=? where username=?", TABLE_NAME);
+            "set password=md5(?), created_date=?, last_updated_date=? where username=?", TABLE_NAME);
     private final String UPDATE_PASSWORD = String.format("update %s " +
-            "set password=?, last_updated_date=? where username=?", TABLE_NAME);
+            "set password=md5(?), last_updated_date=? where username=?", TABLE_NAME);
     private final String DELETE = String.format("delete from %s where username=?", TABLE_NAME);
 
 //    private final String QUERY_ALL = String.format("select * from %s", TABLE_NAME);
     private final String QUERY_ACCOUNT =
-        String.format("select * from %s where username=? and password=? limit 1", TABLE_NAME);
+        String.format("select * from %s where username=? and password=md5(?) limit 1", TABLE_NAME);
     private final String QUERY_ACCOUNT_BY_USERNAME =
         String.format("select * from %s where username=? limit 1", TABLE_NAME);
 
