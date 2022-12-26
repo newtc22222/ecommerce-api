@@ -145,8 +145,7 @@ public class ProductController {
 
     @ApiOperation(value = "Update list price and price of product (laptop)", response = ResponseEntity.class)
     @PatchMapping("/products/{id}")
-    public ResponseEntity<?> updatePriceOfProduct(@PathVariable("id") String productId,
-                                                  @RequestBody ProductDTORequest productDTO) {
+    public ResponseEntity<?> updatePriceOfProduct(@RequestBody ProductDTORequest productDTO) {
         return productService.updatePrice(productDTO);
     }
 
@@ -158,38 +157,44 @@ public class ProductController {
 
     @ApiOperation(value = "Add a discount to product", response = ResponseEntity.class)
     @PostMapping("/products/{id}/discount")
-    public ResponseEntity<?> addDiscountToProduct(@PathVariable("id") String productId, @RequestBody long discountId) {
-        return productService.insertDiscount(productId, discountId);
+    public ResponseEntity<?> addDiscountToProduct(@PathVariable("id") String productId, 
+                                                  @RequestBody Map<String, Long> body) {
+        return productService.insertDiscount(productId, body.get("discountId"));
     }
 
     @ApiOperation(value = "Remove a discount from product", response = ResponseEntity.class)
     @DeleteMapping("/products/{id}/discount")
-    public ResponseEntity<?> removeDiscountToProduct(@PathVariable("id") String productId, @RequestBody long discountId) {
-        return productService.deleteDiscount(productId, discountId);
+    public ResponseEntity<?> removeDiscountToProduct(@PathVariable("id") String productId,
+                                                     @RequestBody Map<String, Long> body) {
+        return productService.deleteDiscount(productId, body.get("discountId"));
     }
 
     // Laptop
     @ApiOperation(value = "Add a graphic card to laptop", response = ResponseEntity.class)
     @PostMapping("/products/{id}/graphic-cards")
-    public ResponseEntity<?> addGraphicCardToLaptop(@PathVariable("id") String laptopId, @RequestBody long graphicCardId) {
-        return laptopService.insertGraphicCard(laptopId, graphicCardId);
+    public ResponseEntity<?> addGraphicCardToLaptop(@PathVariable("id") String laptopId, 
+                                                    @RequestBody Map<String, Long> body) {
+        return laptopService.insertGraphicCard(laptopId, body.get("graphicCardId"));
     }
 
     @ApiOperation(value = "Remove a graphic card from laptop", response = ResponseEntity.class)
     @DeleteMapping("/products/{id}/graphic-cards")
-    public ResponseEntity<?> removeGraphicCardToLaptop(@PathVariable("id") String laptopId, @RequestBody long graphicCardId) {
-        return laptopService.deleteGraphicCard(laptopId, graphicCardId);
+    public ResponseEntity<?> removeGraphicCardToLaptop(@PathVariable("id") String laptopId, 
+                                                       @RequestBody Map<String, Long> body) {
+        return laptopService.deleteGraphicCard(laptopId, body.get("graphicCardId"));
     }
 
     @ApiOperation(value = "Add a hard drive to laptop", response = ResponseEntity.class)
     @PostMapping("/products/{id}/hard-drives")
-    public ResponseEntity<?> addHardDriveToLaptop(@PathVariable("id") String laptopId, @RequestBody long hardDriveId) {
-        return laptopService.insertHardDrive(laptopId, hardDriveId);
+    public ResponseEntity<?> addHardDriveToLaptop(@PathVariable("id") String laptopId,
+                                                  @RequestBody Map<String, Long> body) {
+        return laptopService.insertHardDrive(laptopId, body.get("hardDriveId"));
     }
 
     @ApiOperation(value = "Remove a hard drive from laptop", response = ResponseEntity.class)
     @DeleteMapping("/products/{id}/hard-drives")
-    public ResponseEntity<?> removeHardDriveToLaptop(@PathVariable("id") String laptopId, @RequestBody long hardDriveId) {
-        return laptopService.deleteHardDrive(laptopId, hardDriveId);
+    public ResponseEntity<?> removeHardDriveToLaptop(@PathVariable("id") String laptopId,
+                                                     @RequestBody Map<String, Long> body) {
+        return laptopService.deleteHardDrive(laptopId, body.get("hardDriveId"));
     }
 }

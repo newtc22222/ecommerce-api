@@ -185,7 +185,7 @@ public class InvoiceDTO {
             invoice.setCreatedDate(LocalDateTime.parse(invoiceDTO.getCreatedDate(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         }
         invoice.setPaymentType(invoiceDTO.getPaymentType());
-        invoice.setStatus(OrderStatus.valueOf(invoiceDTO.getStatus()));
+        invoice.setStatus(OrderStatus.valueOf(invoiceDTO.getStatus().trim().toUpperCase()));
         invoice.setPaid(invoiceDTO.getPaid());
         if (invoiceDTO.getNote() != null) {
             invoice.setNote(invoiceDTO.getNote());

@@ -88,8 +88,10 @@ public class InvoiceController {
     @ApiOperation(value = "Update the delivery status of Invoice", response = ResponseEntity.class)
     @PatchMapping("/invoices/{id}/status")
     public ResponseEntity<?> updateInvoiceStatus(@PathVariable("id") String invoiceId,
-                                                 @RequestBody String status) {
-        return invoiceService.updateStatus(invoiceId, OrderStatus.valueOf(status));
+                                                 @RequestBody Map<String, String> body) {
+        return invoiceService.updateStatus(
+                invoiceId,
+                OrderStatus.valueOf(body.get("status").trim().toUpperCase()));
     }
 
     @ApiOperation(value = "Remove an invoice", response = ResponseEntity.class)
