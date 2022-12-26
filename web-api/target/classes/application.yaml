@@ -3,7 +3,7 @@ server:
 
 spring:
   mvc:
-    pathmatch:
+    path match:
       matching-strategy: ant-path-matcher
 
 #springdoc:
