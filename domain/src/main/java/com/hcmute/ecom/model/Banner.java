@@ -2,6 +2,7 @@ package com.hcmute.ecom.model;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * @author Nhat Phi
@@ -66,5 +67,22 @@ public class Banner {
 
     public void setEndedDate(Date ended_date) {
         this.ended_date = ended_date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Banner banner = (Banner) o;
+        return id.equals(banner.id)
+                && path.equals(banner.path)
+                && type.equals(banner.type)
+                && used_date.equals(banner.used_date)
+                && ended_date.equals(banner.ended_date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
