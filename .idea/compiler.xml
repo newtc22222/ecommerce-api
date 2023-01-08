@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="filter" />
+        <module name="exception" />
         <module name="statistical-service" />
         <module name="dao" />
         <module name="service" />
@@ -32,6 +33,7 @@
       <module name="domain" options="-parameters" />
       <module name="dto" options="-parameters" />
       <module name="ecommerce-api" options="-parameters" />
+      <module name="exception" options="-parameters" />
       <module name="file-upload-support" options="-parameters" />
       <module name="filter" options="-parameters" />
       <module name="mapper" options="-parameters" />
