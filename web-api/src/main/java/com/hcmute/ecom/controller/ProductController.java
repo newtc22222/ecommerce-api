@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -132,12 +133,14 @@ public class ProductController {
 
     @ApiOperation(value = "Create a new product (laptop)", response = ResponseEntity.class)
     @PostMapping("/products")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> createNewProduct(@RequestBody Laptop product) {
         return productService.insert(product);
     }
 
     @ApiOperation(value = "Update all information of product (laptop)", response = ResponseEntity.class)
     @PutMapping("/products/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> updateAllForProduct(@PathVariable("id") String productId,
                                                  @RequestBody Laptop product) {
         return productService.updateAll(product, productId);
@@ -145,26 +148,30 @@ public class ProductController {
 
     @ApiOperation(value = "Update list price and price of product (laptop)", response = ResponseEntity.class)
     @PatchMapping("/products/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> updatePriceOfProduct(@RequestBody ProductDTORequest productDTO) {
         return productService.updatePrice(productDTO);
     }
 
     @ApiOperation(value = "Remove product from system", response = ResponseEntity.class)
     @DeleteMapping("/products/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> removeProduct(@PathVariable("id") String productId) {
         return productService.delete(productId);
     }
 
     @ApiOperation(value = "Add a discount to product", response = ResponseEntity.class)
     @PostMapping("/products/{id}/discount")
-    public ResponseEntity<?> addDiscountToProduct(@PathVariable("id") String productId, 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ResponseEntity<?> addDiscountToProduct(@PathVariable("id") String productId,
                                                   @RequestBody Map<String, Long> body) {
         return productService.insertDiscount(productId, body.get("discountId"));
     }
 
     @ApiOperation(value = "Remove a discount from product", response = ResponseEntity.class)
     @DeleteMapping("/products/{id}/discount")
-    public ResponseEntity<?> removeDiscountToProduct(@PathVariable("id") String productId,
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ResponseEntity<?> removeDiscountFromProduct(@PathVariable("id") String productId,
                                                      @RequestBody Map<String, Long> body) {
         return productService.deleteDiscount(productId, body.get("discountId"));
     }
@@ -172,20 +179,23 @@ public class ProductController {
     // Laptop
     @ApiOperation(value = "Add a graphic card to laptop", response = ResponseEntity.class)
     @PostMapping("/products/{id}/graphic-cards")
-    public ResponseEntity<?> addGraphicCardToLaptop(@PathVariable("id") String laptopId, 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ResponseEntity<?> addGraphicCardToLaptop(@PathVariable("id") String laptopId,
                                                     @RequestBody Map<String, Long> body) {
         return laptopService.insertGraphicCard(laptopId, body.get("graphicCardId"));
     }
 
     @ApiOperation(value = "Remove a graphic card from laptop", response = ResponseEntity.class)
     @DeleteMapping("/products/{id}/graphic-cards")
-    public ResponseEntity<?> removeGraphicCardToLaptop(@PathVariable("id") String laptopId, 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ResponseEntity<?> removeGraphicCardFromLaptop(@PathVariable("id") String laptopId,
                                                        @RequestBody Map<String, Long> body) {
         return laptopService.deleteGraphicCard(laptopId, body.get("graphicCardId"));
     }
 
     @ApiOperation(value = "Add a hard drive to laptop", response = ResponseEntity.class)
     @PostMapping("/products/{id}/hard-drives")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> addHardDriveToLaptop(@PathVariable("id") String laptopId,
                                                   @RequestBody Map<String, Long> body) {
         return laptopService.insertHardDrive(laptopId, body.get("hardDriveId"));
@@ -193,7 +203,8 @@ public class ProductController {
 
     @ApiOperation(value = "Remove a hard drive from laptop", response = ResponseEntity.class)
     @DeleteMapping("/products/{id}/hard-drives")
-    public ResponseEntity<?> removeHardDriveToLaptop(@PathVariable("id") String laptopId,
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ResponseEntity<?> removeHardDriveFromLaptop(@PathVariable("id") String laptopId,
                                                      @RequestBody Map<String, Long> body) {
         return laptopService.deleteHardDrive(laptopId, body.get("hardDriveId"));
     }

@@ -1,6 +1,8 @@
 package com.hcmute.ecom.dto.request;
 
 import com.hcmute.ecom.model.Banner;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.sql.Date;
 
@@ -9,10 +11,13 @@ import java.sql.Date;
  * @since 2022-11-25
  * @version 1.0.2
  * */
+@ApiModel("Class representing for Banner request body")
 public class BannerDTO {
     private String path;
     private String type;
+    @ApiModelProperty(example = "2022-12-22")
     private String usedDate;
+    @ApiModelProperty(example = "2022-12-22")
     private String endedDate;
 
     public String getPath() {

@@ -70,15 +70,4 @@ public class ProductImage {
     public void setImageType(ImageType type) {
         this.type = type;
     }
-
-    @Override
-    public String toString() {
-        return "ProductImage{" +
-                "id='" + id + '\'' +
-                ", product_id='" + product_id + '\'' +
-                ", feedback_id=" + feedback_id +
-                ", path='" + path + '\'' +
-                ", type=" + type +
-                '}';
-    }
 }

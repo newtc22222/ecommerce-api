@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -27,6 +28,7 @@ public class ImportProductController {
 
     @ApiOperation(value = "Get all tickets", response = ImportProduct.class)
     @GetMapping("/imported")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> getAllImportProductTickets(@RequestParam(value = "date", required = false) String date,
                                                         @RequestParam(value = "startDate", required = false) String startDate,
                                                         @RequestParam(value = "endDate", required = false) String endDate) {
@@ -45,12 +47,14 @@ public class ImportProductController {
 
     @ApiOperation(value = "Get a ticket with id", response = ImportProduct.class)
     @GetMapping("/imported/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> getImportProductTicket(@PathVariable("id") long ticketId) {
         return importProductService.findImportProductTicket(ticketId);
     }
 
     @ApiOperation(value = "Get all tickets of a product", response = ImportProduct.class)
     @GetMapping("/products/{productId}/imported")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> getImportProductTicketOfProduct(@PathVariable("productId") String productId,
                                                              @RequestParam(value = "date", required = false) String date,
                                                              @RequestParam(value = "startDate", required = false) String startDate,
@@ -67,12 +71,14 @@ public class ImportProductController {
 
     @ApiOperation(value = "Create a new ticket", response = ResponseEntity.class)
     @PostMapping("/imported")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> createNewImportProductTicket(@RequestBody ImportProductDTO importProductDTO) {
         return importProductService.insert(ImportProductDTO.transform(importProductDTO));
     }
 
     @ApiOperation(value = "Update a ticket", response = ResponseEntity.class)
     @PutMapping("/imported/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> updateImportProductTicker(@PathVariable("id") long ticketId,
                                                        @RequestBody ImportProductDTO importProductDTO) {
         return importProductService.update(ImportProductDTO.transform(importProductDTO), ticketId);
@@ -80,6 +86,7 @@ public class ImportProductController {
 
     @ApiOperation(value = "Delete a ticket", response = ResponseEntity.class)
     @DeleteMapping("/imported/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> deleteImportProductTicket(@PathVariable("id") long ticketId) {
         return importProductService.delete(ticketId);
     }

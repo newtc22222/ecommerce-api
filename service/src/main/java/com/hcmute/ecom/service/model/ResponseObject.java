@@ -2,9 +2,6 @@ package com.hcmute.ecom.service.model;
 
 import org.springframework.http.HttpStatus;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ResponseObject {
     private HttpStatus status;
     private String message;

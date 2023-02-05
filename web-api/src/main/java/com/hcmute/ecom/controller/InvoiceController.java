@@ -4,9 +4,11 @@ import com.hcmute.ecom.dto.request.InvoiceDTO;
 import com.hcmute.ecom.enums.OrderStatus;
 import com.hcmute.ecom.model.Invoice;
 import com.hcmute.ecom.service.InvoiceService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -26,6 +28,7 @@ public class InvoiceController {
 
     @ApiOperation(value = "Get all invoices", response = Invoice.class)
     @GetMapping("/invoices")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> getAllInvoices(@RequestParam(value = "address", required = false) String address,
                                             @RequestParam(value = "date", required = false) String date,
                                             @RequestParam(value = "startDate", required = false) String startDate,
@@ -52,24 +55,28 @@ public class InvoiceController {
 
     @ApiOperation(value = "Get one invoice with id", response = Invoice.class)
     @GetMapping("/invoices/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<?> getInvoiceById(@PathVariable("id") String invoiceId) {
         return invoiceService.getInvoiceById(invoiceId);
     }
 
     @ApiOperation(value = "Get all invoices of user", response = Invoice.class)
     @GetMapping("/users/{userId}/invoices")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<?> getInvoicesOfUser(@PathVariable("userId") long userId) {
         return invoiceService.getInvoicesByUserId(userId);
     }
 
     @ApiOperation(value = "Create a new Invoice", response = ResponseEntity.class)
     @PostMapping("/invoices")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> createNewInvoice(@RequestBody InvoiceDTO invoiceDTO) {
         return invoiceService.insert(InvoiceDTO.transform(invoiceDTO));
     }
 
     @ApiOperation(value = "Update all information of Invoice", response = ResponseEntity.class)
     @PutMapping("/invoices/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<?> updateInvoice(@PathVariable("id") String invoiceId,
                                            @RequestBody InvoiceDTO invoiceDTO) {
         return invoiceService.update(InvoiceDTO.transform(invoiceDTO), invoiceId);
@@ -77,6 +84,7 @@ public class InvoiceController {
 
     @ApiOperation(value = "Update payment method and paid status of invoice", response = ResponseEntity.class)
     @PatchMapping("/invoices/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<?> updateInvoicePaymentMethodAndPaidStatus(@PathVariable("id") String invoiceId,
                                                                      @RequestBody Map<String, String> request) {
         return invoiceService.updateInvoicePaymentMethodAndPaidStatus(
@@ -87,6 +95,7 @@ public class InvoiceController {
 
     @ApiOperation(value = "Update the delivery status of Invoice", response = ResponseEntity.class)
     @PatchMapping("/invoices/{id}/status")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<?> updateInvoiceStatus(@PathVariable("id") String invoiceId,
                                                  @RequestBody Map<String, String> body) {
         return invoiceService.updateStatus(
@@ -96,6 +105,7 @@ public class InvoiceController {
 
     @ApiOperation(value = "Remove an invoice", response = ResponseEntity.class)
     @DeleteMapping("/invoices/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteInvoice(@PathVariable("id") String invoiceId) {
         return invoiceService.delete(invoiceId);
     }

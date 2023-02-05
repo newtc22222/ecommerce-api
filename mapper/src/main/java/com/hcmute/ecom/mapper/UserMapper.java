@@ -1,6 +1,7 @@
 package com.hcmute.ecom.mapper;
 
 import com.hcmute.ecom.enums.Gender;
+import com.hcmute.ecom.enums.Role;
 import com.hcmute.ecom.model.User;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -22,9 +23,12 @@ public class UserMapper implements RowMapper<User> {
         user.setId(rs.getLong("id"));
         user.setName(rs.getNString("name"));
         user.setGender(Gender.valueOf(rs.getString("gender")));
+        user.setDateOfBirth(rs.getDate("date_of_birth"));
         user.setPhone(rs.getString("phone"));
         user.setEmail(rs.getString("email"));
-        user.setDateOfBirth(rs.getDate("date_of_birth"));
+        user.setPassword(rs.getString("password"));
+        user.setActive(rs.getBoolean("isActive"));
+        user.setRole(Role.valueOf(rs.getString("role")));
         user.setCreatedDate(LocalDateTime.parse(rs.getString("created_date"), DATE_TIME_PATTERN));
         user.setLastUpdatedDate(LocalDateTime.parse(rs.getString("last_updated_date"), DATE_TIME_PATTERN));
         return user;

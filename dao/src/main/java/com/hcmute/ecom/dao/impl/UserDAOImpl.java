@@ -3,6 +3,7 @@ package com.hcmute.ecom.dao.impl;
 import com.hcmute.ecom.dao.UserDAO;
 import com.hcmute.ecom.dto.request.UserDTORequest;
 import com.hcmute.ecom.enums.Gender;
+import com.hcmute.ecom.enums.Role;
 import com.hcmute.ecom.mapper.UserMapper;
 import com.hcmute.ecom.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +30,15 @@ public class UserDAOImpl implements UserDAO {
             "set name=?, gender=?, phone=?, email=?, date_of_birth=?, created_date=?, last_updated_date=? where id=?", TABLE_NAME);
     private final String UPDATE_INFORMATION = String.format("update %s " +
             "set name=?, gender=?, email=?, date_of_birth=?, last_updated_date=? where id=?", TABLE_NAME);
-    private final String DELETE = String.format("delete from %s where id=?", TABLE_NAME);
+    private final String BLOCK_USER = String.format("update %s set isActive=false, last_updated_date=now() where _id=?", TABLE_NAME);
 
     private final String QUERY_ALL = String.format("select * from %s", TABLE_NAME);
     private final String QUERY_ONE_BY_ID = String.format("select * from %s where id=? limit 1", TABLE_NAME);
     private final String QUERY_ONE_BY_PHONE = String.format("select * from %s where phone=? limit 1", TABLE_NAME);
     private final String QUERY_USERS_BY_NAME = String.format("select * from %s where name like ?", TABLE_NAME);
     private final String QUERY_USERS_BY_GENDER = String.format("select * from %s where gender=?", TABLE_NAME);
+    private final String QUERY_USERS_BY_ROLE = String.format("select * from %s where role=?", TABLE_NAME);
+
 
     @Override
     public int insert(User user) {
@@ -95,10 +98,10 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public int delete(long userId) {
+    public int blockUser(long userId) {
         try {
             return jdbcTemplate.update(
-                    DELETE,
+                    BLOCK_USER,
                     userId
             );
         }
@@ -169,6 +172,20 @@ public class UserDAOImpl implements UserDAO {
                     QUERY_USERS_BY_GENDER,
                     new UserMapper(),
                     gender.toString()
+            );
+        }
+        catch (EmptyResultDataAccessException err) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<User> getUserByRole(Role role) {
+        try {
+            return jdbcTemplate.query(
+                    QUERY_USERS_BY_ROLE,
+                    new UserMapper(),
+                    role.toString()
             );
         }
         catch (EmptyResultDataAccessException err) {

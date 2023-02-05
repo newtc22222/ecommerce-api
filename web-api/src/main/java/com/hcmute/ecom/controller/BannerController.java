@@ -7,14 +7,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * @author Nhat Phi
@@ -48,18 +45,21 @@ public class BannerController {
 
     @ApiOperation(value = "Get banner by bannerId", response = Banner.class)
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> findBannerById(@PathVariable("id") long bannerId) {
         return bannerService.findBannerById(bannerId);
     }
 
     @ApiOperation(value = "Create new banner", response = ResponseEntity.class)
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> insertBanner(@RequestBody BannerDTO bannerDTO) {
         return bannerService.insert(BannerDTO.transform(bannerDTO));
     }
 
     @ApiOperation(value = "Change banner information", response = ResponseEntity.class)
     @PutMapping("{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> updateBanner(@PathVariable("id") long bannerId,
                                           @RequestBody BannerDTO bannerDTO) {
         return bannerService.update(BannerDTO.transform(bannerDTO), bannerId);
@@ -67,6 +67,7 @@ public class BannerController {
 
     @ApiOperation(value = "Delete banner", response = ResponseEntity.class)
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> deleteBanner(@PathVariable("id") long bannerId) {
         return bannerService.delete(bannerId);
     }

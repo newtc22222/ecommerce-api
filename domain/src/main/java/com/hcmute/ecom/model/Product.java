@@ -11,6 +11,31 @@ import java.util.UUID;
  * @version 1.2
  * */
 public class Product {
+    private String id;
+    private String name;
+    private Long brand_id;
+    private Long category_id;
+    private Date released_date;
+    private Integer quantity_in_stock;
+    private BigDecimal listed_price;
+    private BigDecimal price;
+
+    public Product(String id, String name, Long brand_id, Long category_id, Date released_date,
+                   Integer quantity_in_stock, BigDecimal listed_price, BigDecimal price) {
+        this.id = id;
+        this.name = name;
+        this.brand_id = brand_id;
+        this.category_id = category_id;
+        this.released_date = released_date;
+        this.quantity_in_stock = quantity_in_stock;
+        this.listed_price = listed_price;
+        this.price = price;
+    }
+
+    public Product() {
+        this.id = UUID.randomUUID().toString();
+    }
+
     public String getId() {
         return id;
     }
@@ -73,31 +98,6 @@ public class Product {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    private String id;
-    private String name;
-    private Long brand_id;
-    private Long category_id;
-    private Date released_date;
-    private Integer quantity_in_stock;
-    private BigDecimal listed_price;
-    private BigDecimal price;
-
-    public Product(String id, String name, Long brand_id, Long category_id, Date released_date,
-                   Integer quantity_in_stock, BigDecimal listed_price, BigDecimal price) {
-        this.id = id;
-        this.name = name;
-        this.brand_id = brand_id;
-        this.category_id = category_id;
-        this.released_date = released_date;
-        this.quantity_in_stock = quantity_in_stock;
-        this.listed_price = listed_price;
-        this.price = price;
-    }
-
-    public Product() {
-        this.id = UUID.randomUUID().toString();
     }
 
     @Override

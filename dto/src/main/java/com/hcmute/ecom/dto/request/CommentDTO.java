@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 
 /**
  * @author Nhat Phi

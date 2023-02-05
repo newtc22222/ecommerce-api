@@ -77,7 +77,7 @@ public class BannerServiceImpl implements BannerService {
 
         return ResponseCUDObject.of(
                 bannerDAO.delete(bannerId) > 0,
-                HttpStatus.CREATED,
+                HttpStatus.OK,
                 "Delete banner successfully!",
                 HttpStatus.NOT_IMPLEMENTED,
                 "Failed to delete banner with id = " + bannerId

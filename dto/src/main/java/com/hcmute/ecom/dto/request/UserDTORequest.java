@@ -88,9 +88,10 @@ public class UserDTORequest {
         User user = new User();
         user.setName(request.get("name"));
         user.setGender(Gender.valueOf(request.get("gender")));
+        user.setDateOfBirth(Date.valueOf(request.get("dateOfBirth")));
         user.setPhone(request.get("phone"));
         user.setEmail(request.get("email"));
-        user.setDateOfBirth(Date.valueOf(request.get("dateOfBirth")));
+        user.setPassword(request.get("password"));
         if(request.containsKey("createdDate")) {
             user.setCreatedDate(LocalDateTime.parse(request.get("createdDate"), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         }

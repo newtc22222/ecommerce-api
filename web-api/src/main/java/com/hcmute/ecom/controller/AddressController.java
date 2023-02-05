@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -22,30 +23,35 @@ public class AddressController {
 
     @ApiOperation(value = "Get address by addressId", response = Address.class)
     @GetMapping("/address/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> findAddressById(@PathVariable("id") long addressId) {
         return addressService.findAddressById(addressId);
     }
 
     @ApiOperation(value = "Get list address of user (userId)", response = Address.class)
     @GetMapping("/users/{userId}/address")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getAllAddressOfUser(@PathVariable("userId") long userId) {
         return addressService.getAllAddressOfUser(userId);
     }
 
     @ApiOperation(value = "Add new address information", response = ResponseEntity.class)
     @PostMapping("/address")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> createNewAddress(@RequestBody Address address) {
         return addressService.insert(address);
     }
 
     @ApiOperation(value = "Update address information", response = ResponseEntity.class)
     @PutMapping("/address/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateAddress(@PathVariable("id") long addressId, @RequestBody Address address) {
         return addressService.update(address, addressId);
     }
 
     @ApiOperation(value = "Remove address", response = ResponseEntity.class)
     @DeleteMapping("/address/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> deleteAddress(@PathVariable("id") long addressId) {
         return addressService.delete(addressId);
     }

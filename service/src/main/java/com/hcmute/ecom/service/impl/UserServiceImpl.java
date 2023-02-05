@@ -3,6 +3,7 @@ package com.hcmute.ecom.service.impl;
 import com.hcmute.ecom.dao.UserDAO;
 import com.hcmute.ecom.dto.request.UserDTORequest;
 import com.hcmute.ecom.enums.Gender;
+import com.hcmute.ecom.enums.Role;
 import com.hcmute.ecom.model.User;
 import com.hcmute.ecom.service.UserService;
 import com.hcmute.ecom.service.model.ResponseCUDObject;
@@ -10,6 +11,7 @@ import com.hcmute.ecom.service.model.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -25,8 +27,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDAO userDAO;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public ResponseEntity<?> insert(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return ResponseCUDObject.of(
                 userDAO.insert(user) > 0,
                 HttpStatus.CREATED,
@@ -50,9 +56,14 @@ public class UserServiceImpl implements UserService {
         else {
             oldUser.setName(user.getName());
             oldUser.setGender(user.getGender());
+            oldUser.setDateOfBirth(user.getDateOfBirth());
             oldUser.setPhone(user.getPhone());
             oldUser.setEmail(user.getEmail());
-            oldUser.setDateOfBirth(user.getDateOfBirth());
+            oldUser.setActive(user.getActive());
+            oldUser.setRole(user.getRole());
+            if(passwordEncoder.matches(user.getPassword(), oldUser.getPassword())){
+                oldUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
             //oldUser.setCreatedDate(user.getCreatedDate());
             oldUser.setLastUpdatedDate(user.getLastUpdatedDate());
         }
@@ -97,11 +108,11 @@ public class UserServiceImpl implements UserService {
                     ));
         }
         return ResponseCUDObject.of(
-                userDAO.delete(userId) > 0,
-                HttpStatus.CREATED,
-                "Remove user successfully!",
+                userDAO.blockUser(userId) > 0,
+                HttpStatus.OK,
+                "Block user successfully!",
                 HttpStatus.NOT_IMPLEMENTED,
-                "Failed to remove user!"
+                "Failed to block this user!"
         );
     }
 
@@ -148,7 +159,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> filter(String name, String gender) {
+    public ResponseEntity<?> filter(String name, String gender, String role) {
         Set<User> userSet = new HashSet<>(userDAO.getAllUsers());
         Set<User> notSuit = new HashSet<>();
 
@@ -166,6 +177,18 @@ public class UserServiceImpl implements UserService {
                     || gender.equalsIgnoreCase("OTHER"))
             {
                 List<User> userList = userDAO.getUsersByGender(Gender.valueOf(gender.toUpperCase()));
+                userSet.forEach(user -> {
+                    if(!userList.contains(user)) {
+                        notSuit.add(user);
+                    }
+                });
+            }
+        }if(role != null) {
+            if(role.equalsIgnoreCase("ADMIN")
+                    || role.equalsIgnoreCase("MANAGER")
+                    || role.equalsIgnoreCase("USER"))
+            {
+                List<User> userList = userDAO.getUserByRole(Role.valueOf(role.toUpperCase()));
                 userSet.forEach(user -> {
                     if(!userList.contains(user)) {
                         notSuit.add(user);

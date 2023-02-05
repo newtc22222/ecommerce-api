@@ -5,7 +5,6 @@ import com.hcmute.ecom.model.Category;
 import com.hcmute.ecom.service.CategoryService;
 import com.hcmute.ecom.service.model.ResponseCUDObject;
 import com.hcmute.ecom.service.model.ResponseObject;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Locale;
@@ -29,6 +30,7 @@ public class ProductImageController {
 
     @ApiOperation(value = "Get all images in system", response = ProductImage.class)
     @GetMapping("/images")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> getAllImages(@RequestParam(value = "type", required = false) String type) {
         if(type != null) {
             try {
@@ -48,6 +50,7 @@ public class ProductImageController {
 
     @ApiOperation(value = "Get an image with id", response = ProductImage.class)
     @GetMapping("/images/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> getImageById(@PathVariable("id") String imageId) {
         return productImageService.findProductImageById(imageId);
     }
@@ -77,12 +80,14 @@ public class ProductImageController {
 
     @ApiOperation(value = "Import a new image (link)", response = ResponseEntity.class)
     @PostMapping("/images")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> createNewProductImage(@RequestBody ProductImageDTO imageDTO) {
         return productImageService.insert(ProductImageDTO.transform(imageDTO));
     }
 
     @ApiOperation(value = "Update all information of image", response = ResponseEntity.class)
     @PutMapping("/images/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> updateProductImage(@PathVariable("id") String imageId,
                                                 @RequestBody ProductImageDTO imageDTO) {
         return productImageService.update(ProductImageDTO.transform(imageDTO), imageId);
@@ -90,6 +95,7 @@ public class ProductImageController {
 
     @ApiOperation(value = "Update path and type of image", response = ResponseEntity.class)
     @PatchMapping("/images/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> updateProductImagePathAndType(@PathVariable("id") String imageId,
                                                            @RequestBody Map<String, String> imageRequest) {
         String path = imageRequest.get("path");
@@ -105,6 +111,7 @@ public class ProductImageController {
 
     @ApiOperation(value = "Delete an image", response = ResponseEntity.class)
     @DeleteMapping("/images/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> deleteProductImage(@PathVariable("id") String imageId) {
         return productImageService.delete(imageId);
     }

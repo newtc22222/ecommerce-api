@@ -4,11 +4,13 @@ import com.hcmute.ecom.dto.request.HardDriveDTO;
 import com.hcmute.ecom.enums.product.HardDriveType;
 import com.hcmute.ecom.model.laptop.HardDrive;
 import com.hcmute.ecom.service.HardDriveService;
+import com.hcmute.ecom.service.model.ResponseObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(value = { "*" })
 @RestController
 @RequestMapping("/api/v1/hard-drives")
+@PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
 public class HardDriveController {
     @Autowired
     private HardDriveService hardDriveService;
@@ -32,7 +35,12 @@ public class HardDriveController {
                 return hardDriveService.getHardDrivesByType(HardDriveType.valueOf(type.toUpperCase()));
             }
             catch (Exception err) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please check your \"hard drive type\" request!");
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new ResponseObject(
+                                HttpStatus.BAD_REQUEST,
+                                "Please check your \"hard drive type\" request!"
+                        ));
             }
         }
         return hardDriveService.getAllHardDrive();

@@ -27,6 +27,7 @@ public class BrandServiceImpl implements BrandService {
                 brandDAO.insert(brand) > 0,
                 HttpStatus.CREATED,
                 "Insert new brand successfully!",
+                brandDAO.getAllBrand().get(brandDAO.getAllBrand().size() - 1),
                 HttpStatus.NOT_IMPLEMENTED,
                 "Failed to insert new brand! Please check your data again!");
     }

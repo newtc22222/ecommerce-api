@@ -5,8 +5,6 @@ import com.hcmute.ecom.model.ProductImage;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Map;
-
 /**
  * @author Nhat Phi
  * @since 2022-11-26

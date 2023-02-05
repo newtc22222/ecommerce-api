@@ -2,10 +2,10 @@ package com.hcmute.ecom.service.impl;
 
 import com.hcmute.ecom.dao.HardDriveDAO;
 import com.hcmute.ecom.enums.product.HardDriveType;
+import com.hcmute.ecom.exception.NotFoundException;
 import com.hcmute.ecom.model.laptop.HardDrive;
 import com.hcmute.ecom.service.HardDriveService;
 import com.hcmute.ecom.service.model.ResponseCUDObject;
-import com.hcmute.ecom.service.model.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,12 +37,7 @@ public class HardDriveServiceImpl implements HardDriveService {
     public ResponseEntity<?> update(HardDrive hardDrive, long hardDriveId) {
         HardDrive oldHardDrive = hardDriveDAO.findHardDriveById(hardDriveId);
         if(oldHardDrive == null){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseObject(
-                            HttpStatus.NOT_FOUND,
-                            "Cannot find hard drive with id = " + hardDriveId
-                    ));
+            throw new NotFoundException("Cannot find hard drive with id = " + hardDriveId);
         }
         else {
             oldHardDrive.setType(hardDrive.getType());
@@ -62,12 +57,7 @@ public class HardDriveServiceImpl implements HardDriveService {
     @Override
     public ResponseEntity<?> delete(long hardDriveId) {
         if(hardDriveDAO.findHardDriveById(hardDriveId) == null){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseObject(
-                            HttpStatus.NOT_FOUND,
-                            "Cannot find hard drive with id = " + hardDriveId
-                    ));
+            throw new NotFoundException("Cannot find hard drive with id = " + hardDriveId);
         }
         return ResponseCUDObject.of(
                 hardDriveDAO.delete(hardDriveId) > 0,
@@ -82,26 +72,16 @@ public class HardDriveServiceImpl implements HardDriveService {
     public ResponseEntity<?> getAllHardDrive() {
         List<HardDrive> hardDriveList = hardDriveDAO.getAllHardDrive();
         if (hardDriveList == null || hardDriveList.size() == 0) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any hard drive!"
-                    ));
+            throw new NotFoundException("Can not find any hard drive in system!");
         }
         return ResponseEntity.ok(hardDriveList);
     }
 
     @Override
     public ResponseEntity<?> findHardDriveById(long hardDriveId) {
-        HardDrive hardDrive= hardDriveDAO.findHardDriveById(hardDriveId);
+        HardDrive hardDrive = hardDriveDAO.findHardDriveById(hardDriveId);
         if (hardDrive == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseObject(
-                            HttpStatus.NOT_FOUND,
-                            "Cannot find hard drive with id = " + hardDriveId
-                    ));
+            throw new NotFoundException("Cannot find hard drive with id = " + hardDriveId);
         }
         return ResponseEntity.ok(hardDrive);
     }
@@ -110,12 +90,7 @@ public class HardDriveServiceImpl implements HardDriveService {
     public ResponseEntity<?> getHardDrivesByType(HardDriveType type) {
         List<HardDrive> hardDriveList = hardDriveDAO.getHardDrivesByType(type);
         if (hardDriveList == null || hardDriveList.size() == 0) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseObject(
-                            HttpStatus.NO_CONTENT,
-                            "Cannot find any hard drive which suit this condition!"
-                    ));
+            throw new NotFoundException("Cannot find any hard drive which suit this condition!");
         }
         return ResponseEntity.ok(hardDriveList);
     }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +29,7 @@ public class FileUploadController {
 
     @ApiOperation(value = "Upload and save an image to server", response = ResponseEntity.class)
     @PostMapping("/uploads")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> uploadImageFile(@RequestParam("file") MultipartFile file) {
         try {
             String generateFileName = storageService.storeFile(file);
@@ -48,6 +50,7 @@ public class FileUploadController {
 
     @ApiOperation(value = "Upload and save multiple images to server", response = ResponseEntity.class)
     @PostMapping("/uploads-multiple")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> uploadMultipleImageFiles(@RequestParam("files") MultipartFile[] files) {
         try {
             List<String> generateFileNameList = new ArrayList<>();
@@ -86,6 +89,7 @@ public class FileUploadController {
 
     @ApiOperation(value = "Show path of file in system", response = ResponseEntity.class)
     @GetMapping("/files/{filename:.+}/path")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> getPathOfFile(@PathVariable String filename) {
         try {
             return ResponseEntity

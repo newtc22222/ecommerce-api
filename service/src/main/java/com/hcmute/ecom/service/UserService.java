@@ -1,7 +1,6 @@
 package com.hcmute.ecom.service;
 
 import com.hcmute.ecom.dto.request.UserDTORequest;
-import com.hcmute.ecom.enums.Gender;
 import com.hcmute.ecom.model.User;
 import org.springframework.http.ResponseEntity;
 
@@ -16,7 +15,11 @@ public interface UserService {
     ResponseEntity<?> delete(long userId); // Maybe remove
 
     ResponseEntity<?> getAllUsers();
+//    ResponseEntity<?> validateUser();
+
+    @Deprecated
     ResponseEntity<?> findUserById(long userId);
+    @Deprecated
     ResponseEntity<?> findUserByPhone(String phone);
-    ResponseEntity<?> filter(String name, String gender);
+    ResponseEntity<?> filter(String name, String gender, String role);
 }

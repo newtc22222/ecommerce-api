@@ -142,8 +142,6 @@ public class FeedbackServiceImpl implements FeedbackService {
                             "Cannot find any feedback!"
                     ));
         }
-
-
         return ResponseEntity.ok(feedbackList);
     }
 

@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -19,45 +20,40 @@ import java.util.Map;
 @Api(tags = "User information in system", value = "User controller")
 @CrossOrigin(value = { "*" })
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1")
 public class UserController {
     @Autowired
     private UserService userService;
 
     @ApiOperation(value = "Get all users in system", response = User.class)
-    @GetMapping("")
+    @GetMapping("/users")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> getAllUsers(@RequestParam(value = "name", required = false) String name,
-                                         @RequestParam(value = "gender", required = false) String gender) {
-        if(name != null || gender != null) {
-            return userService.filter(name, gender);
+                                         @RequestParam(value = "gender", required = false) String gender,
+                                         @RequestParam(value = "role", required = false) String role) {
+        if(name != null || gender != null || role != null) {
+            return userService.filter(name, gender, role);
         }
 
         return userService.getAllUsers();
     }
 
-    @ApiOperation(value = "Handle login for an user", response = User.class)
-    @GetMapping("/login")
-    public ResponseEntity<?> findUserByPhone(@RequestParam(value = "phoneNumber", required = false) String phone) {
-        if (phone.charAt(0) == '0') {
-            phone = phone.replaceAll("^.", "+84");
-        }
-        return userService.findUserByPhone(phone);
-    }
-
     @ApiOperation(value = "Get an user with id", response = User.class)
-    @GetMapping("{id}")
+    @GetMapping("/users/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<?> findUserById(@PathVariable("id") long userId) {
         return userService.findUserById(userId);
     }
 
     @ApiOperation(value = "Create new user (register)", response = ResponseEntity.class)
-    @PostMapping("")
-    public ResponseEntity<?> createNewUser(@RequestBody Map<String, String> userRequest) {
+    @PostMapping("/auth/register")
+    public ResponseEntity<?> registerNewUser(@RequestBody Map<String, String> userRequest) {
         return userService.insert(UserDTORequest.transform(userRequest));
     }
 
     @ApiOperation(value = "Update all information of user", response = ResponseEntity.class)
-    @PutMapping("{id}")
+    @PutMapping("/users/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> updateAllForUser(@PathVariable("id") long userId,
                                               @RequestBody Map<String, String> userRequest) {
         return userService.updateAll(UserDTORequest.transform(userRequest), userId);
@@ -65,6 +61,7 @@ public class UserController {
 
     @ApiOperation(value = "Update some information", response = ResponseEntity.class)
     @PatchMapping(value = "{id}", consumes = "application/json")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> updateUserInformation(@PathVariable("id") long userId,
                                                    @RequestBody Map<String, String> userRequest) {
 
@@ -72,9 +69,10 @@ public class UserController {
     }
 
     @ApiIgnore
-    @ApiOperation(value = "Remove user from system", response = ResponseEntity.class)
-    @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") long userId) {
+    @ApiOperation(value = "Disable user in system", response = ResponseEntity.class)
+    @DeleteMapping("/users/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ResponseEntity<?> blockUser(@PathVariable("id") long userId) {
         return userService.delete(userId);
     }
 }

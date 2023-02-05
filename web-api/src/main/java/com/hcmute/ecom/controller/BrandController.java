@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -28,24 +29,28 @@ public class BrandController {
 
     @ApiOperation(value = "Get one brand in system with id", response = Brand.class)
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> getBrandById(@PathVariable("id") long brandId){
         return brandService.findBrandById(brandId);
     }
 
     @ApiOperation(value = "Create a new brand", response = ResponseEntity.class)
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> createNewBrand(@RequestBody Brand brand){
         return brandService.insert(brand);
     }
 
     @ApiOperation(value = "Update a brand", response = ResponseEntity.class)
     @PutMapping("{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> updateBrand(@PathVariable("id") long brandId, @RequestBody Brand brand){
         return brandService.update(brand, brandId);
     }
 
     @ApiOperation(value = "Remove a brand in system", response = ResponseEntity.class)
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> deleteBrand(@PathVariable("id") long brandId){
         return brandService.delete(brandId);
     }

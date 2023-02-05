@@ -1,10 +1,8 @@
 package com.hcmute.ecom.service;
 
-import com.hcmute.ecom.enums.DiscountType;
 import com.hcmute.ecom.model.Discount;
 import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
 /**

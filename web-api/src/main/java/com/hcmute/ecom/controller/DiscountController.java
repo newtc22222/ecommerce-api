@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -39,6 +40,7 @@ public class DiscountController {
 
     @ApiOperation(value = "Get one discount with id", response = Discount.class)
     @GetMapping("/discounts/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<?> getDiscountById(@PathVariable("id") long discountId) {
         return discountService.getDiscountById(discountId);
     }
@@ -51,12 +53,14 @@ public class DiscountController {
 
     @ApiOperation(value = "Create a new discount", response = ResponseEntity.class)
     @PostMapping("/discounts")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> createNewDiscount(@RequestBody DiscountDTO discountDTO) {
         return discountService.insert(DiscountDTO.transform(discountDTO));
     }
 
     @ApiOperation(value = "Update a discount", response = ResponseEntity.class)
     @PutMapping("/discounts/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> updateDiscount(@PathVariable("id") long discountId,
                                             @RequestBody DiscountDTO discountDTO) {
         return discountService.update(DiscountDTO.transform(discountDTO), discountId);
@@ -64,6 +68,7 @@ public class DiscountController {
 
     @ApiOperation(value = "Remove a discount", response = ResponseEntity.class)
     @DeleteMapping("/discounts/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<?> deleteDiscount(@PathVariable("id") long discountId) {
         return discountService.delete(discountId);
     }
